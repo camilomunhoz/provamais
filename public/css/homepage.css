@@ -1,0 +1,700 @@
+@import url(main.css);
+
+
+/* Estrutura básica */
+
+#wrp-homepage{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% auto;
+    grid-template-rows: auto 15vh;
+    background-color: var(--bgcolor1);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+#entrada{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-right: 40px;
+    grid-area: 1 / 1 / 3 / 1;
+    background-image: linear-gradient(93deg, white 90%, transparent 90.3%);
+    z-index:1;
+}
+#wrp-overlay{
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: -100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#overlay{
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+
+/* Botões */
+
+#btn-go-login, #btn-go-signup, #btn-login, #btn-signup, #wrp-btn-go-in{
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    align-self: center;
+    width: 300px;
+    height: 70px;
+    margin: 50px auto 0 auto;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s;
+}
+#btn-go-login, #btn-login, #wrp-btn-go-in{
+    background-color: var(--color1);
+}
+#btn-go-signup, #btn-signup{
+    background-color: var(--color2);
+}
+#btn-go-login, #btn-go-signup, #wrp-btn-go-in{
+    width: 65%;
+}
+#btn-go-login:hover, #btn-go-signup:hover, #btn-login:hover, #btn-signup:hover, #wrp-btn-go-in:hover{
+    transform: scale(1.05);
+}
+#voltar, #x-voltar{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: grey;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+}
+#x-voltar{
+    display: none;
+    transform: scaleY(1.5);
+    color: var(--bgcolor1);
+}
+#forgot-pswd{
+    display: block;
+    text-decoration: none;
+    color: var(--color2);
+    font-size: 14px;
+}
+#forgot-pswd:hover, #btn-logout:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+#conheca{
+    display: none;
+    text-decoration: none;
+    color: grey;
+    font-size: calc(7px + 5vw);
+    position: absolute;
+    bottom: 5vh;
+    text-align: center;
+}
+#wrp-btn-go-in{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#btn-logout{
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    height: fit-content;
+    width: 65%;
+    text-align: center;
+    margin-top: 25px;
+}
+
+/* Slider */
+
+#slider{
+    position: relative;
+    grid-area: 1 / 2 / 1 / 2;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 30% auto;
+}
+#frases-wrp{
+    width: 100%;
+    max-height: 100%;
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 7vh;
+}
+#frases-wrp .frase{
+    display: none;
+}
+.frase{
+    display: inline-block;
+    width: 80%;
+    color: white;
+    font-size: calc(1.5em + 2.5vw);
+    user-select: none;
+}
+#slider img{
+    display: none;
+}
+.slide{
+    position: absolute;
+    grid-area: 2 / 1 / 2 / 1;
+    display: inline-block;
+    width: 50%;
+    min-width: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+}
+#slider-scrl{
+    grid-area: 2 / 2 / 2 / 2;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 45%;
+    height: 100%;
+    margin: auto;
+}
+
+/* Formulários de Login e Cadastro */
+
+#wrp-login, #wrp-signup{
+    width: 400px;
+    height: auto;
+    text-align: center;
+    box-sizing: content-box !important;
+    background-color: white;
+    padding: 20px;
+    padding-top: 50px;
+    border-radius: 20px;
+    z-index: 0;
+}
+#form-login, #form-signup{
+    border-radius: 20px;
+    padding: 20px 40px 40px 40px;
+    background-color: white;
+}
+#form-signup{
+    padding: 20px 40px;
+}
+#login-label, #signup-label{
+    position: relative;
+    width: auto;
+    margin: auto;
+    font-size: 50px;
+    font-weight: bold;
+    color: grey;
+    user-select: none;
+}
+.form-input, .form-label{
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    max-width: 320px;
+    margin: auto;
+}
+.form-input{
+    border: none;
+    border-bottom: 3px solid #eee;
+    color: #555;
+    font-size: 17px;
+    height: 50px;
+    padding-left: 10px;
+    margin: 20px 0;
+}
+#form-login input:last-of-type{
+    margin-top: 70px;
+}
+#form-signup input:last-of-type{
+    margin-top: 30px;
+}
+.error-banner{
+    background-color: var(--warning);
+    border: 1px solid var(--color2);
+    padding: 15px;
+    color: var(--color1);
+    max-width: 320px;
+    margin: auto;
+    border-radius: 200px;
+}
+.invalid-signup-input{
+    border-color: var(--color2) !important;
+    margin-bottom: 5px !important;
+}
+.error-pswd-feedback{
+    font-size: small;
+    color: #ccc;
+}
+
+/* Info em mobile */
+
+#infos, .info, footer{
+    display: none;
+}
+.info:nth-of-type(odd){
+    background-color: var(--bgcolor2);
+}
+.info{
+    width: 100vw;
+    padding: 10vw;
+    text-align: center;
+}
+.info > span{
+    color: white;
+    font-size: 5vh;
+}
+.info > img{
+    width: 100%;
+    margin-top: 5vh; 
+}
+footer{
+    height: 10vh;
+    background-color: white;
+    -webkit-box-shadow: inset 0px 15px 17px -14px rgba(0,0,0,0.6); 
+    box-shadow: inset 0px 15px 17px -14px rgba(0,0,0,0.6);
+    padding: 1vh;
+}
+#logo-footer{
+    margin: auto;
+    height: 8vh;
+    /* display: block; */
+}
+
+/* Elementos gráficos */
+
+    /* Homepage */
+    #deco{
+        background-image: url("../img/hmpg/deco.png");
+        margin-top: -30px;
+        width: 110vw;
+        height: 110vh;
+        opacity: 0.02;
+        position: absolute;
+        animation: flutuar 10s linear infinite;
+    }
+    #logo{
+        width: 80%; 
+        min-height: 100px;
+        min-width: 175px;
+    }
+    #left-arrow, #right-arrow{
+        position: absolute;
+        height: 200px;
+        width: 50px;
+        top: 45%;
+        opacity: 0.1;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        transition: opacity 0.5s;
+    }
+    #left-arrow{
+        left: 20px;
+        background-image: url(../img/hmpg/left-arrow.svg);
+    }
+    #right-arrow{
+        right: 50px;
+        background-image: url(../img/hmpg/right-arrow.svg);
+    }
+    #left-arrow:hover, #right-arrow:hover{
+        opacity: 1;
+    }
+    .dot{
+        height: 2vh;
+        width: 2vh;
+        min-height: 10px;
+        min-width: 10px;
+        border-radius: 50%;
+        background-color: white;
+        opacity: 0.1;
+    }
+
+    /* Overlay */
+    .icon-question{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: var(--color1);
+        position: absolute;
+        top: -40px;
+        right: -30px;
+    }
+    .icon-question span{
+        color: white;
+        font-weight: bold;
+        font-size: 23px;
+    }
+    .info-box{
+        color: white;
+        position: absolute;
+        background-color: var(--color2);
+        padding: 20px;
+        top: -40px;
+        right: -230px;
+        font-size: 20px;
+        font-weight: normal;
+        z-index: -1;
+        display: none;
+        border-radius: 10px;
+    }
+    #illust-wrp{
+        position: absolute;
+        overflow: hidden;
+        height: 100%;
+        width: 100vw;
+        top: 0;
+        transition: ease opacity .8s;
+
+    }
+    .illustration{
+        position: absolute;
+        height: 120%;
+        min-height: 900px;
+        z-index: 0;
+        display: none;
+        animation: balanco 2s linear infinite;
+        opacity: 0.5;
+        top: -25%;
+
+    }
+    .io1{
+        left: -100%;
+    }
+    .io2{
+        right: -200%;
+    }
+    .go-arrow{
+        animation: sobeDesce 1s infinite linear;
+        margin-top: 2vh;
+        opacity: 0.3;
+        width: 25px;
+    }
+    .back-arrow{
+        animation: sobeDesce2 1s infinite linear;
+        position: relative;
+        right: 5vw;
+    }
+    #circulo{
+        position: absolute;
+        height: 55vw;
+        width: 55vw;
+        min-height: 900px;
+        min-width: 900px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border-radius: 50%;
+        transition: ease opacity .8s;
+    }
+    /* #tapa-buraco{
+    display: none;
+    position: absolute;
+    background-color: rgb(255, 0, 200);
+    height: 150px;
+    width: 100%;
+    right: -100%;
+    margin-top: -20px;
+    z-index: 1;
+} */
+    
+    /* Animações */
+    @keyframes balanco {
+        0% { transform: rotate(0);}
+        25% { transform: rotate(1deg);}
+        50% { transform: rotate(0);}
+        75% { transform: rotate(-1deg);}
+        100% { transform: rotate(0);}
+    }
+    @keyframes sobeDesce {
+        0% { transform: translateY(0.5vh);}
+        50% { transform: translateY(-0.5vh);}
+        100% { transform: translateY(0.5vh);}
+    }
+    @keyframes sobeDesce2 {
+        0% { transform: translateY(0.5vh) rotate(180deg);}
+        50% { transform: translateY(-0.5vh) rotate(180deg);}
+        100% { transform: translateY(0.5vh) rotate(180deg);}
+    }
+    @keyframes flutuar {
+        from { transform: rotate(0deg) translateX(15px) rotate(0deg); }
+        to   { transform: rotate(360deg) translateX(15px) rotate(-360deg); }
+    }
+
+
+/*--------------------------------------------*/
+/*           |    RESPONSIVIDADE    |         */
+/*--------------------------------------------*/
+
+/* DESKTOP */
+
+    /* Permite overflow quando a altura fica pequena */
+    @media all and (max-height: 750px) and (min-width: 620px){ 
+        #wrp-homepage{
+            grid-template-rows: 650px 100px;
+        }
+        .dot{
+            height: 2vh;
+            width: 2vh;
+            min-height: 15px;
+            min-width: 15px;
+        }
+        #frases-wrp{
+            padding-top: 50px;
+        }
+        #overlay{
+            height: 750px;
+        }
+        #circulo{
+            opacity: 0;
+            transition: ease opacity .8s;
+        }
+    }
+    /* Muda o layout para telas com largura menor */
+    @media all and (max-width: 1280px){ 
+        #wrp-homepage{
+            grid-template-columns: 100%;
+            grid-template-rows: 150px auto 100px;
+            background-color: var(--bgcolor1);
+        }
+        #wrp-overlay{
+            width: 100vw;
+        }
+        #entrada{
+            grid-area: 1 / 1 / 1 / 1;
+            padding: 20px;
+            background-color: white;
+            background-image: none;
+            padding-right: 40px;
+        }
+        #slider{
+            grid-area: 2 / 1 / 2 / 1;
+        }
+        .slide{
+            max-width: 500px;
+            min-width: 400px;
+        }
+        #slider-scrl{
+            grid-area: 3 / 1 / 3 / 1;
+        }
+        #btn-go-login, #btn-go-signup, #wrp-btn-go-in{
+            margin: 0 0 0 15px;
+            width: auto;
+            height: auto;
+            padding: 2vw;
+        }
+        #btn-logout{
+            height: fit-content;
+            width: auto;
+        }
+        #logo{
+            width: 30vw;
+            max-width: 250px;
+            margin-right: auto;
+        }
+        #left-arrow{
+            left: 50px;
+        }
+        .io2{
+            margin-right: 0;
+        }
+        #tapa-buraco{
+            display: block;
+        }
+        .dot{
+            height: 2vw;
+            width: 2vw;
+            max-height: 15px;
+            max-width: 15px;
+        }
+        #wrp-login, #wrp-signup{
+            margin-left: 0;
+        }
+        #illust-wrp{
+            opacity: 0;
+            transition: ease opacity .8s;
+        }
+    }
+    /* Permite overflow no novo layout quando a altura fica pequena */
+    @media all and (max-width: 1280px) and (max-height: 850px){ 
+        #wrp-homepage{
+            grid-template-rows: 150px 600px 100px;
+        }
+    }
+    /* Ajeita a decoração de fundo para não dar overflow */
+    @media all and (max-width: 1280px){ 
+        #deco{
+            width: 100vw;
+        }
+    }
+
+/* MOBILE */
+    
+    /* Muda o layout para dispositivos em modo retrato */
+    @media all and (max-width: 620px) and (orientation: portrait){ 
+        #wrp-homepage{
+            display: block;
+        }
+        #left-arrow, #right-arrow, #slider-scrl, #slider{
+            display: none;
+        }
+        #entrada{
+            height: 100vh;
+            padding: 20vw;
+            padding-bottom: 30vh;
+            gap: 30px;
+        }
+        #btn-go-login, #btn-go-signup, #logo, #wrp-btn-go-in{
+            margin: 0;
+            width: 60vw;
+            font-size: calc(2px + 5vw);
+        }
+        #btn-go-login, #btn-go-signup, #wrp-btn-go-in{
+            padding: 20px 0;
+        }
+        #conheca{
+            display: block;
+        }
+        #logo{
+            margin-bottom: 30px;
+            transform: scale(1.2);
+            max-width: none;
+        }
+        #infos, .info{
+            display: block;
+        }
+        footer{
+            display: flex;
+        }
+        #deco{
+            display: none;
+        }
+
+        /* Overlay */
+            #overlay{
+                min-height: 100%;
+                background: white;
+            }
+            #illust-wrp{
+                display: none;
+            }
+            #wrp-login, #wrp-signup{
+                width: 100vw;
+                padding: 0;
+            }
+            #wrp-signup{
+                align-self: flex-start;
+                margin-top: 70px;
+            }
+            #wrp-login{
+                margin-top: 30px;
+            }
+            #btn-login, #btn-signup{
+                width: 100%;
+                max-width: 320px;
+            }
+            #voltar{
+                display: none;
+            }
+            #x-voltar{
+                display: inline;
+            }
+            #login-label{
+                font-size: 6.5vh;
+            }
+            #signup-label{
+                font-size: 5.2vh;
+            }
+            .form-input{
+                font-size: 2.5vh;
+            }
+            #form-signup{
+                padding: 20px 15vw;
+            }
+    }
+    /* Muda o layout para dispositivos em modo paisagem */
+    @media all and (max-width: 750px) and (max-height: 420px) and (orientation: landscape){
+        #wrp-homepage{
+            grid-template-rows: 30vh auto 20vh;
+        }
+        #entrada{
+            min-height: 100px;
+        }
+        .frase{
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: translate(0, 0);
+            margin-bottom: -5.5vh;
+            width: 90%;
+            font-size: 5.3vw;
+        }
+        #frases-wrp{
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 15vw;
+        }
+        #slider{
+            display: block;
+        }
+        .slide{
+            display: none !important;
+        }
+        #left-arrow, #right-arrow{
+            width: 3vw;
+            opacity: 0.2;
+            top: 50%;
+        }
+        .dot{
+            height: 2vw;
+            width: 2vw;
+        }
+        #overlay{
+            height: 750px;
+        }
+        #login-label, #signup-label{
+            font-size: 6.5vw;
+            opacity: 0.7;
+        }
+        #voltar{
+            display: none;
+        }
+        #x-voltar{
+            display: inline;
+        }
+    }
+    /* Permite overflow quando a largura do aparelho em modo paisagem é pequena demais */
+    @media all and (max-width: 580px) and (orientation: landscape){
+        #wrp-homepage{
+            grid-template-columns: 580px;
+            overflow-x: auto;
+        }
+    }

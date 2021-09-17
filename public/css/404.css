@@ -1,0 +1,61 @@
+@import url(main.css);
+
+html, body{
+    height: 100%;
+}
+body{
+    background-color: #eee;
+    color: #333;
+    overflow: hidden;
+    position: relative;
+    padding: 0 30px !important;
+}
+div, body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.error{
+    font-size: calc(60px + 2vw);
+    font-weight: bold;
+}
+.message{
+    font-size: calc(10px + 2vw);
+}
+svg{
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    opacity: .3;
+    min-width: 800px;
+}
+a{
+    background-color: var(--bgcolor2);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 200px;
+    height: 50px;
+    margin: 50px auto 0 auto;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s;
+    line-height: 48px;
+}
+a:hover{
+    transform: scale(1.05);
+    background-color: var(--bgcolor1);
+}
+img{
+    position: absolute;
+    width: 10vw;
+    bottom: 20px;
+    right: 20px;
+    min-width: 100px;
+}

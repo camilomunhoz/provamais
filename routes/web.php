@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+use App\Http\Controllers\ViewController;
+use App\Http\Controllers\FormValidationController;
+use App\Http\Controllers\AuthController;
+
+Route::get('/', [ViewController::class, 'index']);
+Route::get('/my_tests', [ViewController::class, 'my_tests']);
+
+Route::get('/my_quests', [ViewController::class, 'my_quests']);
+Route::get('/create_quest', [ViewController::class, 'create_quest']);
+Route::get('/search_quests', [ViewController::class, 'search_quests']);
+
+Route::get('/my_profile', [ViewController::class, 'my_profile']);
+Route::get('/help', [ViewController::class, 'help']);
+// Route::get('/goback', [ViewController::class, 'goback']);
+
+Route::post('/update_profile',[FormValidationController::class, 'update_profile']);
+
+Route::get('/logout', [AuthController::class, 'logout']);
+Route::post('/register', [AuthController::class, 'register_user']);
+Route::post('/login', [AuthController::class, 'login']);

@@ -1,0 +1,342 @@
+@import url(main.css);
+
+/* Estrutura básica */
+
+#wrp {
+    height: 100%;
+    width: 100%;    
+}
+
+/* Banners */
+
+.banner {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 26px;
+    font-size: 1.2em;
+    background-color: var(--bgcolor3);
+    color: white;
+    width: 100%;
+    -webkit-box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.3);
+    border-bottom: 4px var(--bgcolor1) solid;
+    gap: 60px;
+    z-index: 99;
+}
+.btn-close-banner {
+    color: white;
+    letter-spacing: 1px;
+    background-color: var(--color1);
+    border-radius: 100px;
+    padding: 5px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-close-banner:hover {
+    background-color: var(--color2);
+}
+.help-tip{
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    display: none;
+    flex-direction: column;
+    padding: 15px 25px;
+    max-width: 300px;
+    -webkit-box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.3);
+    gap: 15px;
+    z-index: 99;
+}
+.arrow{
+    position: absolute;
+    top: -65px;
+    left: 55px;
+    animation: vaiVem 1s infinite;
+    font-size: 35px;
+    color: white;
+    user-select: none;
+    cursor: default;
+    z-index: 5;
+}
+@keyframes vaiVem {
+    0% { transform: translateX(4px);}
+    50% { transform: translateX(0);}
+    100% { transform: translateX(4px);}
+}
+
+/* Navbar */
+
+nav {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    background-color: var(--bgcolor1);
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+}
+nav a{
+    text-decoration: none;
+}
+#nav-left-items, #nav-right-items {
+    position: relative;
+    align-items: center;
+    height: 100%;
+    display: flex;
+}
+#profile {
+    background-image: linear-gradient(
+        100deg,
+        var(--bgcolor3) 80%,
+        transparent 81%
+    );
+    height: 100%;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    margin-right: 2px;
+}
+#profile-picture:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+#profile-picture {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    object-fit: cover;
+}
+#logo {
+    width: 170px;
+    height: 100%;
+    background-image: linear-gradient(100deg, transparent 9%, white 9.5%);
+    display: flex;
+    justify-content: center;
+    padding-left: 10px;
+}
+#logo-img {
+    height: 65px;
+    width: 150px;
+}
+.nav-section, .nav2-section{
+    height: 100%;
+    transition: margin 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 10px;
+}
+.nav-section {
+    width: 250px;
+    /* background-image: linear-gradient(
+        100deg,
+        transparent 9%,
+        var(--bgcolor4) 9.5%,
+        var(--bgcolor4) 92%,
+        transparent 92.5%
+    ); */
+    margin-left: -30px; 
+}
+.nav2-section {
+    padding: 0 20px;
+    background-image: none;   
+}
+.nav-section:hover {
+    background-image: linear-gradient(
+        100deg,
+        transparent 9%,
+        var(--bgcolor3) 9.5%,
+        var(--bgcolor3) 92%,
+        transparent 92.5%
+    );
+    margin-left: -20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.nav2-section:hover {
+    background-image: linear-gradient(
+        100deg,
+        transparent 9%,
+        var(--bgcolor3) 9.5%,
+        var(--bgcolor3) 92%,
+        transparent 92.5%
+    );
+    margin: 0 10px;
+    cursor: pointer;
+}
+.section-img {
+    height: 30px;
+    width: 30px;
+}
+.current {
+    pointer-events: none;
+    background-image: none;
+    position: relative;
+}
+.current:hover {
+    background-image: none;
+    cursor: default;
+    margin-left: -20px;
+    margin-right: 0;
+}
+#current-detail {
+    position: absolute;
+    bottom: -10px;
+    height: 10px;
+    width: 30px;
+    background-color: var(--bgcolor1);
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+}
+.help {
+    width: 150px;
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--bgcolor3) 19%,
+        var(--bgcolor3) 92%,
+        transparent 92.5%
+    );
+    width: 150px;
+    margin-right: -90px;
+    padding-left: 5px;
+    font-weight: bold;
+    gap: 15px;
+}
+.help:hover {
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--bgcolor3) 19%,
+        var(--bgcolor3) 92%,
+        transparent 92.5%
+    );
+    margin-right: -25px;
+}
+.logout {
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--color1) 19%,
+        var(--color1) 92%,
+        transparent 92.5%
+    );
+    margin-right: -75px;
+    width: 150px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+.logout:hover {
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--color2) 19%,
+        var(--color2) 92%,
+        transparent 92.5%
+    );
+    margin-right: -25px;
+}
+.username {
+    color: white;
+    font-weight: bold;
+    margin-left: -15px;
+    margin-right: 15px;
+}
+.line-detail {
+    height: 50px;
+    width: 2px;
+    background-color: var(--bgcolor2);
+    transform: skew(-10deg);
+}
+.close-nav-2 {
+    transition: padding 0.1s;
+}
+.close-nav-2 span {
+    border-bottom: 3px solid var(--bgcolor2);
+    padding: 3px 0;
+}
+.close-nav-2:hover {
+    margin: 0;
+    padding-top: 3px;
+}
+.nav-1 {
+    display: flex;
+}
+.nav-2 {
+    display: none;
+}
+
+/* Botão "Criar" */
+
+#btn-create{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: var(--color1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 70px;
+    right: 70px;
+    transition: transform .3s;
+}
+#btn-create img{
+    height: 50px;
+    width: 50px;
+}
+#btn-create:hover{
+    transform: rotate(180deg) scale(1.1);
+}
+
+/* Header */
+
+header{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 50px;
+}
+#header-left-items{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+#header-right-items{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0px;
+}
+#header-img{
+    height: 60px;
+    width: 60px;
+}
+#header-title{
+    font-size: 30px;
+    color: var(--bgcolor3);
+}
+.search-box{
+    height: 35px;
+    width: 500px;
+    font-size: 14px;
+    padding: 0 20px;
+}
+.search-submit{
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    transition: filter .4s;
+}
+.search-submit img{
+    height: 100%;
+    width: 100%;
+}
+.search-submit:hover{
+    filter: brightness(.7);
+}

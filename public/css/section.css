@@ -1,0 +1,97 @@
+@import url(main.css);
+
+/* Header */
+
+header {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    background-color: var(--bgcolor3);
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+}
+#header-left-items, #header-right-items {
+    position: relative;
+    align-items: center;
+    height: 100%;
+    display: flex;
+}
+#logo {
+    width: 170px;
+    height: 100%;
+    background-image: linear-gradient(100deg, transparent 9%, white 9.5%);
+    display: flex;
+    justify-content: center;
+    padding-left: 10px;
+}
+#logo-img {
+    height: 65px;
+    width: 150px;
+}
+.header-section{
+    height: 100%;
+    transition: margin 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 10px;
+}
+.header-detail{
+    background-image: linear-gradient(
+        100deg,
+        var(--bgcolor1) 80%,
+        transparent 82%
+    );
+    width: 50px;
+}
+#section-title{
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-left: 20px;
+}
+.cancel-action{
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--color1) 19%,
+        var(--color1) 92%,
+        transparent 92.5%
+    );
+    margin-right: -25px;
+    width: 170px;
+    padding-left: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.cancel-action:hover{
+    background-image: linear-gradient(
+        100deg,
+        transparent 18%,
+        var(--color2) 19%,
+        var(--color2) 92%,
+        transparent 92.5%
+    );
+}
+.cancel-action img, .x{
+    transform: rotate(45deg);
+    height: 20px;
+    width: 20px;
+}
+
+/* Conteúdo */
+
+#content{
+    height: calc(100% - 60px);
+    display: flex;
+    justify-content: center;
+}
+.breathe-space{
+    height: 50px;
+}
+
+
+
