@@ -26,21 +26,21 @@ $(document).ready(function(){
             reader.readAsDataURL(e.target.files[0]);
             if(!$('#reset-my-profile-pic').length){
                 $('#wrp-my-profile-pic').append(
-                    '<input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value=false>'+
+                    '<input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value="0">'+
                     '<label for="reset-my-profile-pic"><img src="/img/icons/ico_plus.svg" alt="X"></label>'
                 );
             }
             else{
                 $('#wrp-my-profile-pic label').show();
             }
-            $('#reset-my-profile-pic').attr('value', false);
+            $('#reset-my-profile-pic').attr('value', 0);
             $('#reset-my-profile-pic').on('change', resetProfilePic);
         }
     }
     function resetProfilePic() {
         $('#my-profile-pic').attr('src', '/img/users_profile_pics/user_pic_placeholder.png');
         $('#wrp-my-profile-pic label').hide();
-        $('#reset-my-profile-pic').attr('value', true);
+        $('#reset-my-profile-pic').attr('value', 1);
     }
     
 /********************* CADASTRO DE QUESTÃO *********************/

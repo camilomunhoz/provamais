@@ -15,13 +15,16 @@ class FormValidationController extends Controller
             
         $user = User::find(Auth::user()->id);
         
-        if($request->hasFile('profilepic') && $request->file('profilepic')->isValid() && !$request->resetpic){
-            $pic = $request->profilepic;
-            $pic_ext = $pic->extension();
-            $pic_name = md5($pic->getClientOriginalName() . strtotime("now")) . '.' . $pic_ext;
-            
-            $pic->move(public_path('img/users_profile_pics'), $pic_name);  
-            $user->profile_pic = $pic_name;
+        if($request->hasFile('profilepic') && !$request->resetpic){
+            if($request->file('profilepic')->isValid()){
+                print_r($request->file('profilepic')->isValid());
+                $pic = $request->profilepic;
+                $pic_ext = $pic->extension();
+                $pic_name = md5($pic->getClientOriginalName() . strtotime("now")) . '.' . $pic_ext;
+                
+                $pic->move(public_path('img/users_profile_pics'), $pic_name);  
+                $user->profile_pic = $pic_name;
+            }
         }
         else{
             $user->profile_pic = NULL;
@@ -30,7 +33,7 @@ class FormValidationController extends Controller
         $user->pix = $request->pix;
 
         $user->save();
-            
+
         return redirect('/my_tests')->with('profile_edited','Perfil editado.');
     }
 }

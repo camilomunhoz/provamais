@@ -24,7 +24,7 @@
             <div id="wrp-my-profile-pic">
                 <img id="my-profile-pic" src="/img/users_profile_pics/{{($user->profile_pic)}}" alt="Foto de perfil">
                 @if($user->profile_pic!='user_pic_placeholder.png')
-                    <input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value=false>
+                    <input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value="0">
                     <label for="reset-my-profile-pic"><img src="/img/icons/ico_plus.svg" alt="X"></label>
                 @endif
             </div>
