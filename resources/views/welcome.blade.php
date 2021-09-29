@@ -19,7 +19,7 @@
         <div id="entrada">
             <img id="logo" src="/img/logo.svg" alt="Prova+">
             @auth
-                <a id="wrp-btn-go-in" href="/my_tests"><span>Entrar</span></a>
+                <a id="wrp-btn-go-in" href="/my_docs"><span>Entrar</span></a>
                 <a id="btn-logout" href="/logout">Encerrar sessão</a>
             @endauth
             @guest
@@ -35,7 +35,7 @@
             {{-- Frases --}}
             <div id="frases-wrp">
                 <span class="frase f1">Crie provas rapidamente.</span>
-                <span class="frase f2">Perfeito para professores e estudantes.</span>
+                <span class="frase f2">Organize suas questões.</span>
                 <span class="frase f3">Desfrute de um banco de questões colaborativo.</span>
                 <span class="frase f4">Contribua com a comunidade acadêmica e escolar.</span>
                 <span class="frase f5">Agilize sua produção de material.</span>

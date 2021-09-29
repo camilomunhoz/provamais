@@ -81,6 +81,9 @@
     background-color: none;
     opacity: .5;
 }
+#quest-type-flag{
+    display: none;
+}
 
 /* Enunciado */
 
@@ -213,14 +216,23 @@
     font-size: 14px;
 }
 
-/* Conteúdo e outros termos */
+/* Conteúdo, outros termos e número de linhas*/
 
-#content-tag, #other-terms{
+#content-tag, #other-terms, #n-lines{
     padding: 10px 20px;
     font-size: 14px;
     min-width: 400px;
     width: 60%;
     font-size: 16px;
+}
+#n-lines{
+    width: 70px;
+    min-width: 70px;
+    padding: 10px 10px 10px 20px;
+}
+#n-lines:out-of-range{
+    border-color: var(--color2);
+    background-color: #FEE;
 }
 
 /* Privacidade */

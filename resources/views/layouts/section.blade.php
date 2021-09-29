@@ -29,7 +29,7 @@
             <span class="confirmation-details">Todo o conteúdo não salvo será perdido.</span>
             <div class="confirmation-buttons">
                 <span class="confirmation-btn-hard">Não</span>
-                <a href="/my_tests" class="confirmation-btn-light">Sair</a>
+                <a href="/my_docs" class="confirmation-btn-light">Sair</a>
             </div>
         </div>
     </div>

@@ -34,6 +34,6 @@ class FormValidationController extends Controller
 
         $user->save();
 
-        return redirect('/my_tests')->with('profile_edited','Perfil editado.');
+        return redirect('/my_docs')->with('profile_edited','Perfil editado.');
     }
 }

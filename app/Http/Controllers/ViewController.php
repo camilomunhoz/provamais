@@ -16,8 +16,8 @@ class ViewController extends Controller
         return view('welcome');
     }
     
-    // View "Minhas avaliações"
-    public function my_tests(){
+    // View "Meus documentos"
+    public function my_docs(){
         if(Auth::check()){
             $user = Auth::user();
             $username = explode(' ', $user->name);
@@ -25,7 +25,15 @@ class ViewController extends Controller
             if(!$user->profile_pic){
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
-            return view('my_tests', ['user' => $user]);
+            return view('my_docs', ['user' => $user]);
+        }
+        return redirect('/');
+    }
+
+    // View "Criar documento"
+    public function create_doc(){
+        if(Auth::check()){
+            return view('create_doc');
         }
         return redirect('/');
     }
@@ -47,7 +55,6 @@ class ViewController extends Controller
     // View "Cadastrar questão"
     public function create_quest(){
         if(Auth::check()){
-
             return view('create_quest');
         }
         return redirect('/');

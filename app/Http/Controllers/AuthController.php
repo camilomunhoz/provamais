@@ -38,7 +38,7 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
             
-            return redirect('/my_tests')->with('account_created','Conta criada.');
+            return redirect('/my_docs')->with('account_created','Conta criada.');
         }
     }
 
@@ -59,7 +59,7 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
             
-            return redirect('/my_tests');
+            return redirect('/my_docs');
         }
     }
 

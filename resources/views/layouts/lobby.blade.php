@@ -27,7 +27,7 @@
 
             {{-- nav 1 / Menus --}}
 
-            <a href="/my_tests" id="my-tests" class="nav-1 nav-section @yield('current_1')">
+            <a href="/my_docs" id="my-tests" class="nav-1 nav-section @yield('current_1')">
                 <img src="/img/icons/ico_tests.svg" class="section-img">
                 <span class="section-title">Minhas avaliações</span>
                 @yield('current-detail_1')

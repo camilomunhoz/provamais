@@ -63,6 +63,19 @@ $(document).ready(function(){
             $(e.target).parent().siblings().removeClass('selected-type');
             $(e.target).parent().siblings().addClass('unselected-type');
         }
+
+        // Liberação do respectivo formulário
+        if($(e.target).attr('id') == 'type-alter' || $(e.target).parent().attr('id') == 'type-alter'){
+            $('.hidden').removeClass('hidden');
+            $('#n-lines').parent().parent().addClass('hidden');
+            $('#quest-type-flag').attr('value', 'alternative');
+        }
+        else{
+            $('.hidden').removeClass('hidden');
+            $('.alters').parent().parent().addClass('hidden');
+            $('#quest-type-flag').attr('value', 'essay');
+        }
+
     });
 
     // Quill config
@@ -87,6 +100,7 @@ $(document).ready(function(){
             toolbar: barraBubble,
         },
         theme: 'bubble',
+        bounds: '.alternative'
     }
 
     // Enunciado
@@ -101,7 +115,53 @@ $(document).ready(function(){
             'obj': new Quill('.a'+a, configAlter ), 
         });
     }
+    // Adiciona alternativa
+    $('#add-alter').on('click', () => {
+        let numAlts = $('.alternative').length;
+        let asciiLetter = numAlts + 97; // para definir a letra com ASCII
+        $('.alters').append(
+            '<div class="alternative">'+
+                '<span class="letter">&#'+ asciiLetter +';)</span><div class="a'+ (++a) +' simple-box"></div>'+
+                '<img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">'+
+            '</div>'
+        );
+        alt.push({
+            'number': a,
+            'obj': new Quill('.a'+a, configAlter ), 
+        });
+        $('.x-alter').on('click', deleteAlternative);
+    });
 
+    // Exclui alternativa
+    function deleteAlternative(e){
+        
+        // Seleciona a alternativa
+        let alt = $(e.target).siblings('.simple-box');
+        
+        // Extrai o número da alternativa
+        let classes = alt.attr('class').split(/\s+/);
+        let nAlt = classes[0];
+        nAlt = Number(nAlt.substr(nAlt.length - 1));
+        
+        // Retira a instância Quill do array
+        for(let x = 0; x < alt.length; x++){;
+            if(alt[x].number == nAlt){
+                alt.splice(x, 1);
+                x = alt.length;
+            }
+        }
+        
+        // Remove alternativa do DOM
+        $(e.target).parent('.alternative').remove();
+        
+        // Refaz a enumeração com as letras
+        let letters = $('.letter');
+        for(let i = 0; i < letters.length; i++){
+            $(letters[i]).html('&#'+(97+i)+';)');
+        }
+    }
+    $('.x-alter').on('click', deleteAlternative);
+    
     // Escolha da imagem
     $('#quest-img').on('change', getImageName);
     $('.x-img').on('click', removeImage);
@@ -113,14 +173,14 @@ $(document).ready(function(){
             $('#img-name').html(imgName);
             $('#quest-img-label').html('Alterar imagem');
             $('#quest-img-x').show();
-            $('#quest-img-flag').attr('value', true);
+            $('#quest-img-flag').attr('value', 1);
         }
     }
     function removeImage() {
         $('#img-name').html('Nenhuma imagem selecionada');
         $('#quest-img-label').html('Escolher imagem');
         $('#quest-img-x').hide();
-        $('#quest-img-flag').attr('value', false);
+        $('#quest-img-flag').attr('value', 0);
     }
     
 });

@@ -32,19 +32,20 @@
         
         {{-- Tipo --}}
         <div class="row">
+            <input type="checkbox" name="quest_type_flag" id="quest-type-flag" value="NULL">
             <div class="row-content-left aligned-center-right">
                 <span class="bigger-label required">Tipo da questão</span>
             </div>
             <div class="row-content-right simple-box">
                 <div id="wrp-quest-type">
-                    <div class="quest-type"><img src="/img/icons/quest_alter.svg" alt="Questão alternativa"><span class="bigger-label">Objetiva</span></div>
-                    <div class="quest-type"><img src="/img/icons/quest_disser.svg" alt="Questão dissertativa"><span class="bigger-label">Dissertativa</span></div>
+                    <div class="quest-type" id="type-alter"><img src="/img/icons/quest_alter.svg" alt="Questão objetiva"><span class="bigger-label">Objetiva</span></div>
+                    <div class="quest-type" id="type-essay"><img src="/img/icons/quest_disser.svg" alt="Questão dissertativa"><span class="bigger-label">Dissertativa</span></div>
                 </div>
             </div>
         </div>
 
         {{-- Enunciado --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-top-right">
                 <span class="bigger-label required">Enunciado</span>
             </div>
@@ -53,27 +54,27 @@
             </div>
         </div>
 
-        {{-- Alternativas --}}
-        <div class="row">
+        {{-- Alternativas / para questões objetivas --}}
+        <div class="row hidden">
             <div class="row-content-left aligned-top-right">
                 <span class="bigger-label required">Alternativas</span>
             </div>
             <div class="row-content-right">
                 <div class="alters wrp-quill">
                     <div class="alternative">
-                        <span class="letter">a)</span><div class="a0 simple-box"></div>
+                        <span class="letter">&#97;)</span><div class="a0 simple-box"></div>
                         <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
                     </div>
                     <div class="alternative">
-                        <span class="letter">b)</span><div class="a1 simple-box"></div>
+                        <span class="letter">&#98;)</span><div class="a1 simple-box"></div>
                         <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
                     </div>
                     <div class="alternative">
-                        <span class="letter">c)</span><div class="a2 simple-box"></div>
+                        <span class="letter">&#99;)</span><div class="a2 simple-box"></div>
                         <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
                     </div>
                     <div class="alternative">
-                        <span class="letter">d)</span><div class="a3 simple-box"></div>
+                        <span class="letter">&#100;)</span><div class="a3 simple-box"></div>
                         <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
                     </div>
                 </div>
@@ -81,8 +82,18 @@
             </div>
         </div>
 
+        {{-- Número de linhas / para questões dissertativas --}}
+        <div class="row hidden">
+            <div class="row-content-left aligned-center-right">
+                <span class="required">Número de linhas</span>
+            </div>
+            <div class="row-content-right">
+                <input type="number" name="n_lines" class="simple-box" id="n-lines" max="99" min="1" onkeypress="$(this).mask('00');" value=5>
+            </div>
+        </div>
+
         {{-- Imagem --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-center-right">
                 <span>Incluir imagem</span>
             </div>
@@ -90,13 +101,13 @@
                 <label for="quest-img" id="quest-img-label">Escolher imagem</label>
                 <input type="file" accept=".jpg, .jpeg, .png" name="quest_img" id="quest-img">
                 <span id="img-name">Nenhuma imagem selecionada</span>
-                <input type="checkbox" name="quest_img_flag" id="quest-img-flag" value="false">
+                <input type="checkbox" name="quest_img_flag" id="quest-img-flag" value="0">
                 <label for="quest-img-flag" id="quest-img-x"><img class="x x-img" src="/img/icons/ico_plus.svg" alt="X" title="Remover imagem"></label>
             </div>
         </div>
 
         {{-- Disciplina --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-center-right">
                 <span class="required">Disciplina</span>
             </div>
@@ -108,7 +119,7 @@
         </div>
 
         {{-- Conteúdo --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-center-right">
                 <span class="required">Conteúdo</span>
             </div>
@@ -118,7 +129,7 @@
         </div>
 
         {{-- Outros termos --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-center-right">
                 <span>Outros termos para pesquisa</span>
             </div>
@@ -128,7 +139,7 @@
         </div>
 
         {{-- Escolha privacidade --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left aligned-center-right">
                 <span>Questão privada</span>
             </div>
@@ -147,7 +158,7 @@
         </div>
         
         {{-- Botão de salvar --}}
-        <div class="row">
+        <div class="row hidden">
             <div class="row-content-left">
                 {{-- espaço vazio --}}
             </div>

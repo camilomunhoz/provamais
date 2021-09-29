@@ -64,6 +64,9 @@ input:focus, textarea:focus, select:focus{
 #content{
 	overflow-x: auto;
 }
+.hidden{
+    display: none !important;
+}
 
 /* Overlay de confirmação de saída */
 

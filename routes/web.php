@@ -18,7 +18,8 @@ use App\Http\Controllers\FormValidationController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', [ViewController::class, 'index']);
-Route::get('/my_tests', [ViewController::class, 'my_tests']);
+Route::get('/my_docs', [ViewController::class, 'my_docs']);
+Route::get('/create_doc', [ViewController::class, 'create_doc']);
 
 Route::get('/my_quests', [ViewController::class, 'my_quests']);
 Route::get('/create_quest', [ViewController::class, 'create_quest']);

@@ -38,6 +38,6 @@
 {{-- Conteúdo da seção --}}
 @section('lobby_content')
 
-    <a href="/create_test" id="btn-create" title="Criar avaliação"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>
+    <a href="/create_doc" id="btn-create" title="Criar documento"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>
 
 @endsection

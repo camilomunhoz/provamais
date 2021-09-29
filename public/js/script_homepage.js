@@ -86,7 +86,7 @@ $(document).ready(function(){
     function showInfo(){
         let frases = [
             'Crie provas rapidamente.',
-            'Perfeito para professores e estudantes.',
+            'Organize suas questões.',
             'Desfrute de um banco de questões colaborativo.',
             'Contribua com a comunidade acadêmica e escolar.',
             'Agilize sua produção de material.',
