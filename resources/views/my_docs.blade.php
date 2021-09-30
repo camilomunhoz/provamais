@@ -1,6 +1,7 @@
 @extends('layouts.lobby')
 
 @section('title', '| Minhas avaliações')
+@section('css', '/css/my_docs.css')
 
 {{-- Define a seção atual --}}
 @section('current_1', 'current')
@@ -37,6 +38,12 @@
 
 {{-- Conteúdo da seção --}}
 @section('lobby_content')
+
+    <div id="docs">
+        @for ($i = 0; $i < 41; $i++)
+            <x-document-card>Prova 1 - 2º tri - Conteúdo</x-document-card>
+        @endfor
+    </div>
 
     <a href="/create_doc" id="btn-create" title="Criar documento"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>
 

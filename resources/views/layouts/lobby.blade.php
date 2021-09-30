@@ -1,6 +1,5 @@
 @extends('layouts.main')
 
-@section('css', '/css/lobby.css')
 @section('js', '/js/script_lobby.js')
 
 @section('content')
@@ -84,6 +83,6 @@
 
     <div class="simple-line"></div>
 
-        @yield('lobby_content')
+    @yield('lobby_content')
 
 @endsection

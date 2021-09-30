@@ -144,13 +144,13 @@
                 <span>Questão privada</span>
             </div>
             <div class="row-content-right is-private">
-                <label for="no" class="privacy-label">
-                    <input class="simple-box" name="privacy" type="radio" value="false" id="no" checked>
+                <label for="no" class="checkbox-label">
+                    <input class="simple-box" name="privacy" type="radio" id="no" checked>
                     <div class="checkbox"><div class="checkmark"></div></div>
                     <span>Não</span>
                 </label>
-                <label for="yes" class="privacy-label">
-                    <input class="simple-box" name="privacy" type="radio" value="true" id="yes">
+                <label for="yes" class="checkbox-label">
+                    <input class="simple-box" name="privacy" type="radio" id="yes">
                     <div class="checkbox"><div class="checkmark"></div></div>
                     <span>Sim</span>
                 </label>

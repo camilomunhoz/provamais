@@ -1,0 +1,120 @@
+@import url(lobby.css);
+
+/* Geral */
+
+#content{
+    height: calc(100% - 160px);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 300px auto;
+    gap: 30px;
+}
+
+/* Sidebar dos filtros */
+
+#filters{
+    background-color: white;
+    min-height: 350px;
+    height: 100%;
+    max-height: 100%;
+    padding: 20px 20px 0 20px;
+    display: grid;
+    grid-template-rows: 50px calc(100% - 110px) 60px;
+}
+#filter-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#filter-header > div > span{
+    color: var(--bgcolor3);
+    font-weight: bold;
+    font-size: 20px;
+}
+#filter-header > div:last-of-type{
+    margin-top: 15px;
+    margin-right: 10px;
+}
+#filter-header img{
+    height: 30px;
+}
+#filter-checkboxes{
+    padding-left: 3px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+#filter-checkboxes > div > label, #filter-header > div > div > label{
+    height: 30px;
+}
+.filter-section{
+    color: var(--bgcolor2);
+    font-weight: bold;
+    line-height: 40px;
+}
+#filter-btn{
+    width: 100%;
+    border-top: solid 1px #ccc;
+    line-height: 57px;
+    text-align: center;
+    color: var(--bgcolor2);
+    font-weight: bold;
+    font-size: 19px;
+    transition: font-size ease .15s;
+    cursor: pointer;
+}
+#filter-btn:hover{
+    font-size: 20px;
+}
+
+/* Resultados da pesquisa */
+
+#results{
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 10px;
+    transition: opacity ease .2s;
+}
+.question-card{
+    /* border-radius: 10px; */
+    min-height: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 12px;
+}
+.question-card:hover{
+    background-color: #f5f5f5;
+}
+.question-card-tag{
+    font-size: small;
+    font-weight: bold;
+    color: white;
+    border-radius: 99px;
+    padding: 3px 10px;
+    text-align: center;
+}
+.tag-subject{
+    background-color: var(--color1);
+}
+.tag-content{
+    background-color: var(--color2);
+}
+.tag-type{
+    background-color: var(--bgcolor2);
+    white-space: nowrap;
+}
+.question-card-statement{
+    max-height: 20px;
+    overflow: hidden;
+}
+#results::-webkit-scrollbar, #filter-checkboxes::-webkit-scrollbar{
+    width: 8px;
+}
+#results::-webkit-scrollbar-thumb, #filter-checkboxes::-webkit-scrollbar-thumb{
+    background-color: #ccc;
+    border-radius: 99px;
+}
