@@ -9,6 +9,13 @@
     grid-template-columns: 300px auto;
     gap: 30px;
 }
+#results::-webkit-scrollbar, #filter-checkboxes::-webkit-scrollbar{
+    width: 8px;
+}
+#results::-webkit-scrollbar-thumb, #filter-checkboxes::-webkit-scrollbar-thumb{
+    background-color: #ccc;
+    border-radius: 99px;
+}
 
 /* Sidebar dos filtros */
 
@@ -75,6 +82,13 @@
     gap: 10px;
     padding-right: 10px;
     transition: opacity ease .2s;
+    opacity: 0; /* Tirar */
+}
+#results:hover{
+    opacity: 1; /* Tirar */
+}
+#results::-webkit-scrollbar{
+    width: 8px;
 }
 .question-card{
     /* border-radius: 10px; */
@@ -110,11 +124,4 @@
 .question-card-statement{
     max-height: 20px;
     overflow: hidden;
-}
-#results::-webkit-scrollbar, #filter-checkboxes::-webkit-scrollbar{
-    width: 8px;
-}
-#results::-webkit-scrollbar-thumb, #filter-checkboxes::-webkit-scrollbar-thumb{
-    background-color: #ccc;
-    border-radius: 99px;
 }

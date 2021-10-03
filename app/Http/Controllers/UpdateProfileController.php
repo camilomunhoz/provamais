@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class FormValidationController extends Controller
+class UpdateProfileController extends Controller
 {
-    /*********** FUNÇÕES PARA VALIDAÇÃO DE FORMULÁRIO ***********/
-
     public function update_profile(Request $request){
             
         $user = User::find(Auth::user()->id);

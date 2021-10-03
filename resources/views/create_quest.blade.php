@@ -28,7 +28,7 @@
 {{-- Conteúdo da seção --}}
 @section('section_content')
 
-    <form id="new-quest" action="" enctype="multipart/form-data">
+    <form id="new-quest" action="" enctype="multipart/form-data"> @csrf
         
         {{-- Tipo --}}
         <div class="row">
@@ -113,7 +113,10 @@
             </div>
             <div class="row-content-right">
                 <select name="subject" class="simple-box" id="subject">
-                    <option value="NULL">Selecionar</option>
+                    <option value="NULL">&lt; Selecionar &gt;</option>
+                    @foreach ($subjects as $subject)
+                        <option value="{{$subject->id}}">{{$subject->name}}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -170,5 +173,17 @@
 
         <div class="row breathe-space"></div>
     </form>
+
+    {{-- <script>
+        $(() => {
+            $('#new-quest').submit((e) => {
+                e.preventDefault();
+
+                $.ajax({
+                    // url: "{{ route('teste') }}",
+                });
+            });
+        });
+    </script> --}}
     
 @endsection

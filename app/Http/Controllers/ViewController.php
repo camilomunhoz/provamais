@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Subject;
 
 class ViewController extends Controller
 {
@@ -55,7 +56,8 @@ class ViewController extends Controller
     // View "Cadastrar questão"
     public function create_quest(){
         if(Auth::check()){
-            return view('create_quest');
+            $subjects = Subject::all();
+            return view('create_quest', ['subjects' => $subjects]);
         }
         return redirect('/');
     }

@@ -10,6 +10,18 @@
     gap: 15px;
     overflow-y: auto;
     max-height: calc(100% - 160px);
+    opacity: 0; /* Tirar */
+    transition: opacity ease .2s; /* Tirar */
+}
+#docs:hover{
+    opacity: 1; /* Tirar */
+}
+#docs::-webkit-scrollbar{
+    width: 8px;
+}
+#docs::-webkit-scrollbar-thumb{
+    background-color: #ccc;
+    border-radius: 99px;
 }
 
 /* Card do documento */
