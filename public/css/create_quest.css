@@ -20,6 +20,8 @@
 .row-content-right{
     flex: 5;
     min-width: 500px;
+    padding: 5px;
+    border-radius: 5px;
 }
 .row-content-right img{
     width: 100px;
@@ -35,7 +37,7 @@
 .bigger-label{
     font-size: 20px;
 }
-.row-content-left span{
+.row-content-left span, .row-content-left label{
     color: #444;
 }
 #wrp-quest-type span{
@@ -47,6 +49,10 @@
     font-size: 25px;
     margin-left: 2px;
     line-height: 0px;
+}
+.error-feedback{
+    color: var(--color2) !important;
+    margin-left: 10px;
 }
 
 /* Escolha do tipo */
@@ -69,17 +75,17 @@
 }
 .quest-type:first-of-type{
     border-right: 1px solid #ccc;
-    border-radius: 20px 0 0 20px;
+    border-radius: 5px 0 0 5px;
 }
 .quest-type:last-of-type{
-    border-radius: 0 20px 20px 0;
+    border-radius: 0 5px 5px 0;
 }
 .selected-type{
     background-color: #eee;
 }
 .unselected-type{
-    background-color: none;
-    opacity: .5;
+    background-color: transparent;
+    opacity: .3;
 }
 #quest-type-flag{
     display: none;
@@ -88,10 +94,11 @@
 /* Enunciado */
 
 .statement .ql-toolbar{
-    border-radius: 20px 20px 0 0;
+    border-radius: 15px 15px 0 0;
+    background-color: white;
 }
 .statement .ql-container{
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 15px 15px;
     font-size: 16px;
     height: auto;
     min-height: 60px;
@@ -159,6 +166,32 @@
     margin-right: 10px;
     margin-bottom: -3px;
 }
+#alters-sidebar{
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-end;
+    gap: 30px;
+}
+#alters-sidebar{
+    width: 50%;
+}
+#correct-label{
+    border-radius: 5px;
+    padding: 5px;
+}
+#correct-label span{
+    margin: 0;
+}
+#correct{
+    font-size: 18px;
+    padding: 5px;
+    margin-top: 10px;
+    float: right;
+}
+#correct option{
+    font-size: 18px;
+    text-align: center;
+}
 
 /* Escolher imagem */
 
@@ -212,18 +245,21 @@
 /* Disciplina */
 
 #subject{
-    padding: 8px 16px;
+    padding: 10px 16px;
     font-size: 14px;
 }
 
-/* Conteúdo, outros termos e número de linhas*/
+/* Conteúdo, outros termos, número de linhas, sugestão de resposta*/
 
-#content-tag, #other-terms, #n-lines{
+#content-tag, #other-terms, #n-lines, #answer{
     padding: 10px 20px;
     font-size: 14px;
     min-width: 400px;
     width: 60%;
     font-size: 16px;
+}
+#answer{
+    width: 100%;
 }
 #n-lines{
     width: 70px;
@@ -240,6 +276,7 @@
 .is-private{
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 .is-private .checkbox-label:last-of-type{
     margin-left: 15px;

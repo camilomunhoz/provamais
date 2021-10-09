@@ -45,6 +45,9 @@ $(document).ready(function(){
     
 /********************* CADASTRO DE QUESTÃO *********************/
 
+    // Esconde os spans de erro
+    $('.error-feedback').hide();
+
     // Seleção do tipo
     $('.quest-type').on('click', (e) => {
         let classes = e.target.className;
@@ -66,13 +69,14 @@ $(document).ready(function(){
 
         // Liberação do respectivo formulário
         if($(e.target).attr('id') == 'type-alter' || $(e.target).parent().attr('id') == 'type-alter'){
-            $('.hidden').removeClass('hidden');
-            $('#n-lines').parent().parent().addClass('hidden');
+            $('.hidden').fadeIn(200).css('display', 'flex').removeClass('hidden');
+            $('#n-lines').parent().parent().addClass('hidden').hide();
+            $('#answer').parent().parent().addClass('hidden').hide();
             $('#quest-type-flag').attr('value', 'alternative');
         }
         else{
-            $('.hidden').removeClass('hidden');
-            $('.alters').parent().parent().addClass('hidden');
+            $('.hidden').fadeIn(200).css('display', 'flex').removeClass('hidden');
+            $('.alters').parent().parent().addClass('hidden').hide();
             $('#quest-type-flag').attr('value', 'essay');
         }
 
@@ -89,22 +93,35 @@ $(document).ready(function(){
     var barraBubble = [
         ['bold'], ['italic'], ['underline'], ['strike'], ['formula']
     ]
+    var allowedFormats = ['bold', 'italic', 'strike', 'underline', 'formula', 'indent', 'list', 'align', 'script']
+
     var configEnunciado = {
         modules: {
             toolbar: barraSnow,
         },
         theme: 'snow',
-    }
+        formats: allowedFormats,
+    } 
     var configAlter = {
         modules: {
             toolbar: barraBubble,
         },
         theme: 'bubble',
+        formats: allowedFormats,
         bounds: '.alternative'
     }
 
     // Enunciado
     var enunciado = new Quill('#input-statement', configEnunciado);
+
+    // Alternativa correta
+    function refreshCorrect(){
+        $('#correct').empty().append("<option value=''>-</option>");
+        for (let i = 0; i < alt.length; i++){
+            let asciiLetter = i + 97; // para definir a letra com ASCII
+            $('#correct').append('<option value='+a+'>&#'+asciiLetter+';</option>');
+        }
+    }
 
     // Alternativas
     var alt = [];
@@ -115,6 +132,8 @@ $(document).ready(function(){
             'obj': new Quill('.a'+a, configAlter ), 
         });
     }
+    refreshCorrect();
+
     // Adiciona alternativa
     $('#add-alter').on('click', () => {
         let numAlts = $('.alternative').length;
@@ -129,6 +148,7 @@ $(document).ready(function(){
             'number': a,
             'obj': new Quill('.a'+a, configAlter ), 
         });
+        refreshCorrect();
         $('.x-alter').on('click', deleteAlternative);
     });
 
@@ -136,10 +156,10 @@ $(document).ready(function(){
     function deleteAlternative(e){
         
         // Seleciona a alternativa
-        let alt = $(e.target).siblings('.simple-box');
+        let alter = $(e.target).siblings('.simple-box');
         
         // Extrai o número da alternativa
-        let classes = alt.attr('class').split(/\s+/);
+        let classes = alter.attr('class').split(/\s+/);
         let nAlt = classes[0];
         nAlt = Number(nAlt.substr(nAlt.length - 1));
         
@@ -159,6 +179,7 @@ $(document).ready(function(){
         for(let i = 0; i < letters.length; i++){
             $(letters[i]).html('&#'+(97+i)+';)');
         }
+        refreshCorrect();
     }
     $('.x-alter').on('click', deleteAlternative);
     
@@ -182,6 +203,93 @@ $(document).ready(function(){
         $('#quest-img-x').hide();
         $('#quest-img-flag').attr('value', 0);
     }
+
+    // Envia o formulário via AJAX
+
+    $('#new-quest').on('submit', (e) => {
+        e.preventDefault();
+        console.log($('#correct').find(':selected').val());
+        // Define o tipo de questão de acordo com a que está selecionada
+        let questType = '';
+
+        if($('#type-alter').hasClass('selected-type')){
+            questType = 'objetiva';
+        }
+        else if($('#type-essay').hasClass('selected-type')){
+            questType = 'dissertativa';
+        }
+
+        // Escolhe o que será enviado dependendo do tipo da questão
+        // para evitar conflito caso o usuário mude no meio da inserção
+        let nLines, answer;
+        let altDeltas = [];
+
+        if(questType == 'objetiva'){
+            nLines = 1;
+            answer = '';
+            for (let i = 0; i < alt.length; i++) {
+                altDeltas[i] = {
+                    delta: JSON.stringify(alt[i].obj.getContents()),
+                    order: i
+                };
+            }
+            JSON.stringify(altDeltas);
+        }
+        else {
+            nLines = $('#n-lines').val();
+            answer = $('#answer').val();
+            altDeltas = '';
+        }
+
+        // Trata a alternativa correta de acordo com o tipo da Questão
+        let correct;
+        if(questType == 'objetiva'){
+            correct = $('#correct').find(':selected').val();
+        }
+        else {
+            correct = 'No correct answer for this type of question.';
+        }
+
+        // Define os dados que serão enviados para o back-end
+        let data = {
+            _token: $("#new-quest :input[name='_token']").val(),            // CSRF token
+            type: questType,                                                // Tipo da questão
+            statement: JSON.stringify(enunciado.getContents()),             // Enunciado. getContents() pega o delta do enunciado.
+            options: altDeltas,                                             // Alternativas. Envia os deltas coletados.
+            n_lines: nLines,                                                // Número de linhas
+            private: $("#new-quest :input[type='radio']:checked").val(),    // Opção de privacidade
+            subject_id: $('#subject').find(':selected').val(),              // Disciplina. Envia o id, não o nome.
+            content: $('#content-tag').val(),                               // Conteúdo
+            other_terms: $('#other-terms').val(),                           // Outros termos
+            image: '',                                                      // Imagem
+            correct: correct,                                               // Alternativa correta
+            answer_suggestion: answer                                       // Sugestão de resposta
+        };
+        console.log(JSON.stringify(enunciado.getContents()))
+
+        JSON.stringify(data);
+
+        // Posta via AJAX
+        $.ajax({
+            url: '/store_question',
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            error: (jqXHR, textStatus, errorThrown) => {
+                // Reseta os spans de erro
+                $('.error-feedback').hide().html('');
+                $('.error-feedback').parent().css({background: 'transparent'});
+                
+                // Exibe os erros e colore as divs
+                var response = jqXHR.responseJSON;
+                for (let key in response.errors) {
+                    $('#error-'+key).html(response.errors[key]).fadeIn(300);
+                    $('#error-'+key).parent().animate({backgroundColor: 'rgb(255, 190, 190)'}, 300);
+                }
+            }
+        });
+    
+    });
     
     /******************************************************************** */
     /******************************************************************** */

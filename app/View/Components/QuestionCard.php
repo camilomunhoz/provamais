@@ -6,17 +6,22 @@ use Illuminate\View\Component;
 
 class QuestionCard extends Component
 {
+    private $id;
     private $subject;
     private $content;
     private $type;
 
-    public function __construct($subject, $content, $type)
+    public function __construct($id, $subject, $content, $type)
     {
+        $this->id = $id;
         $this->subject = $subject;
         $this->content = $content;
         $this->type = $type;
     }
 
+    public function getId(){
+        return $this->id;
+    }
     public function getSubject(){
         return $this->subject;
     }

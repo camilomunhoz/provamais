@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Subject;
+use App\Models\Question;
 
 class ViewController extends Controller
 {
@@ -48,7 +49,17 @@ class ViewController extends Controller
             if(!$user->profile_pic){
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
-            return view('my_quests', ['user' => $user]);
+
+            $questions = $user->questions;
+            
+            foreach ($questions as $q){
+                $q['subject_name'] = $q->subject->name;
+
+                $owner = explode(' ', $q->user->name);
+                $q['owner'] = $owner[0];
+            }
+
+            return view('my_quests', ['user' => $user, 'questions' => $questions]);
         }
         return redirect('/');
     }

@@ -101,7 +101,7 @@
                     <input type="text" maxlength="146" class="form-input @error('name') invalid-signup-input @enderror" name="name" placeholder="Nome completo" value="{{ old('name') }}">
                         @error('name') <span class="error-feedback">{{$message}}</span> @enderror
 
-                    <input type="text" maxlength="14" class="form-input @error('cpf') invalid-signup-input @enderror" name="cpf" placeholder="CPF" onkeypress="$(this).mask('000.000.000-00');" value="{{ old('cpf') }}">
+                    <input type="text" maxlength="14" class="form-input @error('cpf') invalid-signup-input @enderror" name="cpf" placeholder="CPF" onchange="$(this).mask('000.000.000-00');" onkeypress="$(this).mask('000.000.000-00');" value="{{ old('cpf') }}">
                         @error('cpf') <span class="error-feedback">{{$message}}</span> @enderror
 
                     <input type="text" maxlength="255" class="form-input @error('email') invalid-signup-input @enderror" name="email" placeholder="E-mail" @if(!session('login')) value="{{ old('email') }}" @endif>

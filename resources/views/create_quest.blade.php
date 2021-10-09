@@ -41,6 +41,7 @@
                     <div class="quest-type" id="type-alter"><img src="/img/icons/quest_alter.svg" alt="Questão objetiva"><span class="bigger-label">Objetiva</span></div>
                     <div class="quest-type" id="type-essay"><img src="/img/icons/quest_disser.svg" alt="Questão dissertativa"><span class="bigger-label">Dissertativa</span></div>
                 </div>
+                <span class="error-feedback" id="error-type"></span>
             </div>
         </div>
 
@@ -51,13 +52,18 @@
             </div>
             <div class="row-content-right statement wrp-quill">
                 <div id="input-statement" class="simple-box"></div>
+                <span class="error-feedback" id="error-statement"></span>
             </div>
         </div>
 
         {{-- Alternativas / para questões objetivas --}}
         <div class="row hidden">
-            <div class="row-content-left aligned-top-right">
+            <div class="row-content-left aligned-top-right" id="alters-sidebar">
                 <span class="bigger-label required">Alternativas</span>
+                <label for="correct" id="correct-label"> <span class="required">Correta:</span><br>
+                    <select name="correct" id="correct" class="simple-box"></select>
+                    <span class="error-feedback" id="error-correct"></span>
+                </label>
             </div>
             <div class="row-content-right">
                 <div class="alters wrp-quill">
@@ -79,6 +85,7 @@
                     </div>
                 </div>
                 <div id="add-alter"><img src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">Adicionar alternativa</div>
+                <span class="error-feedback" id="error-options"></span>
             </div>
         </div>
 
@@ -89,6 +96,18 @@
             </div>
             <div class="row-content-right">
                 <input type="number" name="n_lines" class="simple-box" id="n-lines" max="99" min="1" onkeypress="$(this).mask('00');" value=5>
+                <span class="error-feedback" id="error-n-lines"></span>
+            </div>
+        </div>
+
+        {{-- Sugestão de resposta / para questões dissertativas --}}
+        <div class="row hidden">
+            <div class="row-content-left aligned-center-right">
+                <span>Sugestão de resposta</span>
+            </div>
+            <div class="row-content-right">
+                <input type="text" name="answer_suggestion" class="simple-box" id="answer">
+                <span class="error-feedback" id="error-answer_suggestion"></span>
             </div>
         </div>
 
@@ -103,6 +122,7 @@
                 <span id="img-name">Nenhuma imagem selecionada</span>
                 <input type="checkbox" name="quest_img_flag" id="quest-img-flag" value="0">
                 <label for="quest-img-flag" id="quest-img-x"><img class="x x-img" src="/img/icons/ico_plus.svg" alt="X" title="Remover imagem"></label>
+                <span class="error-feedback" id="error-image"></span>
             </div>
         </div>
 
@@ -113,11 +133,12 @@
             </div>
             <div class="row-content-right">
                 <select name="subject" class="simple-box" id="subject">
-                    <option value="NULL">&lt; Selecionar &gt;</option>
+                    <option value="">&lt; Selecionar &gt;</option>
                     @foreach ($subjects as $subject)
                         <option value="{{$subject->id}}">{{$subject->name}}</option>
                     @endforeach
                 </select>
+                <span class="error-feedback" id="error-subject_id"></span>
             </div>
         </div>
 
@@ -128,6 +149,7 @@
             </div>
             <div class="row-content-right">
                 <input type="text" name="content" class="simple-box" id="content-tag">
+                <span class="error-feedback" id="error-content"></span>
             </div>
         </div>
 
@@ -138,6 +160,7 @@
             </div>
             <div class="row-content-right">
                 <input type="text" name="other_terms" class="simple-box" id="other-terms">
+                <span class="error-feedback" id="error-other-terms"></span>
             </div>
         </div>
 
@@ -148,22 +171,23 @@
             </div>
             <div class="row-content-right is-private">
                 <label for="no" class="checkbox-label">
-                    <input class="simple-box" name="privacy" type="radio" id="no" checked>
+                    <input class="simple-box" name="privacy" type="radio" id="no" value="0" checked>
                     <div class="checkbox"><div class="checkmark"></div></div>
                     <span>Não</span>
                 </label>
                 <label for="yes" class="checkbox-label">
-                    <input class="simple-box" name="privacy" type="radio" id="yes">
+                    <input class="simple-box" name="privacy" type="radio" id="yes" value="1">
                     <div class="checkbox"><div class="checkmark"></div></div>
                     <span>Sim</span>
                 </label>
+                <span class="error-feedback" id="error-privacy">Este campo é obrigatório.</span>
             </div>
         </div>
         
         {{-- Botão de salvar --}}
         <div class="row hidden">
             <div class="row-content-left">
-                {{-- espaço vazio --}}
+                {{-- espaço vazio proposital --}}
             </div>
             <div class="row-content-right">
                 <input type="submit" value="Salvar" class="confirmation-btn-hard save-btn">
@@ -173,17 +197,5 @@
 
         <div class="row breathe-space"></div>
     </form>
-
-    {{-- <script>
-        $(() => {
-            $('#new-quest').submit((e) => {
-                e.preventDefault();
-
-                $.ajax({
-                    // url: "{{ route('teste') }}",
-                });
-            });
-        });
-    </script> --}}
     
 @endsection

@@ -16,6 +16,17 @@
 @section('header-title', 'Minhas questões')
 @section('search-placeholder', 'Procurar em "Minhas questões"')
 
+{{-- Linkando o Quill e Katex --}}
+@section('quill')
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+	<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+@endsection
+
 {{-- Conteúdo da seção --}}
 @section('lobby_content')
 
@@ -59,14 +70,38 @@
 
         </div>
 
+        {{-- Define variável que será usada em /js/show_questions.js para acessar os detalhes da questão--}}
+        <script> var questions = {!! json_encode($questions) !!}; </script>
+
+        {{-- Resultados da pesquisa --}}
         <div id="results">
-            @for ($i = 0; $i < 15; $i++)
-                <x-question-card :id="$i" subject="Disciplina" content="Conteúdo" type="Tipo da questão">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere repudiandae quia laudantium eius porro voluptate, qui reprehenderit maxime! Earum, ex.Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda, id.</x-question-card>
-            @endfor
+            @if (count($questions) > 0)
+                @foreach ($questions as $q)
+                    <x-question-card :id="$q->id" :subject="$q->subject_name" :content="$q->content" :type="$q->type">
+                        {{$q->statement}}
+                    </x-question-card>
+                @endforeach
+            @else
+                <span id="no-quests">Não há questões para exibir.</span>
+                <div id="create-tip">
+                    <span>Clique aqui para<br>cadastrar uma questão</span><br>
+                    <img src="/img/icons/ico_curved_arrow.svg">
+                </div>
+            @endif
+            
+            <script src="/js/show_questions.js"></script>
         </div>
 
     </div>
 
+    {{-- Botão de criar questão --}}
     <a href="/create_quest" id="btn-create" title="Cadastrar questão"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>
+    
+    {{-- Overlay de detalhes que aparece ao clicar em uma questão --}}
+    <div class="black-overlay showing-quest">
+        <div id="quest-details" class="simple-box">
+            {{-- Aqui são inseridos os detalhes da questão via JS --}}
+        </div>   
+    </div>
 
 @endsection

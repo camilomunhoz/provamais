@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidPassword implements Rule
+class EmptyQuill implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,7 +25,8 @@ class ValidPassword implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
+        $value = json_decode($value);
+        return (!preg_match('/^(?:\s+)?\\n$/', $value->ops[0]->insert));
     }
 
     /**
@@ -35,6 +36,6 @@ class ValidPassword implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Preencha esse campo.';
     }
 }

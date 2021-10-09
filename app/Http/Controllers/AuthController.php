@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Facades\Hash; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 
 class AuthController extends Controller

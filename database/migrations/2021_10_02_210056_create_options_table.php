@@ -17,7 +17,7 @@ class CreateOptionsTable extends Migration
             $table->id();
             $table->foreignId('id_quest')->constrained('questions');
             $table->json('content');
-            $table->boolean('isCorrect');
+            $table->boolean('correct');
             $table->tinyInteger('order');
         });
     }

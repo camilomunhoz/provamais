@@ -15,14 +15,15 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_subject')->constrained('subjects');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('subject_id')->constrained();
             $table->string('type');
-            $table->boolean('isPrivate');
+            $table->boolean('private');
             $table->string('content');
             $table->json('statement');
-            $table->text('answer_suggestion')->nullable();
+            $table->string('image')->nullable();
             $table->tinyInteger('n_lines')->nullable();
+            $table->text('answer_suggestion')->nullable();
             $table->json('other_terms')->nullable();
             $table->integer('denunciations')->nullable();
             $table->timestamps();
