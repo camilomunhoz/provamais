@@ -32,7 +32,7 @@
             <input type="file" accept=".jpg, .jpeg, .png" name="profilepic" id="my-profile-alterpic">
             <span class="my-profile-data simple-box">CPF nº {{$user->cpf}}</span>
             <span class="my-profile-data simple-box">{{$user->email}}</span>
-            <span class="my-profile-data simple-box">Questões cadastradas: <b>X</b></span>
+            <span class="my-profile-data simple-box">Questões cadastradas: <b>{{$user->n_quests}}</b></span>
         </div>
         <div id="my-profile-extras">
             <label>
@@ -40,8 +40,8 @@
                 <textarea name="desc" placeholder="Dê mais detalhes sobre você ao público" class="my-profile-desc simple-box">{{$user->description}}</textarea>
             </label>
             <label>
-                Chave PIX:<br>
-                <input type="text" name="pix" placeholder="Chave PIX" class="my-profile-pix simple-box" value="{{$user->pix}}">
+                Chave Pix:<br>
+                <input type="text" name="pix" placeholder="Chave Pix" class="my-profile-pix simple-box" value="{{$user->pix}}">
             </label>
             <button type="submit" class="confirmation-btn-hard save-btn">SALVAR</button>
         </div>

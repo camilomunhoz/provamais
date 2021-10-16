@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="/img/icone.ico">
 
         <script src="/js/jquery.js"></script>
-        <script src="/js/jqueryUI/jquery-ui.js"></script>
+        <script src="/js/jqueryUI/jquery-ui.js"></script> {{-- bem pesado, tem que dar um jeito nisso--}}
         <script src="/js/jqueryMask/src/jquery.mask.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
         <script src= @yield('js') ></script>

@@ -9,10 +9,10 @@
     grid-template-columns: 300px auto;
     gap: 30px;
 }
-#results::-webkit-scrollbar, #filter-checkboxes::-webkit-scrollbar{
+#results::-webkit-scrollbar, #filter-checkboxes::-webkit-scrollbar, #quest-details-content::-webkit-scrollbar{
     width: 8px;
 }
-#results::-webkit-scrollbar-thumb, #filter-checkboxes::-webkit-scrollbar-thumb{
+#results::-webkit-scrollbar-thumb, #filter-checkboxes::-webkit-scrollbar-thumb, #quest-details-content::-webkit-scrollbar-thumb{
     background-color: #ccc;
     border-radius: 99px;
 }
@@ -58,8 +58,13 @@
     font-weight: bold;
     line-height: 40px;
 }
+#filter-subjects div{
+    margin-bottom: 5px;
+}
 #filter-btn{
     width: 100%;
+    background: none;
+    border: none;
     border-top: solid 1px #ccc;
     line-height: 57px;
     text-align: center;
@@ -181,10 +186,57 @@
     align-items: center;
     justify-content: space-between;
 }
+#quest-details-content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 18px;
+    overflow-y: auto;
+}
+#n-lines, #other-terms{
+    color: #aaa;
+}
+#question-statement{
+    height: fit-content;
+}
 #question-statement .ql-editor{
     padding: 0;
     font-size: 18px;
     text-align: justify;
+    height: fit-content;
+}
+#question-answer{
+    color: var(--bgcolor2);
+}
+#left-info{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+#owner{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: grey;
+}
+#owner-pic{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    object-fit: cover;
+}
+#owner a{
+    text-decoration: none;
+    border-bottom: 2px solid grey;
+    font-weight: bold;
+}
+#owner a:visited{
+    color: grey;
+}
+#tags{
+    display: flex;
+    gap: 10px;
     height: fit-content;
 }
 .x{

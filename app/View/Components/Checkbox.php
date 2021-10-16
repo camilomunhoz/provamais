@@ -10,9 +10,10 @@ class Checkbox extends Component
     private $name;
     public $checked;
 
-    public function __construct($id, $name, $checked = false)
+    public function __construct($id, $name, $value = true, $checked = false)
     {
-        $this->id = 'c'.$id;
+        $this->id = $id;
+        $this->value = $value;
         $this->name = strtolower($name);
         $this->checked = $checked;
     }
@@ -22,6 +23,9 @@ class Checkbox extends Component
     }
     public function getName(){
         return $this->name;
+    }
+    public function getValue(){
+        return $this->value;
     }
     /**
      * Get the view / contents that represent the component.

@@ -17,6 +17,7 @@ use App\Http\Controllers\ViewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UpdateProfileController;
 use App\Http\Controllers\StoreQuestionController;
+use App\Http\Controllers\FilterQuestionsController;
 
 // Página inicial
 Route::get('/', [ViewController::class, 'index']);
@@ -29,9 +30,12 @@ Route::get('/create_doc', [ViewController::class, 'create_doc']);
 Route::get('/my_quests', [ViewController::class, 'my_quests']);
 Route::get('/create_quest', [ViewController::class, 'create_quest']);
 Route::get('/search_quests', [ViewController::class, 'search_quests']);
+Route::post('/filter_my_quests', [FilterQuestionsController::class, 'filter_my_quests']);
+Route::post('/search_my_quests', [FilterQuestionsController::class, 'search_my_quests']);
 
 // Outros
 Route::get('/my_profile', [ViewController::class, 'my_profile']);
+Route::get('/profile/{id}', [ViewController::class, 'show_profile']);
 Route::get('/help', [ViewController::class, 'help']);
 
 // Rotas para validar os formulários em geral

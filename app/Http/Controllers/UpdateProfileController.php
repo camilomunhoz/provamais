@@ -11,7 +11,7 @@ class UpdateProfileController extends Controller
 {
     public function update_profile(Request $request){
             
-        $user = User::find(Auth::user()->id);
+        $user = Auth::user();
         
         if($request->hasFile('profilepic') && !$request->resetpic){
             if($request->file('profilepic')->isValid()){
@@ -24,7 +24,10 @@ class UpdateProfileController extends Controller
                 $user->profile_pic = $pic_name;
             }
         }
-        else{
+        else if($user->profile_pic && !$request->resetpic){
+            // condição apenas para manter a foto caso já haja
+        }
+        else {
             $user->profile_pic = NULL;
         }
         $user->description = $request->desc;

@@ -66,6 +66,7 @@
     word-wrap: break-word;
     border-radius: 0;
     border-style: dotted;
+    text-align: center;
 }
 .my-profile-desc, .my-profile-pix{
     width: 100%;
@@ -74,8 +75,10 @@
 }
 .my-profile-desc{
     height: 300px;
-    padding: 20px;
+    padding: 12px 20px;
     resize: none;
+    text-align: justify;
+    font-size: 15.5px;
 }
 .my-profile-pix{
     height: 50px;

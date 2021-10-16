@@ -205,7 +205,6 @@ $(document).ready(function(){
     }
 
     // Envia o formulário via AJAX
-
     $('#new-quest').on('submit', (e) => {
         e.preventDefault();
         console.log($('#correct').find(':selected').val());

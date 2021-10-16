@@ -33,7 +33,7 @@
     <div id="content">
         
         {{-- Sidebar de filtros --}}
-        <div id="filters" class="simple-box">
+        <form id="filters" class="simple-box" @if($questions[0] == 'empty') style="user-select: none; pointer-events: none; filter: grayscale(100%); opacity: .6;" @endif> @csrf
 
             {{-- Header --}}
             <div id="filter-header">
@@ -51,37 +51,32 @@
             <div id="filter-checkboxes">
 
                 <span class="filter-section">Marcadores</span>
-                <x-checkbox id="private-questions" name="private">Privadas</x-checkbox>
-                <x-checkbox id="favorite-questions" name="favorite">Favoritas</x-checkbox>
+                <x-checkbox id="public-questions" name="public" checked="checked">Públicas</x-checkbox>
+                <x-checkbox id="private-questions" name="private" checked="checked">Privadas</x-checkbox>
+                <x-checkbox id="favorite-questions" name="favorite" checked="checked">Favoritas</x-checkbox>
                 
                 <span class="filter-section">Disciplinas</span>
-                @for ($i = 0; $i < 3; $i++)
-                    <x-checkbox :id="$i" name="blah">Filtro</x-checkbox>
-                @endfor
+                <div id="filter-subjects">
+                    @if ($questions[0] == 'empty') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nenhuma @endif
+                </div>
 
                 <span class="filter-section">Tipo de questão</span>
-                <x-checkbox id="alternative" name="objetiva">Objetiva</x-checkbox>
-                <x-checkbox id="essay" name="dissertativa">Dissertativa</x-checkbox>
+                <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
+                <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
 
             </div>
 
             {{-- Botão para aplicar os filtros --}}
-            <div id="filter-btn" title="Filtrar resultados">Aplicar filtros</div>
+            <button type="submit" id="filter-btn" class="no-style" title="Filtrar resultados">Aplicar filtros</button>
 
-        </div>
+        </form>
 
         {{-- Define variável que será usada em /js/show_questions.js para acessar os detalhes da questão--}}
         <script> var questions = {!! json_encode($questions) !!}; </script>
 
         {{-- Resultados da pesquisa --}}
         <div id="results">
-            @if (count($questions) > 0)
-                @foreach ($questions as $q)
-                    <x-question-card :id="$q->id" :subject="$q->subject_name" :content="$q->content" :type="$q->type">
-                        {{$q->statement}}
-                    </x-question-card>
-                @endforeach
-            @else
+            @if ($questions[0] == 'empty')
                 <span id="no-quests">Não há questões para exibir.</span>
                 <div id="create-tip">
                     <span>Clique aqui para<br>cadastrar uma questão</span><br>

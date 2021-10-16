@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('cpf');
             $table->string('pix')->nullable();
-            $table->string('description')->nullable();
+            $table->string('description', 1024)->nullable();
             $table->string('profile_pic')->nullable();
             $table->string('created_at')->nullable();
             $table->string('updated_at')->nullable();

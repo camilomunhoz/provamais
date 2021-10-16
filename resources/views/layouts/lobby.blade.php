@@ -72,10 +72,10 @@
             <span id="header-title">@yield('header-title')</span>
         </div>
 
-        <form action="@yield('search-route')" method="GET" id="header-right-items">
+        <form id="header-right-items">
             @csrf
-            <input type="text" placeholder="@yield('search-placeholder')" class="search-box simple-box">
-            <button type="submit" class="search-submit no-style">
+            <input type="text" placeholder="@yield('search-placeholder')" id="search-box" class="simple-box" name="search">
+            <button type="submit" id="search-submit" class="no-style">
                 <img src="/img/icons/ico_search_box.svg" alt="Pesquisar" title="Pesquisar">
             </button>
         </form>   
