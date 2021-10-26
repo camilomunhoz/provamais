@@ -320,6 +320,7 @@ header{
 #header-title{
     font-size: 30px;
     color: var(--bgcolor3);
+    flex-shrink: 0;
 }
 #search-box{
     height: 35px;

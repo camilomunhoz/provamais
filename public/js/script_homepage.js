@@ -31,6 +31,7 @@ $(document).ready(function(){
         $('.f'+atual).fadeIn(400);
         $('.s'+atual).fadeIn(400);
     }
+    changeSlide();
 
     $('#left-arrow').on('click', changeSlide);
     $('#right-arrow').on('click', changeSlide);
@@ -111,5 +112,4 @@ $(document).ready(function(){
     
     /****** fim responsividade Mobile ******/
 
-    $(window).load(changeSlide());
 })

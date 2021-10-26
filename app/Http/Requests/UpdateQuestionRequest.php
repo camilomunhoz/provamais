@@ -7,7 +7,7 @@ use App\Rules\EmptyQuill;
 use App\Rules\EmptyOptions;
 use App\Rules\MinimumOptions;
 
-class StoreQuestionRequest extends FormRequest
+class UpdateQuestionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -35,7 +35,6 @@ class StoreQuestionRequest extends FormRequest
             'correct' => 'required',
             'image' => 'nullable|max:1024|mimes:jpg,jpeg,png,webp',
             'options' => [new EmptyOptions, new MinimumOptions],
-            'identifier' => 'required|unique:questions,identifier',
         ];
     }
     public function messages(){

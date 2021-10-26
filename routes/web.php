@@ -17,7 +17,10 @@ use App\Http\Controllers\ViewController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UpdateProfileController;
 use App\Http\Controllers\StoreQuestionController;
+use App\Http\Controllers\UpdateQuestionController;
 use App\Http\Controllers\FilterQuestionsController;
+use App\Http\Controllers\FilterMyQuestionsController;
+use App\Http\Controllers\RemoveQuestionController;
 
 // Página inicial
 Route::get('/', [ViewController::class, 'index']);
@@ -29,9 +32,9 @@ Route::get('/create_doc', [ViewController::class, 'create_doc']);
 // Questões
 Route::get('/my_quests', [ViewController::class, 'my_quests']);
 Route::get('/create_quest', [ViewController::class, 'create_quest']);
+Route::get('/edit_quest/{id}', [ViewController::class, 'edit_quest']);
+Route::get('/remove_quest/{id}', [RemoveQuestionController::class, 'remove_quest']);
 Route::get('/search_quests', [ViewController::class, 'search_quests']);
-Route::post('/filter_my_quests', [FilterQuestionsController::class, 'filter_my_quests']);
-Route::post('/search_my_quests', [FilterQuestionsController::class, 'search_my_quests']);
 
 // Outros
 Route::get('/my_profile', [ViewController::class, 'my_profile']);
@@ -41,6 +44,11 @@ Route::get('/help', [ViewController::class, 'help']);
 // Rotas para validar os formulários em geral
 Route::post('/update_profile', [UpdateProfileController::class, 'update_profile']);
 Route::post('/store_question', [StoreQuestionController::class, 'store_question']);
+Route::post('/update_question', [UpdateQuestionController::class, 'update_question']);
+Route::post('/filter_my_quests', [FilterMyQuestionsController::class, 'filter']);
+Route::post('/search_my_quests', [FilterMyQuestionsController::class, 'search']);
+Route::post('/filter_quests', [FilterQuestionsController::class, 'filter']);
+Route::post('/search_quests', [FilterQuestionsController::class, 'search']);
 
 // Autenticação
 Route::get('/logout', [AuthController::class, 'logout']);

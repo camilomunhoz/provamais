@@ -116,12 +116,15 @@
 .question-card{
     /* border-radius: 10px; */
     min-height: 50px;
+    min-width: 600px;
     height: 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 5px;
     padding: 0 12px;
+    overflow: hidden;
+    position: relative;
 }
 .question-card:hover{
     background-color: #f5f5f5;
@@ -134,6 +137,9 @@
     padding: 3px 10px;
     text-align: center;
     display: inline-block;
+    max-height: 22px;
+    flex-shrink: 0;
+    /* max-width: 22px; */
 }
 .tag-subject{
     background-color: var(--color1);
@@ -167,12 +173,14 @@
 .showing-quest{
     align-items: center;
     justify-content: center;
+    gap: 10px;
 }
 .showing-quest .simple-line{
     width: 100%;
 }
 #quest-details{
     width: 800px;
+    max-width: 800px;
     height: 800px;
     padding: 30px;
     padding-top: 20px;
@@ -196,17 +204,37 @@
 #n-lines, #other-terms{
     color: #aaa;
 }
-#question-statement{
-    height: fit-content;
+#question-statement, .question-option{
+    height: fit-content !important;
 }
-#question-statement .ql-editor{
+#question-statement .ql-editor, .question-option .ql-editor{
     padding: 0;
     font-size: 18px;
     text-align: justify;
     height: fit-content;
 }
+#question-options{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.question-option{
+    padding-right: 10px;
+}
+.option-container{
+    padding-left: 20px;
+    display: flex;
+    gap: 10px;
+}
+.option-enumerator{
+    color: #888;
+}
 #question-answer{
     color: var(--bgcolor2);
+}
+#question-image{
+    width: 60%;
+    margin: 0 auto;
 }
 #left-info{
     display: flex;
@@ -227,6 +255,7 @@
     object-fit: cover;
 }
 #owner a{
+    color: grey;
     text-decoration: none;
     border-bottom: 2px solid grey;
     font-weight: bold;
@@ -251,4 +280,28 @@
 }
 .x:hover{
     opacity: .6;
+}
+
+/* Ações da questão */
+
+.question-action img{
+    transition: opacity .1s ease;
+    opacity: .6;
+}
+.question-action img:hover{
+    opacity: 1;
+}
+.edit img{
+    width: 16px;
+    margin-right: 3px;
+}
+.remove img{
+    width: 22px;
+}
+#removing-quest{
+    display: flex;
+    align-items: center;
+}
+.btn-remove{
+    font-size: 13px;
 }

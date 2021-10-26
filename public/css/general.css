@@ -139,7 +139,6 @@ input:focus, textarea:focus, select:focus{
 }
 .save-btn{
     font-size: x-large;
-    flex-basis: content;
     border: none;
     padding: 15px 25px;
     border-radius: 5px;

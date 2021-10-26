@@ -71,7 +71,7 @@
 
         </form>
 
-        {{-- Define variável que será usada em /js/show_questions.js para acessar os detalhes da questão--}}
+        {{-- Define variável que será usada em /js/show_questions.js para acessar os detalhes da questão --}}
         <script> var questions = {!! json_encode($questions) !!}; </script>
 
         {{-- Resultados da pesquisa --}}
@@ -94,6 +94,7 @@
     
     {{-- Overlay de detalhes que aparece ao clicar em uma questão --}}
     <div class="black-overlay showing-quest">
+        <div id="actions" class="simple-box"></div>
         <div id="quest-details" class="simple-box">
             {{-- Aqui são inseridos os detalhes da questão via JS --}}
         </div>   

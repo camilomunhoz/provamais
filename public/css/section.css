@@ -16,6 +16,7 @@ header {
     align-items: center;
     height: 100%;
     display: flex;
+    flex-shrink: 0;
 }
 #logo {
     width: 170px;

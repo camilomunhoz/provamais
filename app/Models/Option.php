@@ -10,7 +10,7 @@ class Option extends Model
     use HasFactory;
 
     // Afirma a relação 1:N de question-option
-    public function options(){
+    public function question(){
         return $this->belongsTo(Question::class);
     }
 }

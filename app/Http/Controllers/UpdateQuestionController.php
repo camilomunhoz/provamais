@@ -5,16 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\UpdateQuestionRequest;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\Option;
 
-class StoreQuestionController extends Controller
+class UpdateQuestionController extends Controller
 {
-    public function store_question(StoreQuestionRequest $request){
-        // dd($request);
-        $question = new Question;
+    public function update_question(UpdateQuestionRequest $request){
+
+        // Seleciona a questão pre-existente através de seu identificador
+        $question = Question::firstWhere('identifier', $request->identifier);
+
+                                // Caso o tipo da questão seja mudado de objetiva para dissertativa, apaga as alternativas 
+                                if ($question->type == 'Objetiva' && $request->type == 'dissertativa') {
+                                    foreach ($question->options as $o) {
+                                        $o->delete();
+                                    }
+                                }
 
         // Owner
         $question->user_id = Auth::user()->id;
@@ -69,7 +77,10 @@ class StoreQuestionController extends Controller
         // Salvando a questão...
         $question->save();
 
-        // Para questões alternativas
+        /****************************************************************************************************************/
+        /**************************************   Para questões objetivas    ********************************************/
+        /****************************************************************************************************************/
+
         if ($question->type == 'Objetiva') {
             
             $options = json_decode($request->options);
@@ -77,16 +88,47 @@ class StoreQuestionController extends Controller
 
             // Selecionando o id da questão recém salva para referenciar nas alternativas...
             $quest = Question::select('id')->firstWhere('identifier', $question->identifier);
+
+            // Apagando as alternativas que não vieram no post...
+            $quest->options; // Puxando as options do banco
+            for ($o = 0; $o < count($quest->options); $o++) { // Percorre todas as options pre-existentes da questão
+
+                // Procura um id dentre as options enviadas que não coincida com os ids do banco
+                for ($i = 0; $i < count($options); $i++) {
+
+                    // Caso os ids coincidam, quebra esse laço e vai para o próximo id
+                    if ($options[$i]->id == $quest->options[$o]->id) break;
+
+                    // Se chega na última iteração e não executou o break, significa que a option do banco não existe mais
+                    if ($i == count($options)-1) {
+                        $option_to_delete = Option::firstWhere('id', $quest->options[$o]->id);
+                        $option_to_delete->delete();
+                    }
+                }
+            }
             
             // Salvando as alternativas...
-            for($o = 0; $o < count($options); $o++){
-                $option = new Option;
-                $option->question_id = $quest->id;
+            for ($o = 0; $o < count($options); $o++) {
+
+                // Se a opção tiver id, vai modificar, se não, vai criar outra
+                $option = $options[$o]->id ? Option::firstWhere('id', $options[$o]->id) : new Option;
+
+                // Caso a option não tenha id, ela não existe ainda, então necessita do quest_id referente a esta questão
+                if (!$options[$o]->id) $option->question_id = $quest->id;
+                    
+                // Conteúdo da option
                 $option->content = $options[$o]->delta;
+
+                // É correta ou não
                 if ($options[$o]->order == $request->correct) {
                     $option->correct = 1; //true
                 }
+                else { $option->correct = NULL; }
+
+                // Order da option
                 $option->order = $options[$o]->order;
+
+                // Salvando...
                 $option->timestamps = false;
                 $option->save();
             }

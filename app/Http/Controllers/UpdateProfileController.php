@@ -15,7 +15,6 @@ class UpdateProfileController extends Controller
         
         if($request->hasFile('profilepic') && !$request->resetpic){
             if($request->file('profilepic')->isValid()){
-                print_r($request->file('profilepic')->isValid());
                 $pic = $request->profilepic;
                 $pic_ext = $pic->extension();
                 $pic_name = md5($pic->getClientOriginalName() . strtotime("now")) . '.' . $pic_ext;

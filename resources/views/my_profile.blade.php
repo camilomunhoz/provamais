@@ -3,6 +3,9 @@
 @section('title', '| Meu perfil')
 @section('css', '/css/my_profile.css')
 
+{{-- URL para redirecionamento caso a ação seja cancelada --}}
+@section('if-cancelled', '/my_docs')
+
 {{-- Define título do header --}}
 @section('section-title', 'Meu perfil')
 
@@ -16,6 +19,7 @@
 
 {{-- Conteúdo da seção --}}
 @section('section_content')
+    <script type="text/javascript" src="/js/my_profile.js"></script>
 
     <form id="my-profile" action="/update_profile" method="POST" enctype="multipart/form-data">
         @csrf

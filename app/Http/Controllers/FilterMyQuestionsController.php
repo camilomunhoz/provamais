@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
 
-class FilterQuestionsController extends Controller
+class FilterMyQuestionsController extends Controller
 {
     public function filter(Request $request) {
         
@@ -17,7 +17,26 @@ class FilterQuestionsController extends Controller
 
             $user_id = Auth::user()->id;
 
-            $sql = "SELECT * FROM questions WHERE private = 0";
+            $sql = "SELECT * FROM questions WHERE user_id = $user_id";
+
+            // Privacidade
+            $privacy = [];
+            if ($request->public) $privacy['public'] = $request->public;
+            if ($request->private) $privacy['private'] = $request->private;
+
+            if (count($privacy) == 2){
+                $sql .= " AND (private = 0 OR private = 1)";
+            }
+            else if (array_key_exists('public', $privacy)){
+                $sql .= " AND private = 0";
+            }
+            else if (array_key_exists('private', $privacy)){
+                $sql .= " AND private = 1";
+            }
+            else {
+                echo json_encode([]);
+                die();
+            }
             
             // Disciplinas
             if ($request->subjects) {
@@ -92,7 +111,7 @@ class FilterQuestionsController extends Controller
 
         // Caso todos os filtros estejam selecionados
         else if ($request->all){
-            $questions = Question::where('private', 0)->get();
+            $questions = Auth::user()->questions;
 
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
@@ -122,7 +141,9 @@ class FilterQuestionsController extends Controller
 
     public function search(Request $request) {
 
-        $sql = "SELECT * FROM questions WHERE private = 0 AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+        $user_id = Auth::user()->id;
+
+        $sql = "SELECT * FROM questions WHERE user_id = $user_id AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
 
         // Resgatando as questões
         $questions = DB::select($sql);

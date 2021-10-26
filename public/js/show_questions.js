@@ -16,7 +16,7 @@ $(document).ready(function(){
         if (questions.length && questions[0] != 'empty') {
             $('#results').empty();
             
-            /************** Exibe o termo de busca caso exista **************/
+            /************** Exibe o termo de busca esteja sendo buscado **************/
 
             if ($('#search-box').val()) {
                 $('#results').append(
@@ -27,16 +27,26 @@ $(document).ready(function(){
             /************** Cria e insere os cards **************/
 
             for (q in questions) {
+
                 $('#results').append(
-                    '<div>'+
+                    '<div id="card-'+q+'">'+
                         '<div id="'+questions[q].id+'" class="question-card simple-box">'+
                             '<div class="question-tag tag-subject">'+questions[q].subject_name+'</div>'+
                             '<div class="question-tag tag-content">'+questions[q].content+'</div>'+
                             '<div class="question-tag tag-type">'+questions[q].type+'</div>'+
                             '<span class="question-card-statement">'+questions[q].statement+'</span>'+
+                            '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'+
+                            '<div class="question-action remove" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'+
                         '</div>'+
                     '</div>'
                 );
+
+                if (questions[q].private) {
+                    $('#card-'+q+' > div').prepend(
+                        '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
+                    );
+                }
+
             }
 
             /************** Exibe os enunciados das questões **************/
@@ -58,6 +68,12 @@ $(document).ready(function(){
     /************** Caso a filtragem ou busca não retorne nenhuma questão **************/
         else if (questions[0] != 'empty') {
             $('#results').empty();
+
+            if ($('#search-box').val()) {
+                $('#results').append(
+                    '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
+                );  
+            } 
             $('#results').append(
                 '<span id="no-quests">Nenhuma questão corresponde aos filtros aplicados.</span>'
             );
@@ -90,13 +106,34 @@ $(document).ready(function(){
 
         let questCard; // Armazenará o card (elemento) clicado
 
-        (!$(e.target).hasClass('question-card')) ? // Caso clique nos elementos filhos
+        // Caso clique nos elementos filhos
+        (!$(e.target).hasClass('question-card')) ? 
             questCard = $(e.target).parents('.question-card')
             :
             questCard = $(e.target);
 
         // Pega o id da questão clicada
         let questId = questCard.attr('id');
+        
+        if ( // Caso clique em "apagar" ou "editar"
+            ($(e.target).attr('id') == 'remove') ||
+            ($(e.target).attr('id') == 'edit')   ||
+            ($(e.target).hasClass('btn-remove')) ||
+            ($(e.target).prop('nodeName') == 'IMG')
+        ){
+            if ($(e.target).hasClass('trash') && !questCard.children('.btn-remove').length) {
+                $(e.target).attr('title', 'Cancelar');
+                questCard.append(
+                    '<a href="/remove_quest/'+questId+'" class="confirmation-btn-hard btn-remove">Apagar</a>'
+                );
+            }
+            else if ($(e.target).hasClass('trash') && questCard.children('.btn-remove').length) {
+                $(e.target).attr('title', 'Apagar');
+                $('.btn-remove').remove();
+            }
+            return;
+        }
+
 
         let question; // Armazenará a questão e seus atributos
 
@@ -130,20 +167,56 @@ $(document).ready(function(){
                 '<span id="question-statement"></span>'+
             '</div>'
         );
+        if (questions[q].private) {
+            $('#tags').prepend(
+                '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
+            );
+        }
 
         let statement = new Quill('#question-statement', {theme: 'bubble', enable: 'false', readOnly: 'true'});
         statement.setContents(JSON.parse(question.statement));
         statement.disable();
-
+        
+        if(question.image){
+            $('#quest-details-content').append(
+                '<img id="question-image" src="/img/questions_images/'+question.image+'">'
+            );
+        }
         if(question.answer_suggestion){
             $('#quest-details-content').append(
                 '<span id="question-answer"><strong>Sugestão de resposta:</strong> '+question.answer_suggestion+'</span>'
             );
         }
+        if(question.options && question.options.length){
+            let correct;
+            $('#quest-details-content').append(
+                '<div id="question-options"></div>'
+            );
+            for(let i = 0; i < question.options.length; i++){
+                $('#question-options').append(
+                    '<div class="option-container opt-'+i+'"></div>'
+                );
+                $('.opt-'+i).append(
+                    '<span class="option-enumerator"><b>&#'+(97+i)+';)</b></span>'+
+                    '<div class="question-option o'+i+'"></div>'
+                );
+                let option = new Quill('.o'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
+                option.setContents(JSON.parse(question.options[i].content));
+                option.disable();
+                if (question.options[i].correct) correct = i;
+            }
+            $('#quest-details-content').append(
+                '<div id="question-answer" style="text-align: right; padding-right: 10px;"><strong>Alternativa correta:</strong> &#'+(65+correct)+';</div>'
+            );
+        }
         $('#quest-details-content').append(
-            '<div class="simple-line"></div>'+
-            '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'
+            '<div class="simple-line"></div>'
         );
+        if (question.type == 'Dissertativa') {
+            $('#quest-details-content').append(
+                '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'
+            );
+        }
         // if(question.other_terms){
             $('#quest-details-content').append(
                 '<span id="other-terms"><strong>Outros termos relacionados:</strong> de alguma forma aqui vão os termos</span>'
@@ -217,8 +290,21 @@ $(document).ready(function(){
 
     $('.checkbox-label input').on('change', () => {
         let filterSubjectsCheck = false;
+
+        // Na aba "Procurar questões", não há esses filtros, então a condição será verdadeira sempre
+        let filterPublicCheck = true;
+        let filterPrivateCheck = true;
+        let filterFavoriteCheck = true;
+
         let subjectsInputs = $('#filter-subjects input');
         
+        // Somente mudará de estado caso exista "#public-questions", isto é, em "Minhas questões"
+        if ($('#public-questions').length) {
+            filterPublicCheck = $('#public-questions')[0].checked;
+            filterPrivateCheck = $('#private-questions')[0].checked;
+            filterFavoriteCheck = $('#favorite-questions')[0].checked;
+        }
+
         for (i = 0; i < subjectsInputs.length; i++) {
             if (subjectsInputs[i].checked == true) {
                 filterSubjectsCheck = true;
@@ -226,7 +312,7 @@ $(document).ready(function(){
             }
         }
 
-        if ( (!$('#public-questions')[0].checked && !$('#private-questions')[0].checked && !$('#favorite-questions')[0].checked)
+        if ( (!filterPublicCheck && !filterPrivateCheck && !filterFavoriteCheck)
             || (!filterSubjectsCheck)
             || (!$('#alternative')[0].checked && !$('#essay')[0].checked) ) {
             
@@ -246,10 +332,10 @@ $(document).ready(function(){
         e.preventDefault();
 
         // Caso todos os filtros estejam selecionados, envia somente "all: 1", senão, envia todos os marcados
-        let data;
-        
+        let data;     
         if ($('#all-questions')[0].checked) {
-            data = {all: $('#all-questions').val(), _token: $("#filters :input[name='_token']").val()}
+            data = {all: $('#all-questions').val(), _token: $("#filters :input[name='_token']").val()};
+            $('#search-box').val('');
         }
         else {
             data = $(e.target).serialize();
@@ -257,11 +343,10 @@ $(document).ready(function(){
                 data += '&search='+$('#search-box').val();  
             } 
         }
-        console.log(data);
 
         // Posta via AJAX
         $.ajax({
-            url: '/filter_my_quests',
+            url: $('#public-questions').length ? '/filter_my_quests' : '/filter_quests', // Micro gambiarra pra saber se filtra "Minhas questões" ou "Procurar questões"
             type: 'post',
             data: data,
             dataType: 'json',
@@ -270,16 +355,18 @@ $(document).ready(function(){
                 questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 console.log(questions);
                 appendQuests();
-            },
-            // error:  (jqXHR, textStatus, errorThrown) => { console.log(errorThrown)},
+            }
         });
-
-        // 
     });
 
     /******** Procura por palavra-chave ********/
     $('#header-right-items').on('submit', (e) => {
         e.preventDefault();
+
+        // Marca todos os filtros
+        for ($i of $('#filters input')) {
+            $i.checked = true;
+        }
         
         // Posta via AJAX
         $.ajax({

@@ -16,7 +16,8 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('subject_id')->constrained();
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+            $table->string('identifier');
             $table->string('type');
             $table->boolean('private');
             $table->string('content');

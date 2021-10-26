@@ -3,6 +3,9 @@
 @section('title', '| Novo documento')
 @section('css', '/css/create_quest.css')
 
+{{-- URL para redirecionamento caso a ação seja cancelada --}}
+@section('if-cancelled', '/my_docs')
+
 {{-- Linkando o Quill e Katex --}}
 @section('quill')
     <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">

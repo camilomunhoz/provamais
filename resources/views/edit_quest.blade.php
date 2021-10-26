@@ -1,6 +1,6 @@
 @extends('layouts.section')
 
-@section('title', '| Nova questão')
+@section('title', '| Edição de questão')
 @section('css', '/css/create_quest.css')
 
 {{-- URL para redirecionamento caso a ação seja cancelada --}}
@@ -18,7 +18,7 @@
 @endsection
 
 {{-- Define o título do header --}}
-@section('section-title', 'Nova questão')
+@section('section-title', 'Edição de questão')
 
 {{-- Adiciona um botão de cancelar no header --}}
 @section('add-header-section')
@@ -30,6 +30,10 @@
 
 {{-- Conteúdo da seção --}}
 @section('section_content')
+
+    {{-- Define variável que será usada em /js/create_edit_quest.js para acessar os detalhes da questão --}}
+    <script> var question = {!! json_encode($question) !!}; </script>
+    
     <script type="text/javascript" src="/js/create_quest.js"></script>
 
     <form id="new-quest"> @csrf <input type="hidden" name="identifier" value="{{$identifier}}">
@@ -71,22 +75,9 @@
             </div>
             <div class="row-content-right">
                 <div class="alters wrp-quill">
-                    <div class="alternative">
-                        <span class="letter">&#97;)</span><div class="a0 simple-box"></div>
-                        <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
-                    </div>
-                    <div class="alternative">
-                        <span class="letter">&#98;)</span><div class="a1 simple-box"></div>
-                        <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
-                    </div>
-                    <div class="alternative">
-                        <span class="letter">&#99;)</span><div class="a2 simple-box"></div>
-                        <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
-                    </div>
-                    <div class="alternative">
-                        <span class="letter">&#100;)</span><div class="a3 simple-box"></div>
-                        <img class="x x-alter" src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">
-                    </div>
+                    
+                    {{-- Aqui vão as alternativas via JS --}}
+
                 </div>
                 <div id="add-alter"><img src="/img/icons/ico_plus.svg" alt="X" title="Apagar alternativa">Adicionar alternativa</div>
                 <span class="error-feedback" id="error-options"></span>
@@ -123,7 +114,7 @@
             <div class="row-content-right wrp-img-input">
                 <label for="quest-img" id="quest-img-label">Escolher imagem</label>
                 <input type="file" accept=".jpg, .jpeg, .png" name="quest_img" id="quest-img">
-                <span id="img-name">Nenhuma imagem selecionada</span>
+                <span id="img-name"> @if(!$question->image) Nenhuma imagem selecionada @endif</span>
                 <input type="checkbox" name="image_flag" id="quest-img-flag" value="0">
                 <label for="quest-img-flag" id="quest-img-x"><img class="x x-img" src="/img/icons/ico_plus.svg" alt="X" title="Remover imagem"></label>
                 <span class="error-feedback" id="error-image"></span>
@@ -175,7 +166,7 @@
             </div>
             <div class="row-content-right is-private">
                 <label for="no" class="checkbox-label">
-                    <input class="simple-box" name="privacy" type="radio" id="no" value="0" checked>
+                    <input class="simple-box" name="privacy" type="radio" id="no" value="0">
                     <div class="checkbox"><div class="checkmark"></div></div>
                     <span>Não</span>
                 </label>
@@ -195,7 +186,6 @@
             </div>
             <div class="row-content-right">
                 <input type="submit" value="Salvar" class="confirmation-btn-hard save-btn" id="save-and-leave">
-                <input type="submit" value="Salvar e cadastrar mais uma" class="confirmation-btn-light save-btn" id="save-and-other">
             </div>
         </div>
 
