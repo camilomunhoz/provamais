@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
 
-class FilterQuestionsController extends Controller
+class FilterDocQuestionsController extends Controller
 {
     public function filter(Request $request) {
         
@@ -17,7 +17,32 @@ class FilterQuestionsController extends Controller
 
             $user_id = Auth::user()->id;
 
-            $sql = "SELECT * FROM questions WHERE private = 0";
+            $sql = "SELECT * FROM questions WHERE";
+            $concatenated = false; // Para saber se algo já foi concatenado
+
+            // Questões de qualquer usuário
+            if ($request->all_questions) {
+                $sql .= " (private = 0";
+                if (!($request->my_questions || $request->private)) {
+                    $sql .= ")";
+                }
+                $concatenated = true;
+            }
+
+            // Minhas questões
+            if ($request->my_questions) {
+                $concatenated ? $sql .= " OR (user_id = $user_id AND private = 0)" : $sql .= " ((user_id = $user_id AND private = 0)";
+                if (!($request->private)) {
+                    $sql .= ")";
+                }
+                $concatenated = true;
+            }
+
+            // Questões de qualquer usuário
+            if ($request->private) {
+                $concatenated ? $sql .= " OR (user_id = $user_id AND private = 1))" : $sql .= " ((user_id = $user_id AND private = 1))";
+                $concatenated = true;
+            }
             
             // Disciplinas
             if ($request->subjects) {
@@ -98,11 +123,22 @@ class FilterQuestionsController extends Controller
 
         // Caso todos os filtros estejam selecionados
         else if ($request->all){
-            $questions = Question::where('private', 0)->get();
+
+            $user_id = Auth::user()->id;
+
+            $sql = "SELECT * FROM questions WHERE (private = 0 OR user_id = $user_id)";
+            if ($request->search) $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+
+            // Resgatando as questões
+            $questions = DB::select($sql);
+
+            // Transformando o resultado em uma Collection para melhor manipulação
+            $questions = Question::hydrate($questions);
 
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
+                $q['options'] = $q->options;
                 
                 if ($q->user->name == Auth::user()->name) {
                     $q->owner = 'você mesmo';
@@ -131,37 +167,23 @@ class FilterQuestionsController extends Controller
         echo json_encode($questions);
     }
 
-    public function search(Request $request) {
+    public function get(Request $request) {
 
-        $sql = "SELECT * FROM questions WHERE private = 0 AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+        $sql = "SELECT * FROM questions WHERE";
 
-        // Resgatando as questões
-        $questions = DB::select($sql);
-        
-        // Transformando o resultado em uma Collection para melhor manipulação
-        $questions = Question::hydrate($questions);
+        $ids = explode(';', $request->ids);
+        array_pop($ids);
 
-        // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
-        foreach ($questions as $q) {
-            $q['subject_name'] = $q->subject->name;
-            
-            $username = explode(' ', $q->user->name);
-            $q->owner = $username[0];
-            
-            if(!$q->user->profile_pic){
-                $q->user->profile_pic = 'user_pic_placeholder.png';
+        foreach ($ids as $key => $id) {
+            if ($key == 0){
+                $sql .= " id = $id";
             }
-            
-            // Retirando dados sensíveis e deixando somente 'id' e 'profile_pic'
-            unset($q->user['name']);
-            unset($q->user['cpf']);
-            unset($q->user['password']);
-            unset($q->user['pix']);
-            unset($q->user['email']);
-            unset($q->user['description']);
-            unset($q->user['created_at']);
-            unset($q->user['updated_at']);
+            else {
+                $sql .= " OR id = $id";
+            }
         }
+
+        $questions = DB::select($sql);
 
         echo json_encode($questions);
     }

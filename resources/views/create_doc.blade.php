@@ -1,7 +1,7 @@
 @extends('layouts.section')
 
 @section('title', '| Novo documento')
-@section('css', '/css/create_quest.css')
+@section('css', '/css/create_doc.css')
 
 {{-- URL para redirecionamento caso a ação seja cancelada --}}
 @section('if-cancelled', '/my_docs')
@@ -30,7 +30,102 @@
 
 {{-- Conteúdo da seção --}}
 @section('section_content')
-
+    <script type="text/javascript" src="/js/create_doc.js"></script>
     
+    <div id="doc">
+        {{-- <div id="enumerators"></div> --}}
+        <div id="add-question-btn">Adicionar questões</div>
+        {{-- Divisória --}} <div></div>
+
+    </div>
+
+    {{-- Overlay de adição de questões --}}
+    <div class="black-overlay add-question-overlay">
+
+        <div id="add-question-dialog" class="simple-box">
+
+            {{-- Header --}}
+            <div id="add-question-dialog-header">
+                <div id="add-question-dialog-left-items">
+                    <span id="add-question-header-title">Selecione as questões desejadas.</span>
+                </div>
+                <div id="add-question-dialog-right-items">
+                    <img class="x" src="/img/icons/ico_plus.svg" alt="X" title="Fechar">
+                </div>
+            </div>
+
+            {{-- Divisória --}} <div class="simple-line"></div>
+
+            {{-- Conteúdo principal --}}
+            <div id="add-question-dialog-content">
+
+                {{-- Sidebar para filtragem --}}
+                <div id="filters-sidebar">
+
+                    {{-- Pesquisa por palavra-chave --}}
+                    <div id="search-for-quests">
+                        <div id="search-submit">
+                            <img src="/img/icons/ico_search_box.svg" alt="Pesquisar" title="Pesquisar">
+                        </div>
+                        <input type="text" placeholder="Termo de busca" id="search-box" class="simple-box" name="search">
+                    </div>
+
+                    {{-- Filtros com checkboxes --}}
+                    <form id="filters" class="simple-box"> @csrf
+
+                        <div id="filter-header">
+                            <div>
+                                <img src="/img/icons/ico_filter.svg">
+                                <span>Filtros</span>
+                            </div>
+                            <div>
+                                <x-checkbox id="all" name="all">Todas</x-checkbox>
+            
+                            </div>
+                        </div>
+            
+                        <div id="filter-checkboxes">
+            
+                            <span class="filter-section">Marcadores</span>
+                            <x-checkbox id="all-questions" name="all_questions" checked="checked">De qualquer usuário</x-checkbox>
+                            <x-checkbox id="my-questions" name="my_questions" checked="checked">Minhas questões públicas</x-checkbox>
+                            <x-checkbox id="private-questions" name="private" checked="checked">Minhas questões privadas</x-checkbox>
+                            <x-checkbox id="favorite-questions" name="favorite">Favoritas</x-checkbox>
+                            
+                            <span class="filter-section">Tipo de questão</span>
+                            <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
+                            <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
+            
+                            <span class="filter-section">Disciplinas</span>
+                            <div id="filter-subjects">
+                                @foreach($subjects as $subject)
+                                    <x-checkbox id="{{$subject->id}}" name="subjects[]" value="{{$subject->id}}">{{$subject->name}}</x-checkbox>
+                                @endforeach
+                            </div>
+            
+                        </div>
+            
+                        <button type="submit" id="filter-btn" class="no-style" title="Filtrar resultados">Aplicar filtros</button>
+            
+                    </form>
+                </div>
+
+                {{-- Resultados da pesquisa --}}
+                <div id="results">
+                    <span>&larr;&nbsp;&nbsp;&nbsp; Especifique a busca inserindo um termo de busca.</span><br><br><br>
+                    <span>&larr;&nbsp;&nbsp;&nbsp; Escolha ao menos uma disciplina para começar.</span>
+                </div>
+
+            </div>
+
+            {{-- Divisória --}} <div class="simple-line"></div>
+
+            {{-- Footer --}}
+            <form id="add-question-dialog-footer"> @csrf
+                <button type="button" id="insert-questions" class="save-btn confirmation-btn-hard">Inserir</button>
+                <span id="selected-questions">Questões selecionadas: <b>0</b></span>
+            </form>
+        </div>   
+    </div>
     
 @endsection

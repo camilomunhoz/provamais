@@ -14,7 +14,7 @@
 {{-- Define o header da seção --}}
 @section('header-img', '/img/icons/ico_question.svg')
 @section('header-title', 'Procurar questões')
-@section('search-placeholder', 'Procurar questões"')
+@section('search-placeholder', 'Procurar questões')
 
 {{-- Linkando o Quill e Katex --}}
 @section('quill')
@@ -50,14 +50,14 @@
             {{-- Filtros --}}
             <div id="filter-checkboxes">
                 
+                <span class="filter-section">Tipo de questão</span>
+                <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
+                <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
+
                 <span class="filter-section">Disciplinas</span>
                 <div id="filter-subjects">
                     @if ($questions[0] == 'empty') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nenhuma @endif
                 </div>
-
-                <span class="filter-section">Tipo de questão</span>
-                <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
-                <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
 
             </div>
 

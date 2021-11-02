@@ -173,7 +173,6 @@
 .showing-quest{
     align-items: center;
     justify-content: center;
-    gap: 10px;
 }
 .showing-quest .simple-line{
     width: 100%;

@@ -28,7 +28,7 @@
 
             <a href="/my_docs" id="my-tests" class="nav-1 nav-section @yield('current_1')">
                 <img src="/img/icons/ico_tests.svg" class="section-img">
-                <span class="section-title">Minhas avaliações</span>
+                <span class="section-title">Meus documentos</span>
                 @yield('current-detail_1')
             </a>
     

@@ -89,9 +89,15 @@ class FilterMyQuestionsController extends Controller
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
+                $q['options'] = $q->options;
                 
-                $username = explode(' ', $q->user->name);
-                $q->owner = $username[0];
+                if ($q->user->name == Auth::user()->name) {
+                    $q->owner = 'você mesmo';
+                }
+                else {
+                    $username = explode(' ', $q->user->name);
+                    $q->owner = $username[0];
+                }
 
                 if(!$q->user->profile_pic){
                     $q->user->profile_pic = 'user_pic_placeholder.png';
@@ -116,9 +122,15 @@ class FilterMyQuestionsController extends Controller
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
+                $q['options'] = $q->options;
                 
-                $username = explode(' ', $q->user->name);
-                $q->owner = $username[0];
+                if ($q->user->name == Auth::user()->name) {
+                    $q->owner = 'você mesmo';
+                }
+                else {
+                    $username = explode(' ', $q->user->name);
+                    $q->owner = $username[0];
+                }
 
                 if(!$q->user->profile_pic){
                     $q->user->profile_pic = 'user_pic_placeholder.png';
@@ -155,8 +167,13 @@ class FilterMyQuestionsController extends Controller
         foreach ($questions as $q) {
             $q['subject_name'] = $q->subject->name;
             
-            $username = explode(' ', $q->user->name);
-            $q->owner = $username[0];
+            if ($q->user->name == Auth::user()->name) {
+                $q->owner = 'você mesmo';
+            }
+            else {
+                $username = explode(' ', $q->user->name);
+                $q->owner = $username[0];
+            }
             
             if(!$q->user->profile_pic){
                 $q->user->profile_pic = 'user_pic_placeholder.png';

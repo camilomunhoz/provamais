@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Prova+ @yield('title')</title>
+		<title>ProvA+ @yield('title')</title>
 		<link rel="stylesheet" href= @yield('css') type="text/css">
         <link rel="shortcut icon" href="/img/icone.ico">
 
@@ -17,7 +17,7 @@
 	</head>
 	<body>
         {{-- Previne que HTML cru seja mostrado antes do CSS carregar --}}
-        <div id="loading-overlay" style="background: #F00; position: absolute; height: 100%; width: 100%;"></div>
+        <div id="loading-overlay" style="background: rgb(228, 228, 228); position: absolute; height: 100%; width: 100%;"></div>
         @yield('banner')
         @yield('content')
 

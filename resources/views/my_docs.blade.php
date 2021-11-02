@@ -1,6 +1,6 @@
 @extends('layouts.lobby')
 
-@section('title', '| Minhas avaliações')
+@section('title', '| Meus documentos')
 @section('css', '/css/my_docs.css')
 
 {{-- Define a seção atual --}}
@@ -13,8 +13,8 @@
 
 {{-- Define o header da seção --}}
 @section('header-img', '/img/icons/ico_test.svg')
-@section('header-title', 'Minhas avaliações')
-@section('search-placeholder', 'Procurar em "Minhas avaliações"')
+@section('header-title', 'Meus documentos')
+@section('search-placeholder', 'Procurar em "Meus documentos"')
 
 {{-- Carrega banner se a conta foi recém criada --}}
 @if(session('account_created'))
@@ -40,9 +40,7 @@
 @section('lobby_content')
 
     <div id="docs">
-        @for ($i = 0; $i < 41; $i++)
-            <x-document-card>Prova 1 - 2º tri - Conteúdo</x-document-card>
-        @endfor
+        
     </div>
 
     <a href="/create_doc" id="btn-create" title="Criar documento"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>

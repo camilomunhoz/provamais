@@ -3,6 +3,7 @@ $(document).ready(function(){
     // Coloca as questões por ordem de disciplina
     if (questions[0] != 'empty') {    
         questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0));
+        questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0));
     }
     console.log(questions);
 
@@ -35,8 +36,6 @@ $(document).ready(function(){
                             '<div class="question-tag tag-content">'+questions[q].content+'</div>'+
                             '<div class="question-tag tag-type">'+questions[q].type+'</div>'+
                             '<span class="question-card-statement">'+questions[q].statement+'</span>'+
-                            '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'+
-                            '<div class="question-action remove" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'+
                         '</div>'+
                     '</div>'
                 );
@@ -47,6 +46,12 @@ $(document).ready(function(){
                     );
                 }
 
+                if ($('#public-questions').length) {  // Micro gambiarra pra exibir o "edit" e "delete" somente em "Minhas questões"
+                    $('#card-'+q+' > div').append(
+                        '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'+
+                        '<div class="question-action remove" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'
+                    );
+                }
             }
 
             /************** Exibe os enunciados das questões **************/
@@ -353,6 +358,7 @@ $(document).ready(function(){
             success: (response) => {
                 questions = response;
                 questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de conteúdo
                 console.log(questions);
                 appendQuests();
             }
@@ -377,6 +383,7 @@ $(document).ready(function(){
             success: (response) => {
                 questions = response;
                 questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 console.log(questions);
                 appendQuests();
             },

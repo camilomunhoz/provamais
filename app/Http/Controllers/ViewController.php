@@ -37,7 +37,8 @@ class ViewController extends Controller
     // View "Criar documento"
     public function create_doc(){
         if(Auth::check()){
-            return view('create_doc');
+            $subjects = Subject::all();
+            return view('create_doc', ['subjects' => $subjects]);
         }
         return redirect('/');
     }
@@ -46,11 +47,6 @@ class ViewController extends Controller
     public function my_quests(){
         if(Auth::check()){
             $user = Auth::user();
-            $username = explode(' ', $user->name);
-            $user->name = $username[0];
-            if(!$user->profile_pic){
-                $user->profile_pic = 'user_pic_placeholder.png';
-            }
 
             $questions = $user->questions;
             if(count($questions) == 0) {
@@ -62,8 +58,13 @@ class ViewController extends Controller
                     
                     $q['options'] = $q->options;
 
-                    $owner = explode(' ', $q->user->name);
-                    $q['owner'] = $owner[0];
+                    if ($q->user->name == $user->name) {
+                        $q->owner = 'você mesmo';
+                    }
+                    else {
+                        $username = explode(' ', $q->user->name);
+                        $q->owner = $username[0];
+                    }
 
                     if(!$q->user->profile_pic){
                         $q->user->profile_pic = 'user_pic_placeholder.png';
@@ -79,6 +80,11 @@ class ViewController extends Controller
                     unset($q->user['created_at']);
                     unset($q->user['updated_at']);
                 }
+            }
+            $username = explode(' ', $user->name);
+            $user->name = $username[0];
+            if(!$user->profile_pic){
+                $user->profile_pic = 'user_pic_placeholder.png';
             }
 
             return view('my_quests', ['user' => $user, 'questions' => $questions]);
@@ -115,20 +121,21 @@ class ViewController extends Controller
     public function search_quests(){
         if(Auth::check()){
             $user = Auth::user();
-            $username = explode(' ', $user->name);
-            $user->name = $username[0];
-            if(!$user->profile_pic){
-                $user->profile_pic = 'user_pic_placeholder.png';
-            }
 
             $questions = Question::where('private', 0)->get();
             foreach ($questions as $q){
                 $q['subject_name'] = $q->subject->name;
+                $q['options'] = $q->options;
                 
                 $q['options'] = $q->options;
 
-                $owner = explode(' ', $q->user->name);
-                $q['owner'] = $owner[0];
+                if ($q->user->name == $user->name) {
+                    $q->owner = 'você mesmo';
+                }
+                else {
+                    $username = explode(' ', $q->user->name);
+                    $q->owner = $username[0];
+                }
 
                 if(!$q->user->profile_pic){
                     $q->user->profile_pic = 'user_pic_placeholder.png';
@@ -143,6 +150,11 @@ class ViewController extends Controller
                 unset($q->user['description']);
                 unset($q->user['created_at']);
                 unset($q->user['updated_at']);
+            }
+            $username = explode(' ', $user->name);
+            $user->name = $username[0];
+            if(!$user->profile_pic){
+                $user->profile_pic = 'user_pic_placeholder.png';
             }
 
             return view('search_quests', ['user' => $user, 'questions' => $questions]);

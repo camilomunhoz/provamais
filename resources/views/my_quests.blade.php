@@ -55,14 +55,14 @@
                 <x-checkbox id="private-questions" name="private" checked="checked">Privadas</x-checkbox>
                 <x-checkbox id="favorite-questions" name="favorite" checked="checked">Favoritas</x-checkbox>
                 
+                <span class="filter-section">Tipo de questão</span>
+                <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
+                <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
+                
                 <span class="filter-section">Disciplinas</span>
                 <div id="filter-subjects">
                     @if ($questions[0] == 'empty') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nenhuma @endif
                 </div>
-
-                <span class="filter-section">Tipo de questão</span>
-                <x-checkbox id="alternative" name="types[]" value="Objetiva" checked="checked">Objetiva</x-checkbox>
-                <x-checkbox id="essay" name="types[]" value="Dissertativa" checked="checked">Dissertativa</x-checkbox>
 
             </div>
 
@@ -94,7 +94,6 @@
     
     {{-- Overlay de detalhes que aparece ao clicar em uma questão --}}
     <div class="black-overlay showing-quest">
-        <div id="actions" class="simple-box"></div>
         <div id="quest-details" class="simple-box">
             {{-- Aqui são inseridos os detalhes da questão via JS --}}
         </div>   
