@@ -176,14 +176,19 @@ class FilterDocQuestionsController extends Controller
 
         foreach ($ids as $key => $id) {
             if ($key == 0){
-                $sql .= " id = $id";
+                $sql .= " identifier = '$id'";
             }
             else {
-                $sql .= " OR id = $id";
+                $sql .= " OR identifier = '$id'";
             }
         }
 
         $questions = DB::select($sql);
+        $questions = Question::hydrate($questions);
+
+        foreach ($questions as $q) {
+            $q->options;
+        }
 
         echo json_encode($questions);
     }

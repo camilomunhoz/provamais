@@ -32,11 +32,11 @@
 @section('section_content')
     <script type="text/javascript" src="/js/create_doc.js"></script>
     
+    {{-- DOCUMENTO --}}
     <div id="doc">
-        {{-- <div id="enumerators"></div> --}}
         <div id="add-question-btn">Adicionar questões</div>
-        {{-- Divisória --}} <div></div>
-
+        <div id="questions"></div>
+        <div id="teste"></div>
     </div>
 
     {{-- Overlay de adição de questões --}}

@@ -7,7 +7,7 @@
     <header>
         {{-- Itens à esquerda --}}
 
-        <div id="header-right-items">
+        <div id="header-left-items">
             <div class="header-detail header-section"></div>
             <span id="section-title">@yield('section-title')</span>
         </div>

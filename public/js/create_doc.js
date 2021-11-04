@@ -8,6 +8,66 @@ $(document).ready(function() {
 /*******************************************************************************************************************************************/
 
     /****************************************************************/
+    /******************** Insere botão de salvar ********************/
+    /****************************************************************/
+
+    $('#header-right-items').prepend(
+        '<div id="save">'+
+            '<img id="save-icon" src="/img/icons/ico_save.png">'+
+            '<span id="save-label">Salvar</span>'+
+        '</div>'
+    );
+
+    /**********************************************************************/
+    /*************** Exibe o ambiente para salvar a questão ***************/
+    /**********************************************************************/
+
+    $('#save').on('click', openSaveDialog);
+
+    function openSaveDialog() {
+        $('#content').append(
+            '<div id="save-overlay" class="black-overlay">'+
+                '<form id="save-dialog">'+
+                    '<input id="input-name" name="name" type="text" class="simple-box">'+
+                '</form>'+
+            '</div>'
+        );
+        $('#save-overlay').fadeIn(200);
+        $('#save-dialog').slideDown(200);
+        $('#save').off('click');
+
+        // Deixa o documento em preto e branco
+        $('#doc').css({filter: 'grayscale(.5)'});
+
+        // Faz o botão "Salvar" fechar o overlay
+        setTimeout(() => { $('#save').on('click', closeSaveDialog); }, 200); // Para não acumular animações
+
+        // Faz o clique na parte preta do overlay fechar o overlay
+        $('#save-dialog').on('mouseleave', () => {
+            $('#save-overlay').on('click', closeSaveDialog);
+        });
+        $('#save-dialog').on('mouseenter', () => {
+            $('#save-overlay').off('click', closeSaveDialog);
+        });
+    }
+
+    /****************************************************/
+    /*********** Fecha overlay de salvamento ************/
+    /****************************************************/
+
+    function closeSaveDialog() {
+        $('#doc').css({filter: 'none'});
+        $('#save-dialog').slideUp(200);
+        $('#save-overlay').fadeOut(200);
+        $('#save').off('click');
+        $('#save-dialog').off('mouseenter');
+        $('#save-dialog').off('mouseleave');
+        setTimeout(() => { $('#save').on('click', openSaveDialog); }, 200); // Para não acumular animações
+    }
+
+    $('.cancel-action').on('click', closeSaveDialog)
+
+    /****************************************************************/
     /*********** Exibe o ambiente de seleção de questões ************/
     /****************************************************************/
 
@@ -21,7 +81,7 @@ $(document).ready(function() {
     /****** Fecha overlay de seleção de questões *******/
     /***************************************************/
 
-    function closeDialog(){
+    function closeInsertionDialog(){
         $('.add-question-overlay').fadeOut(200);
         setTimeout(() => {
             $('#results').empty();
@@ -32,16 +92,16 @@ $(document).ready(function() {
             selectedQuestions = [];
             updateSelectedCount();
             blockOrUnlockInsertion();
+            questions = [];
         }, 200);  
     }
-    $('.x').on('click', closeDialog);
+    $('.x').on('click', closeInsertionDialog);
     $('#add-question-dialog').on('mouseleave', () => {
-        $('.add-question-overlay').on('click', closeDialog);
+        $('.add-question-overlay').on('click', closeInsertionDialog);
     });
     $('#add-question-dialog').on('mouseenter', () => {
-        $('.add-question-overlay').off('click',closeDialog);
+        $('.add-question-overlay').off('click',closeInsertionDialog);
     });
-
 
     /**************************************************/
     /********* Imprime os cards das questões **********/
@@ -53,56 +113,66 @@ $(document).ready(function() {
         if (questions.length) {
             $('#results').empty();
             
-            /************** Exibe o termo de busca esteja sendo buscado **************/
-
+            // Exibe o termo de busca esteja sendo buscado
             if ($('#search-box').val()) {
                 $('#results').append(
                     '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
                 );  
             } 
             
-            /************** Cria e insere os cards **************/
-
+            // Cria e insere os cards
             for (q in questions) {
 
+                // Insere a estrutura do card já com as tags
                 $('#results').append(
                     '<div id="result-'+q+'" class="result">'+
-                        '<div id="'+questions[q].id+'" class="question-card simple-box">'+
+                        '<div id="'+questions[q].identifier+'" class="question-card simple-box">'+
                             '<div class="question-tag tag-subject">'+questions[q].subject_name+'</div>'+
                             '<div class="question-tag tag-content">'+questions[q].content+'</div>'+
                             '<div class="question-tag tag-type">'+questions[q].type+'</div>'+
-                            '<span class="question-card-statement">'+questions[q].statement+'</span>'+
+                            '<span class="question-card-statement"></span>'+
                         '</div>'+
                     '</div>'
                 );
-
+                // Insere icone de cadeado caso a questão seja privada
                 if (questions[q].private) {
                     $('#result-'+q+' > .question-card').prepend(
                         '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
                     );
                 }
-
+                // Insere a checkbox correspondendo a questão
                 $('#result-'+q).append(
                     '<label for="q-'+q+'" class="checkbox-label" title="Selecionar">'+
-                        '<input type="checkbox" class="simple-box" id="q-'+q+'" value="'+questions[q].id+'">'+
+                        '<input type="checkbox" class="simple-box" id="q-'+q+'" value="'+questions[q].identifier+'">'+
                         '<div class="checkbox"><div class="checkmark"></div></div>'+
                     '</label>'
                 );
                 // Marca a checkbox caso a questão já esteja selecionada 
-                if (questions[q].id == selectedQuestions.find((quest) => {
-                    if (quest == questions[q].id) return true;
+                if (questions[q].identifier == selectedQuestions.find((quest) => {
+                    if (quest == questions[q].identifier) return true;
                     else return false;
                 })) {
                     $('#q-'+q)[0].checked = true;
                 }
+                // Bloqueia a checkbox caso a questão já esteja inserida
+                if (questions[q].identifier == insertedQuestions.find((quest) => {
+                    if (quest == questions[q].identifier) return true;
+                    else return false;
+                })) {
+                    $('#q-'+q)[0].checked = true;
+                    $('#q-'+q).parent().css({
+                        userSelect: 'none',
+                        opacity: '.3',
+                        cursor: 'default'
+                    }).attr('title', 'Questão já inserida');
+                    $('#q-'+q).removeAttr('id');
+                }
             }
 
-            /************** Exibe os enunciados das questões **************/
-
+            // Exibe os enunciados das questões
             let quills = [];
             let cards = $('.question-card .question-card-statement');
 
-            // Cria os Quill Containers para os enunciados
             for (let i = 0 ; i < cards.length ; i++) {
                 quills.push(
                     new Quill(cards[i], {theme: 'bubble', enable: 'false', readOnly: true})
@@ -205,7 +275,6 @@ $(document).ready(function() {
     /*********** Faz a filtragem dos resultados ***********/
     /******************************************************/
 
-    /******** Aplica os filtros ********/
     $('#filters').on('submit', (e) => {
         e.preventDefault();
 
@@ -234,9 +303,8 @@ $(document).ready(function() {
             dataType: 'json',
             success: (response) => {
                 questions = response;
-                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
-                // console.log(questions);
+                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 appendQuests();
             }
         });
@@ -256,18 +324,6 @@ $(document).ready(function() {
             :
             questCard = $(e.target);
 
-        // // Não exibe os detalhes e marca a checkbox caso clicada
-        // if ($(e.target).hasClass('checkbox')) {
-        //     $(e.target).siblings('input')[0].checked == true ? 
-        //         $(e.target).siblings('input')[0].checked = false:
-        //         $(e.target).siblings('input')[0].checked = true;
-        //     return false;
-        // }
-        // else if ($(e.target).hasClass('checkmark')) {
-        //     $(e.target).parent().siblings('input')[0].checked = false; 
-        //     return false;
-        // }
-
         // Pega o id da questão clicada
         let questId = questCard.attr('id');
 
@@ -275,7 +331,7 @@ $(document).ready(function() {
 
         // Percorre as questões (advindas da filtragem) em busca da questão clicada
         for(q in questions){
-            if(questions[q].id == questId){
+            if(questions[q].identifier == questId){
                 question = questions[q];
                 break;
             }
@@ -298,7 +354,7 @@ $(document).ready(function() {
                 '</div>'+
                 '<div id="right-info">'+
                     '<label for="q-current" class="checkbox-label">'+
-                        '<input type="checkbox" class="simple-box" id="q-current" value="'+questions[q].id+'">'+
+                        '<input type="checkbox" class="simple-box" id="q-current" value="'+questions[q].identifier+'">'+
                         '<div id="select-current">Selecionar</div>'+    
                     '</label>'+
                     '<img class="x" src="/img/icons/ico_plus.svg" alt="X" title="Fechar">'+
@@ -369,9 +425,14 @@ $(document).ready(function() {
 
             // Quando exibe os detalhes, marca como selecionado ou não de acordo com as questões selecionadas
             if ($('#q-current').val() == selectedQuestions.find((quest) => {
-                if (quest == questions[q].id) return true;
+                if (quest == questions[q].identifier) return true;
                 else return false;
-            })) {
+                }) ||
+                $('#q-current').val() == insertedQuestions.find((quest) => {
+                    if (quest == questions[q].identifier) return true;
+                    else return false;
+                })
+            ) {
                 $('#select-current').html('Selecionada <div class="checkmark"></div>').css({
                     color: 'var(--color1)',
                     backgroundColor: 'transparent',
@@ -393,8 +454,8 @@ $(document).ready(function() {
                     }).addClass('selected').attr('title', 'Remover');
 
                     // Inclui nas selecionadas e marca a checkbox
-                    selectedQuestions.push(Number($('#q-current').val()));
-                    $('.result input[value='+$('#q-current').val()+']')[0].checked = true;
+                    selectedQuestions.push($('#q-current').val());
+                    $('.result input[value="'+$('#q-current').val()+'"]')[0].checked = true;
                     updateSelectedCount();
                 }
                 else {
@@ -410,11 +471,26 @@ $(document).ready(function() {
                             else return false;
                         }),
                     1);
-                    $('.result input[value='+$('#q-current').val()+']')[0].checked = false;
+                    $('.result input[value="'+$('#q-current').val()+'"]')[0].checked = false;
                     updateSelectedCount();
                 }
                 blockOrUnlockInsertion();
             });
+
+            // Se a questão já está inserida, marca como selecionado e bloqueia o botão
+            if (question.identifier == insertedQuestions.find((quest) => {
+                if (quest == question.identifier) return true;
+                else return false;
+            })) {
+                $('#q-current').parent().css({
+                    userSelect: 'none',
+                    opacity: '.3',
+                    cursor: 'default'
+                }).attr('title', 'Questão já inserida')
+                $('#q-current').removeAttr('id');
+                $('#select-current').html('Inserida <div class="checkmark"></div>')
+                $('#select-current').off('click');
+            }
 
         $('#quest-details').slideDown(200).css('display', 'grid');
         $('#no-quests').hide();
@@ -430,7 +506,7 @@ $(document).ready(function() {
     /**************************************************************************/
 
     function selectQuestion(e) {
-        let questId = Number(e.target.value);
+        let questId = e.target.value;
         if (e.target.checked == true) {
             selectedQuestions.push(questId);
         }
@@ -476,9 +552,13 @@ $(document).ready(function() {
     updateSelectedCount();
 
     /***********************************************************************/
-    /*********** Puxa do banco e insere as questões selecionadas ***********/
+    /**************** Puxa do banco as questões selecionadas ***************/
     /***********************************************************************/
+    
+    // Array que guarda as questões inseridas
+    var insertedQuestions = [];
 
+    // Traz via AJAX as questões selecionadas
     function getQuestions() {
         $('#insert-questions').off('click');
         let questionsIds = '';
@@ -487,9 +567,7 @@ $(document).ready(function() {
         });
         let data = {
             ids: questionsIds,
-            _token: $('input[name=_token]').val()
         };
-        console.log(data)
 
         $.get('/insert_doc_quests', data)
             .done((response => {
@@ -497,22 +575,119 @@ $(document).ready(function() {
                 for (q of questions) {
                     insertQuestion(q);
                 }
-                closeDialog();
+                closeInsertionDialog();
+                updateEnumerators();
             })
         );
     }
 
+    /***********************************************************************/
+    /******************* Insere as questões selecionadas *******************/
+    /***********************************************************************/
+
     function insertQuestion(q) {
-        $('#doc').append(
-            '<div class="question simple-box" data-question-id="'+q.id+'">'+
-                '<div class="statement">'+q.statement+'</div>'+
-                '<div>dfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldhadfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sddfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sddfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sddfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sddfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sddfas jhfd kajfkjafkda hfkdaj fkajdfhklajhdfk ljah kfjdha kfjldha kfjah sdkjfha sd</div>'+
+        // Insere a questão
+        $('#questions').append(
+            '<div class="question" id="'+q.identifier+'">'+
+                '<div class="enumerator"></div>'+
+                '<div class="question-content" data-question-id="'+q.identifier+'">'+
+                    '<div class="statement"></div>'+
+                '</div>'+
+                '<div class="actions">'+
+                    '<img class="remove-question" src="/img/icons/ico_trash.png" alt="Remover" title="Remover questão" data-question-id="'+q.identifier+'">'+
+                    '<img class="reorder-question" src="/img/icons/ico_reorder.svg" alt="Reordenar" title="Arraste para reordenar">'+
+                    '<img class="expand-question" src="/img/icons/ico_expand.svg" alt="Expandir" title="Expandir questão" data-question-id="'+q.identifier+'">'+
+                    '<img class="minimize-question" src="/img/icons/ico_minimize.svg" alt="Minimizar" title="Minimizar questão" data-question-id="'+q.identifier+'">'+
+                '</div>'+
             '</div>'
         );
-        $('[data-question-id='+q.id+']').on('click', () => {
-            $('[data-question-id='+q.id+']').css({height: 'fit-content'}) // css-tricks do the trick (animate height/width to "auto")
+        // Adiciona o enunciado com Quill
+        let stmt = new Quill('.question-content[data-question-id="'+q.identifier+'"] .statement',
+                        {theme: 'bubble', enable: 'false', readOnly: true});
+        stmt.setContents(JSON.parse(q.statement));
+        stmt.disable();
+
+        // Adiciona a imagem se houver
+        if(q.image){
+            $('.question-content[data-question-id="'+q.identifier+'"]').append(
+                '<img class="image" src="/img/questions_images/'+q.image+'">'
+            );
+        }
+        // Adiciona as alternativas se houver
+        if(q.options && q.options.length){
+            $('.question-content[data-question-id="'+q.identifier+'"]').append(
+                '<div class="options"></div>'
+            );
+            for(let i = 0; i < q.options.length; i++){
+                $('.options').append(
+                    '<div class="option-container opt-'+i+'"></div>'
+                );
+                $('.opt-'+i).append(
+                    '<span class="option-enumerator"><b>&#'+(97+i)+';)</b></span>'+
+                    '<div class="option o'+i+'"></div>'
+                );
+                let option = new Quill('.o'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
+                option.setContents(JSON.parse(q.options[i].content));
+                option.disable();
+            }
+        }
+        // Expande a questão
+        $('.expand-question[data-question-id="'+q.identifier+'"]').on('click', (e) => {
+            $('.question-content[data-question-id="'+q.identifier+'"]').css({height: 'fit-content'}) // css-tricks do the trick (animate height/width to "auto")
+            $(e.target).hide();
+            $(e.target).siblings('.minimize-question').show();
         })
+        // Minimiza a questão
+        $('.minimize-question[data-question-id="'+q.identifier+'"]').on('click', (e) => {
+            $('.question-content[data-question-id="'+q.identifier+'"]').animate({height: '80px'}, 200) // css-tricks do the trick (animate height/width to "auto")
+            $(e.target).hide();
+            $(e.target).siblings('.expand-question').show();
+        });
+        // Adiciona no array que guarda o identifier de todas as questões que estão inseridas
+        insertedQuestions.push(q.identifier);
+
+        // Remove a questão
+        $('.remove-question[data-question-id="'+q.identifier+'"]').on('click', (e) => {
+            $('.question[data-question-id="'+q.identifier+'"]').remove();
+            insertedQuestions.splice(
+                insertedQuestions.findIndex((iQ) => {
+                    if (iQ == q.identifier) return true;   
+                    else return false;
+                }),
+            1);
+            updateEnumerators();
+        });
     }
+
+    /***********************************************************************/
+    /*********************** Reordenação das questões **********************/
+    /***********************************************************************/
+
+    // Permite a reordenção com o JQuery UI
+    $('#questions').sortable({
+        containment: '#questions',       // Container constrain
+        handle: '.reorder-question',     // Sort Handle (que dispara o evento)
+        revert: 100,                     // Animaçãozinha dele indo pro lugar
+        tolerance: 'pointer',            // O item será reordenado quando o ponteiro passar por cima
+        update: () => {                  // Dispara quando é reordenado
+            updateEnumerators();
+            let teste = $('#questions').sortable('toArray');
+            console.log(teste);
+        },
+    });
+
+    // Atualiza os enumeradores das questões
+    function updateEnumerators() {
+        let enums = document.getElementsByClassName('enumerator');
+        let count = 1;
+        for (e of enums) {
+            $(e).html(count+'.');
+            count++;
+        }
+    }
+    updateEnumerators()
+
+    // Atualiza o que é necessário quando ocorre reordenação
 
 /*******************************************************************************************************************************************/
 /*******************************************************************************************************************************************/

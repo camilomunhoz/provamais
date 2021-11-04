@@ -1,9 +1,9 @@
 $(document).ready(function(){
 
-    // Coloca as questões por ordem de disciplina
+    // Coloca as questões por ordem de disciplina e conteúdo
     if (questions[0] != 'empty') {    
-        questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0));
         questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0));
+        questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0));
     }
     console.log(questions);
 
