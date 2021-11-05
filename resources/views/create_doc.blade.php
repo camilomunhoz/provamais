@@ -34,6 +34,7 @@
     
     {{-- DOCUMENTO --}}
     <div id="doc">
+        {{-- @csrf Token que será "movido" com JS pra dentro do form de salvamento --}}
         <div id="add-question-btn">Adicionar questões</div>
         <div id="questions"></div>
         <div id="teste"></div>
@@ -121,7 +122,7 @@
             {{-- Divisória --}} <div class="simple-line"></div>
 
             {{-- Footer --}}
-            <form id="add-question-dialog-footer"> @csrf
+            <form id="add-question-dialog-footer">
                 <button type="button" id="insert-questions" class="save-btn confirmation-btn-hard">Inserir</button>
                 <span id="selected-questions">Questões selecionadas: <b>0</b></span>
             </form>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
 
-class FilterDocQuestionsController extends Controller
+class DocQuestionsController extends Controller
 {
     public function filter(Request $request) {
         
@@ -191,5 +191,9 @@ class FilterDocQuestionsController extends Controller
         }
 
         echo json_encode($questions);
+    }
+
+    public function store(Request $request) {
+        dd($request);
     }
 }

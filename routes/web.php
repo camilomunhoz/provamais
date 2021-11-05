@@ -20,7 +20,7 @@ use App\Http\Controllers\StoreQuestionController;
 use App\Http\Controllers\UpdateQuestionController;
 use App\Http\Controllers\FilterQuestionsController;
 use App\Http\Controllers\FilterMyQuestionsController;
-use App\Http\Controllers\FilterDocQuestionsController;
+use App\Http\Controllers\DocQuestionsController;
 use App\Http\Controllers\RemoveQuestionController;
 
 // Página inicial
@@ -36,7 +36,7 @@ Route::get('/create_quest', [ViewController::class, 'create_quest']);
 Route::get('/edit_quest/{id}', [ViewController::class, 'edit_quest']);
 Route::get('/remove_quest/{id}', [RemoveQuestionController::class, 'remove_quest']);
 Route::get('/search_quests', [ViewController::class, 'search_quests']);
-Route::get('/insert_doc_quests', [FilterDocQuestionsController::class, 'get']);
+Route::get('/insert_doc_quests', [DocQuestionsController::class, 'get']);
 
 // Outros
 Route::get('/my_profile', [ViewController::class, 'my_profile']);
@@ -51,7 +51,8 @@ Route::post('/filter_my_quests', [FilterMyQuestionsController::class, 'filter'])
 Route::post('/search_my_quests', [FilterMyQuestionsController::class, 'search']);
 Route::post('/filter_quests', [FilterQuestionsController::class, 'filter']);
 Route::post('/search_quests', [FilterQuestionsController::class, 'search']);
-Route::post('/filter_doc_quests', [FilterDocQuestionsController::class, 'filter']);
+Route::post('/filter_doc_quests', [DocQuestionsController::class, 'filter']);
+Route::post('/store_doc', [DocQuestionsController::class, 'store']);
 
 // Autenticação
 Route::get('/logout', [AuthController::class, 'logout']);

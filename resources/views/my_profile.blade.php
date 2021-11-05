@@ -45,7 +45,7 @@
             </label>
             <label>
                 Chave Pix:<br>
-                <input type="text" name="pix" placeholder="Chave Pix" class="my-profile-pix simple-box" value="{{$user->pix}}">
+                <input type="text" name="pix" class="my-profile-pix simple-box" value="{{$user->pix}}">
             </label>
             <button type="submit" class="confirmation-btn-hard save-btn">SALVAR</button>
         </div>
