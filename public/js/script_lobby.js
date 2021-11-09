@@ -16,7 +16,7 @@ $(document).ready(function(){
 
     function showOverlay(){
         $('#profile').off('click');
-        $('#profile').on('click', hideOverlay);
+        setTimeout(() => { $('#profile').on('click', hideOverlay) }, 210);
         $('.nav-1').hide();
         $('.nav-2').slideDown(400).css('display', 'flex');
         $('nav').animate({backgroundColor: 'rgb(0, 20, 50)'}, 200);
@@ -25,7 +25,7 @@ $(document).ready(function(){
 
     function hideOverlay(){
         $('#profile').off('click');
-        $('#profile').on('click', showOverlay);
+        setTimeout(() => { $('#profile').on('click', showOverlay) }, 210);
         $('.nav-2').hide();
         $('.nav-1').slideDown(400).css('display', 'flex');
         $('nav').animate({backgroundColor: 'rgb(15, 59, 109)'}, 200);

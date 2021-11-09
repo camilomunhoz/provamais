@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\Question;
+use App\Models\Document;
 
 class ViewController extends Controller
 {
@@ -29,7 +30,11 @@ class ViewController extends Controller
             if(!$user->profile_pic){
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
-            return view('my_docs', ['user' => $user]);
+            $docs = Document::where('user_id', $user->id)->get();
+            if(count($docs) == 0) {
+                $docs[0] = 'empty';
+            }
+            return view('my_docs', ['user' => $user, 'docs' => $docs]);
         }
         return redirect('/');
     }
@@ -39,6 +44,15 @@ class ViewController extends Controller
         if(Auth::check()){
             $subjects = Subject::all();
             return view('create_doc', ['subjects' => $subjects]);
+        }
+        return redirect('/');
+    }
+
+    // View "Editar documento"
+    public function edit_doc(){
+        if(Auth::check()){
+            $subjects = Subject::all();
+            return view('edit_doc', ['subjects' => $subjects]);
         }
         return redirect('/');
     }

@@ -5,7 +5,7 @@ $(document).ready(function(){
         questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0));
         questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0));
     }
-    console.log(questions);
+    // console.log(questions);
 
 /**************************************************/
 /********* Imprime os cards das questões **********/

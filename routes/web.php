@@ -21,6 +21,7 @@ use App\Http\Controllers\UpdateQuestionController;
 use App\Http\Controllers\FilterQuestionsController;
 use App\Http\Controllers\FilterMyQuestionsController;
 use App\Http\Controllers\DocQuestionsController;
+use App\Http\Controllers\DocController;
 use App\Http\Controllers\RemoveQuestionController;
 
 // Página inicial
@@ -29,6 +30,11 @@ Route::get('/', [ViewController::class, 'index']);
 // Documentos
 Route::get('/my_docs', [ViewController::class, 'my_docs']);
 Route::get('/create_doc', [ViewController::class, 'create_doc']);
+Route::post('/store_doc', [DocQuestionsController::class, 'store']);
+Route::post('/my_docs/rename/{id}', [DocController::class, 'rename']);
+Route::get('/my_docs/remove/{id}', [DocController::class, 'remove']);
+Route::get('/my_docs/duplicate/{id}', [DocController::class, 'duplicate']);
+Route::get('/my_docs/get', [DocController::class, 'get']);
 
 // Questões
 Route::get('/my_quests', [ViewController::class, 'my_quests']);
@@ -38,21 +44,21 @@ Route::get('/remove_quest/{id}', [RemoveQuestionController::class, 'remove_quest
 Route::get('/search_quests', [ViewController::class, 'search_quests']);
 Route::get('/insert_doc_quests', [DocQuestionsController::class, 'get']);
 
-// Outros
-Route::get('/my_profile', [ViewController::class, 'my_profile']);
-Route::get('/profile/{id}', [ViewController::class, 'show_profile']);
-Route::get('/help', [ViewController::class, 'help']);
-
-// Rotas para validar os formulários em geral
-Route::post('/update_profile', [UpdateProfileController::class, 'update_profile']);
 Route::post('/store_question', [StoreQuestionController::class, 'store_question']);
 Route::post('/update_question', [UpdateQuestionController::class, 'update_question']);
-Route::post('/filter_my_quests', [FilterMyQuestionsController::class, 'filter']);
-Route::post('/search_my_quests', [FilterMyQuestionsController::class, 'search']);
 Route::post('/filter_quests', [FilterQuestionsController::class, 'filter']);
 Route::post('/search_quests', [FilterQuestionsController::class, 'search']);
+Route::post('/filter_my_quests', [FilterMyQuestionsController::class, 'filter']);
+Route::post('/search_my_quests', [FilterMyQuestionsController::class, 'search']);
 Route::post('/filter_doc_quests', [DocQuestionsController::class, 'filter']);
-Route::post('/store_doc', [DocQuestionsController::class, 'store']);
+
+// Perfil
+Route::get('/my_profile', [ViewController::class, 'my_profile']);
+Route::get('/profile/{id}', [ViewController::class, 'show_profile']);
+Route::post('/update_profile', [UpdateProfileController::class, 'update_profile']);
+
+// Ajuda
+Route::get('/help', [ViewController::class, 'help']);
 
 // Autenticação
 Route::get('/logout', [AuthController::class, 'logout']);

@@ -15,10 +15,11 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_header')->constrained('headers');
-            $table->string('quest_enumerator');
-            $table->char('alt_enumerator');
+            $table->foreignId('user_id')->constrained('users');
+            // $table->foreignId('header_id')->constrained('headers');
+            $table->string('name');
+            $table->string('question_enumerator');
+            $table->string('options_enumerator');
             $table->timestamps();
         });
     }

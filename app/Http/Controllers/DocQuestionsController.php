@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Models\User;
 use App\Models\Question;
+use App\Models\Document;
+use App\Models\DocumentQuestion;
 
 class DocQuestionsController extends Controller
 {
@@ -194,6 +196,46 @@ class DocQuestionsController extends Controller
     }
 
     public function store(Request $request) {
-        dd($request);
+
+        $doc = new Document;
+        $doc->user_id = Auth::user()->id;
+        $doc->name = $request->name;
+        trim($doc->name);                                     // Tira espaços no início e fim
+        $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
+        $doc->question_enumerator = $request->question_enumerator;
+        $doc->options_enumerator = $request->options_enumerator;
+        $doc->save();
+
+        $questions_ids = json_decode($request->questions);
+
+        foreach ($questions_ids as $order => $q_identifier) {
+            $relation = new DocumentQuestion;
+            $q_id = Question::select('id')->where('identifier', $q_identifier)->first()->id;
+            $relation->document_id = $doc->id;
+            $relation->question_id = $q_id;
+            $relation->order = $order;
+            $relation->save();
+        }
+        return redirect('/my_docs');
+
     }
+
+    public function rename(Request $request, $id) {
+        $doc = Document::firstWhere('id', $id);
+        $doc->name = $request->name;
+        $doc->save();
+    }
+
+    public function remove($id) {
+        if(Auth::check()){
+            $doc = Document::firstWhere('id', $id);
+            
+            if($doc && $doc->user_id === Auth::id()) {
+                $doc->delete();
+            }
+            else return redirect('/my_quests');
+        }
+        else return redirect('/');
+    }
+
 }

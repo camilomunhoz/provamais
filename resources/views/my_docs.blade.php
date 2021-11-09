@@ -39,10 +39,31 @@
 {{-- Conteúdo da seção --}}
 @section('lobby_content')
 
+    {{-- Define variável que será usada em /js/show_docs.js para acessar e imprimir os cards dos documentos --}}
+    <script> var docs = {!! json_encode($docs) !!}; </script>
+    <script src="/js/show_docs.js"></script>
+
     <div id="docs">
+
+        {{-- Aqui vão os cards dos documentos --}}
+
+        @if ($docs[0] == 'empty')
+            <div id="create-tip">
+                <span>Clique aqui para<br>criar um documento</span><br>
+                <img src="/img/icons/ico_curved_arrow.svg">
+            </div>
+        @endif
         
     </div>
-
+    
+    {{-- Botão de criar documento --}}
     <a href="/create_doc" id="btn-create" title="Criar documento"><img src="/img/icons/ico_plus.svg" alt="Criar"></a>
+
+    {{-- Overlay de detalhes que aparece ao clicar em um card --}}
+    <div class="black-overlay showing-doc">
+        <div id="doc-details" class="simple-box">
+            {{-- Aqui são inseridos os detalhes do documento via JS --}}
+        </div>   
+    </div>
 
 @endsection

@@ -8,7 +8,7 @@ $(document).ready(function() {
 /*******************************************************************************************************************************************/
 
     // Array que guarda as questões inseridas
-    var insertedQuestions = [1];
+    var insertedQuestions = [];
 
     /****************************************************************/
     /******************** Insere botão de salvar ********************/
@@ -34,23 +34,25 @@ $(document).ready(function() {
             $('#save').off('click');
             $('#save').on('click', openSaveDialog).removeAttr('style');
         }
+        blockOrUnlockRedSave();
     }
     blockOrUnlockSave();
 
     /**********************************************************************/
     /*************** Exibe o ambiente para salvar a questão ***************/
     /**********************************************************************/
+    
     $('#content').append(
         '<div id="save-overlay" class="black-overlay">'+
             '<form autocomplete="off" id="save-dialog" action="/store_doc" method="POST">'+
                 '<input autocomplete="false" type="hidden">'+
                 '<input id="questions-to-save" name="questions" type="hidden">'+
                 '<label id="label-name-input" for="name-input" class="save-dialog-label">Nome do documento:'+
-                    '<input id="name-input" name="name" type="text" class="simple-box" onkeydown="return event.key != \'Enter\';">'+
+                    '<input id="name-input" name="name" type="text" maxlength="100" class="simple-box" onkeydown="return event.key != \'Enter\';">'+
                 '</label>'+
                 '<div class="simple-line"></div>'+
                 '<label id="label-enum-questions-input" for="enum-quests" class="save-dialog-label">Enumerador das questões:'+
-                    '<select id="enum-quests" name="enum_questions" class="simple-box">'+
+                    '<select id="enum-quests" name="question_enumerator" class="simple-box">'+
                         '<option value="1.">1.&nbsp;&nbsp;2.&nbsp;&nbsp;3.</option>'+
                         '<option value="1)">1)&nbsp;&nbsp;2)&nbsp;&nbsp;3)</option>'+
                         '<option value="1-">1-&nbsp;&nbsp;2-&nbsp;&nbsp;3-</option>'+
@@ -64,7 +66,7 @@ $(document).ready(function() {
                     '</select>'+
                 '</label>'+
                 '<label id="label-enum-options-input" for="enum-opts" class="save-dialog-label">Enumerador das alternativas:'+
-                    '<select id="enum-opts" name="enum_options" class="simple-box">'+
+                    '<select id="enum-opts" name="options_enumerator" class="simple-box">'+
                         '<option value="a)">a)&nbsp;&nbsp;b)&nbsp;&nbsp;c)</option>'+
                         '<option value="A)">A)&nbsp;&nbsp;B)&nbsp;&nbsp;C)</option>'+
                     '</select>'+
@@ -78,9 +80,9 @@ $(document).ready(function() {
     // Clona o CSRFtoken inserido via PHP pra dentro do form de salvamento // gambiarra total
     $('#save-dialog').prepend($('#filters input[name="_token"]').clone());
 
-    // Bloqueia e desbloqueia o botão vermelho de salvar de acordo com a ausência de nome
+    // Bloqueia e desbloqueia o botão vermelho de salvar de acordo com a ausência de nome e questões
     function blockOrUnlockRedSave() {
-        if (!$('#name-input').val() || $('#name-input').val().match(/^(\s+)$/)) {
+        if (!$('#name-input').val() || $('#name-input').val().match(/^(\s+)$/) || insertedQuestions.length == 0) {
             $('#save-btn').css({
                 userSelect: 'none',
                 pointerEvents: 'none',
@@ -96,10 +98,14 @@ $(document).ready(function() {
     blockOrUnlockRedSave();
     $('#name-input').on('input', blockOrUnlockRedSave);
 
+    /****************************************************/
+    /************ Abre overlay de salvamento ************/
+    /****************************************************/
+
     function openSaveDialog() {
         
         $('#save-overlay').fadeIn(200);
-        $('#save-dialog').slideDown(200);
+        $('#save-dialog').slideDown(200).css('display', 'flex');
         $('#save').off('click');
 
         // Insere no input escondido os identifiers das questões a serem enviadas
@@ -721,14 +727,15 @@ $(document).ready(function() {
 
         // Remove a questão
         $('.remove-question[data-question-id="'+q.identifier+'"]').on('click', (e) => {
-            $('.question[data-question-id="'+q.identifier+'"]').remove();
+            $('.question[id="'+q.identifier+'"]').remove();
             insertedQuestions.splice(
                 insertedQuestions.findIndex((iQ) => {
-                    if (iQ == q.identifier) return true;   
+                    if (iQ == q.identifier) return true;
                     else return false;
                 }),
             1);
             updateEnumerators();
+            blockOrUnlockSave();
         });
     }
 
