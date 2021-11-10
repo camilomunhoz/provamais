@@ -1,6 +1,6 @@
 @extends('layouts.section')
 
-@section('title', '| Novo documento')
+@section('title', '| '.$document->name)
 @section('css', '/css/create_doc.css')
 
 {{-- URL para redirecionamento caso a ação seja cancelada --}}
@@ -18,7 +18,7 @@
 @endsection
 
 {{-- Define o título do header --}}
-@section('section-title', 'Novo documento')
+@section('section-title', $document->name)
 
 {{-- Adiciona um botão de cancelar no header --}}
 @section('add-header-section')
@@ -31,7 +31,11 @@
 {{-- Conteúdo da seção --}}
 @section('section_content')
     <script type="text/javascript" src="/js/create_edit_doc.js"></script>
-    
+
+    {{-- Define variáveis que serão usada em /js/create_edit_doc.js para acessar os detalhes da questão --}}
+    <script> var oldQuestions = {!! json_encode($questions) !!}; </script>
+    <script> var doc = {!! json_encode($document) !!}; </script>
+
     {{-- DOCUMENTO --}}
     <div id="doc">
         <div id="add-question-btn">Adicionar questões</div>

@@ -30,7 +30,9 @@ Route::get('/', [ViewController::class, 'index']);
 // Documentos
 Route::get('/my_docs', [ViewController::class, 'my_docs']);
 Route::get('/create_doc', [ViewController::class, 'create_doc']);
+Route::get('/edit_doc/{id}', [ViewController::class, 'edit_doc']);
 Route::post('/store_doc', [DocQuestionsController::class, 'store']);
+Route::post('/update_doc', [DocQuestionsController::class, 'update']);
 Route::post('/my_docs/rename/{id}', [DocController::class, 'rename']);
 Route::get('/my_docs/remove/{id}', [DocController::class, 'remove']);
 Route::get('/my_docs/duplicate/{id}', [DocController::class, 'duplicate']);

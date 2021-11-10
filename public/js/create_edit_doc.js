@@ -10,6 +10,16 @@ $(document).ready(function() {
     // Array que guarda as questões inseridas
     var insertedQuestions = [];
 
+    // Caso seja uma edição, insere as questões já existentes
+    try {
+        if (oldQuestions !== 'undefined') {
+            for (let q of oldQuestions) {
+                oldQuestions.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+                insertQuestion(q);
+            }
+        }
+    } catch (e) {}   
+
     /****************************************************************/
     /******************** Insere botão de salvar ********************/
     /****************************************************************/
@@ -72,10 +82,25 @@ $(document).ready(function() {
                     '</select>'+
                 '</label>'+
                 '<div class="simple-line"></div>'+
+                '<label id="label-details-input" for="details-input" class="save-dialog-label">Detalhes:'+
+                    '<input id="details-input" name="details" class="simple-box">'+
+                '</label>'+
+                '<div class="simple-line"></div>'+
                 '<button type="submit" id="save-btn" class="save-btn confirmation-btn-hard">Salvar</button>'+
             '</form>'+
         '</div>'
     );
+
+    // Caso seja uma edição: muda a action do form, insere o nome, os tipos de enumeradores e o id do doc
+    try {
+        if (oldQuestions !== 'undefined') {
+            $('#save-dialog').attr('action', '/update_doc');
+            $('#save-dialog').prepend('<input name="doc_id" value="'+doc.id+'" type="hidden">');
+            $('#name-input').val(doc.name);
+            $('#enum-quests option[value="'+doc.question_enumerator+'"]').attr('selected', 'selected');
+            $('#enum-opts option[value="'+doc.options_enumerator+'"]').attr('selected', 'selected');
+        }
+    } catch (e) {}  
 
     // Clona o CSRFtoken inserido via PHP pra dentro do form de salvamento // gambiarra total
     $('#save-dialog').prepend($('#filters input[name="_token"]').clone());
@@ -202,7 +227,7 @@ $(document).ready(function() {
             } 
             
             // Cria e insere os cards
-            for (q in questions) {
+            for (let q in questions) {
 
                 // Insere a estrutura do card já com as tags
                 $('#results').append(
@@ -326,7 +351,7 @@ $(document).ready(function() {
 
         let subjectsInputs = $('#filter-subjects input');
 
-        for (i = 0; i < subjectsInputs.length; i++) {
+        for (let i = 0; i < subjectsInputs.length; i++) {
             if (subjectsInputs[i].checked == true) {
                 filterSubjectsCheck = true;
                 break;
@@ -355,6 +380,8 @@ $(document).ready(function() {
     /******************************************************/
     /*********** Faz a filtragem dos resultados ***********/
     /******************************************************/
+
+    let questions; // Armazenará as questões advindas da filtragem 
 
     $('#filters').on('submit', (e) => {
         e.preventDefault();
@@ -473,9 +500,9 @@ $(document).ready(function() {
             );
             for(let i = 0; i < question.options.length; i++){
                 $('#question-options').append(
-                    '<div class="option-container opt-'+i+'"></div>'
+                    '<div class="option-container op-'+i+'"></div>'
                 );
-                $('.opt-'+i).append(
+                $('.op-'+i).append(
                     '<span class="option-enumerator"><b>&#'+(97+i)+';)</b></span>'+
                     '<div class="question-option o'+i+'"></div>'
                 );
@@ -650,7 +677,7 @@ $(document).ready(function() {
         $.get('/insert_doc_quests', data)
             .done((response => {
                 let questions = JSON.parse(response);
-                for (q of questions) {
+                for (let q of questions) {
                     insertQuestion(q);
                 }
                 closeInsertionDialog();
@@ -703,9 +730,9 @@ $(document).ready(function() {
                 );
                 $('.opt-'+i).append(
                     '<span class="option-enumerator"><b>&#'+(97+i)+';)</b></span>'+
-                    '<div class="option o'+i+'"></div>'
+                    '<div class="option o-'+i+'"></div>'
                 );
-                let option = new Quill('.o'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
+                let option = new Quill('.o-'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
                 option.setContents(JSON.parse(q.options[i].content));
                 option.disable();
             }
@@ -759,7 +786,7 @@ $(document).ready(function() {
     function updateEnumerators() {
         let enums = document.getElementsByClassName('enumerator');
         let count = 1;
-        for (e of enums) {
+        for (let e of enums) {
             $(e).html(count+'.');
             count++;
         }

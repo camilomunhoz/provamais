@@ -209,9 +209,10 @@ $(document).ready(function(){
         if ($('#doc-name textarea').val() != $('#doc-name textarea').data('name')) {
             $.post('/my_docs/rename/'+id,
                 {name: $('#doc-name textarea').val(), _token: $('input[name="_token"]').val()},
-                function() {
+                function (response) {
                     getDocs();
-                    $('#doc-name textarea').data('name', $('#doc-name textarea').val());
+                    $('#doc-name textarea').data('name', response);
+                    $('#doc-name textarea').val(response);
                 }
             );
         }

@@ -199,7 +199,19 @@ class DocQuestionsController extends Controller
 
         $doc = new Document;
         $doc->user_id = Auth::user()->id;
+
         $doc->name = $request->name;
+
+        // Garante que não seja salvo um nome repetido. Concatena '(n)'.
+        while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$doc->name'"))) {
+            if (preg_match('/^\s\(\d\)$/', substr($doc->name, -4))) {
+                $doc->name = substr($doc->name, 0, -4).' ('.(substr($doc->name, -2, -1) + 1).')';
+            }
+            else {
+                $doc->name = $doc->name.' (1)';
+            }
+        }
+
         trim($doc->name);                                     // Tira espaços no início e fim
         $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
         $doc->question_enumerator = $request->question_enumerator;
@@ -220,20 +232,64 @@ class DocQuestionsController extends Controller
 
     }
 
-    public function rename(Request $request, $id) {
-        $doc = Document::firstWhere('id', $id);
-        $doc->name = $request->name;
-        $doc->save();
-    }
+    public function update(Request $request) {
 
-    public function remove($id) {
-        if(Auth::check()){
-            $doc = Document::firstWhere('id', $id);
-            
-            if($doc && $doc->user_id === Auth::id()) {
-                $doc->delete();
+        $doc = Document::firstWhere('id', $request->doc_id);
+
+        if($doc && $doc->user_id === Auth::id()) {
+
+            $name_was_changed = ($doc->name == $request->name) ? false : true ;
+
+            // Se o nome foi mudado, garante que não seja salvo um nome repetido. Concatena '(n)'.
+            if ($name_was_changed) {
+                $was_equal = false;
+                while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$request->name'"))) {
+                    
+                    $was_equal = true;
+
+                    if (preg_match('/^\s\(\d\)$/', substr($request->name, -4))) {
+                        $doc->name = substr($request->name, 0, -4).' ('. (substr($request->name, -2, -1) + 1) .')';
+                        $request->name = $doc->name;
+                    }
+
+                    else {
+                        $doc->name = $request->name.' (1)';
+                        $request->name = $doc->name;
+                    }
+                }
+                if (!$was_equal) {
+                    $doc->name = $request->name;
+                }
+                trim($doc->name);                                     // Tira espaços no início e fim
+                $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
             }
-            else return redirect('/my_quests');
+
+            $doc->question_enumerator = $request->question_enumerator;
+            $doc->options_enumerator = $request->options_enumerator;
+            // $doc->details = $request->details;
+
+            $doc->save();
+
+            // Atualizando a relação document_question...
+
+            $doc_quest = DocumentQuestion::where('document_id', $doc->id)->get();
+
+            foreach ($doc_quest as $dc) {
+                // Apaga as relações antigas
+                DB::statement("DELETE FROM document_questions WHERE document_id = '$dc->document_id' AND question_id = '$dc->question_id'");
+            }
+
+            $questions_ids = json_decode($request->questions);
+
+            foreach ($questions_ids as $order => $q_identifier) { // Cria as relações
+                $relation = new DocumentQuestion;
+                $q_id = Question::select('id')->where('identifier', $q_identifier)->first()->id;
+                $relation->document_id = $doc->id;
+                $relation->question_id = $q_id;
+                $relation->order = $order;
+                $relation->save();
+            }
+            return redirect('/my_docs');
         }
         else return redirect('/');
     }

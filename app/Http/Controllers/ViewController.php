@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Subject;
 use App\Models\Question;
 use App\Models\Document;
+use App\Models\DocumentQuestion;
 
 class ViewController extends Controller
 {
@@ -49,10 +50,22 @@ class ViewController extends Controller
     }
 
     // View "Editar documento"
-    public function edit_doc(){
+    public function edit_doc($id){
         if(Auth::check()){
+            $document = Document::where('id', $id)->get();
+            $doc_quest = DocumentQuestion::where('document_id', $id)->get();
+            $questions = [];
+
+            foreach ($doc_quest as $dc) {
+                $question = Question::where('id', $dc->question_id)->get();
+                // dd($question);
+                $question[0]->options;
+                array_push($questions, $question[0]);
+            }
+            // dd($questions);
+
             $subjects = Subject::all();
-            return view('edit_doc', ['subjects' => $subjects]);
+            return view('edit_doc', ['subjects' => $subjects, 'questions' => $questions, 'document' => $document[0]]);
         }
         return redirect('/');
     }
