@@ -32,6 +32,12 @@
 @section('section_content')
     <script type="text/javascript" src="/js/create_edit_doc.js"></script>
     
+    {{-- Define variável que será usada em /js/create_edit_doc.js para acessar as questões favoritas --}}
+    <script> var favorites = {!! json_encode($favorites) !!}; </script>
+
+    {{-- Define variável que será usada em /js/create_edit_doc.js para acessar o id do usuário --}}
+    <script> var userId = {{ $user->id }}; </script>
+
     {{-- DOCUMENTO --}}
     <div id="doc">
         <div id="add-question-btn">Adicionar questões</div>
@@ -86,7 +92,7 @@
                         <div id="filter-checkboxes">
             
                             <span class="filter-section">Marcadores</span>
-                            <x-checkbox id="all-questions" name="all_questions" checked="checked">De qualquer usuário</x-checkbox>
+                            <x-checkbox id="others-questions" name="others_questions" checked="checked">De outros usuários</x-checkbox>
                             <x-checkbox id="my-questions" name="my_questions" checked="checked">Minhas questões públicas</x-checkbox>
                             <x-checkbox id="private-questions" name="private" checked="checked">Minhas questões privadas</x-checkbox>
                             <x-checkbox id="favorite-questions" name="favorite">Favoritas</x-checkbox>
@@ -111,8 +117,8 @@
 
                 {{-- Resultados da pesquisa --}}
                 <div id="results">
-                    <span>&larr;&nbsp;&nbsp;&nbsp; Especifique a busca inserindo um termo de busca.</span><br><br><br>
-                    <span>&larr;&nbsp;&nbsp;&nbsp; Escolha ao menos uma disciplina para começar.</span>
+                    <span>&larr;&nbsp;&nbsp;&nbsp; Se desejar, especifique a busca inserindo um termo de busca.</span><br><br><br>
+                    <span id="instruction">&larr;&nbsp;&nbsp;&nbsp; Escolha ao menos uma disciplina para começar.</span>
                 </div>
 
             </div>

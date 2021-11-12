@@ -240,6 +240,11 @@
     align-items: center;
     gap: 20px;
 }
+#right-info{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 #owner{
     display: flex;
     align-items: center;
@@ -303,4 +308,46 @@
 }
 .btn-remove{
     font-size: 13px;
+}
+
+/* Favoritar a questão */
+
+.favorite{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -10px;
+    opacity: .15;
+    transition: opacity .2s ease;
+    transition: transform .2s ease;
+    transform: rotate(0deg);
+    cursor: pointer;
+}
+.favorite:hover{
+    opacity: .4;
+}
+.favorited {
+    opacity: 1 !important;
+    transform: rotate(72deg) !important;
+}
+.favorited:hover {
+    opacity: 1 !important;
+    transform: rotate(144deg) !important;
+}
+.star{
+    width: 20px;
+}
+#favorite-this {
+    width: 25px;
+    opacity: .15;
+    transform: rotate(0deg);
+    transition: opacity .2s ease;
+    transition: transform .2s ease;
+    transform: rotate(0deg);
+    cursor: pointer;
+}
+#favorite-this:hover{
+    opacity: .4;
 }

@@ -48,6 +48,7 @@ Route::get('/insert_doc_quests', [DocQuestionsController::class, 'get']);
 
 Route::post('/store_question', [StoreQuestionController::class, 'store_question']);
 Route::post('/update_question', [UpdateQuestionController::class, 'update_question']);
+Route::post('/favorite_question', [FilterQuestionsController::class, 'favorite']);
 Route::post('/filter_quests', [FilterQuestionsController::class, 'filter']);
 Route::post('/search_quests', [FilterQuestionsController::class, 'search']);
 Route::post('/filter_my_quests', [FilterMyQuestionsController::class, 'filter']);

@@ -12,6 +12,7 @@ use App\Models\Subject;
 use App\Models\Question;
 use App\Models\Document;
 use App\Models\DocumentQuestion;
+use App\Models\FavoriteQuestion;
 
 class ViewController extends Controller
 {
@@ -43,8 +44,15 @@ class ViewController extends Controller
     // View "Criar documento"
     public function create_doc(){
         if(Auth::check()){
+            $user = Auth::user();
+
+            // Selecionando as questões favoritas
+            $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
+
+            // Selecionando as disciplinas
             $subjects = Subject::all();
-            return view('create_doc', ['subjects' => $subjects]);
+
+            return view('create_doc', ['user' => $user, 'subjects' => $subjects, 'favorites' => $favorites]);
         }
         return redirect('/');
     }
@@ -75,7 +83,21 @@ class ViewController extends Controller
         if(Auth::check()){
             $user = Auth::user();
 
-            $questions = $user->questions;
+            $sql = "SELECT * FROM questions WHERE user_id = $user->id";
+
+            // Selecionando as favoritas
+            $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
+
+            // Incluindo as favoritas na query
+            foreach ($favorites as $key => $fav) {
+                if ($key == 0) $sql .= " OR (id = $fav->question_id";
+                else $sql .= " OR id = $fav->question_id";
+                if ($key == count($favorites)-1) $sql .= ')';
+            }
+
+            // Selecionando as questões do usuário
+            $questions = Question::hydrate(DB::select($sql));
+
             if(count($questions) == 0) {
                 $questions[0] = 'empty';
             }
@@ -114,7 +136,7 @@ class ViewController extends Controller
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
 
-            return view('my_quests', ['user' => $user, 'questions' => $questions]);
+            return view('my_quests', ['user' => $user, 'questions' => $questions, 'favorites' => $favorites]);
         }
         return redirect('/');
     }
@@ -184,7 +206,10 @@ class ViewController extends Controller
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
 
-            return view('search_quests', ['user' => $user, 'questions' => $questions]);
+            // Selecionando as favoritas
+            $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
+
+            return view('search_quests', ['user' => $user, 'questions' => $questions, 'favorites' => $favorites]);
         }
         return redirect('/');
     }

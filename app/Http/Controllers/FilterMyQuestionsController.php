@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Models\User;
 use App\Models\Question;
+use App\Models\FavoriteQuestion;
 
 class FilterMyQuestionsController extends Controller
 {
@@ -33,11 +34,40 @@ class FilterMyQuestionsController extends Controller
             else if (array_key_exists('private', $privacy)){
                 $sql .= " AND private = 1";
             }
-            else {
+            else if (!$request->favorite) {
                 echo json_encode([]);
-                die();
+                die;
             }
             
+            // Favoritas
+            if ($request->favorite && count($privacy) == 0) {
+
+                $sql = "SELECT * FROM questions WHERE ";
+
+                $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
+
+                if (count($favorites) > 0) {
+                    foreach ($favorites as $key => $fav) {
+                        if ($key == 0) $sql .= " (id = $fav->question_id";
+                        else $sql .= " OR id = $fav->question_id";
+                        if ($key == count($favorites)-1) $sql .= ')';
+                    }
+                } else {
+                    echo json_encode([]);
+                    die;
+                }
+            }
+            else if ($request->favorite) {
+
+                $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
+
+                foreach ($favorites as $key => $fav) {
+                    if ($key == 0) $sql .= " OR (id = $fav->question_id";
+                    else $sql .= " OR id = $fav->question_id";
+                    if ($key == count($favorites)-1) $sql .= ')';
+                }
+            }
+
             // Disciplinas
             if ($request->subjects) {
                 $subjects = $request->subjects;
@@ -56,7 +86,7 @@ class FilterMyQuestionsController extends Controller
             }
             else {
                 echo json_encode([]);
-                die();
+                die;
             }
 
             // Tipos das questões
@@ -72,7 +102,7 @@ class FilterMyQuestionsController extends Controller
             }
             else {
                 echo json_encode([]);
-                die();
+                die;
             }
 
             // Caso tenha termo de busca
@@ -117,7 +147,22 @@ class FilterMyQuestionsController extends Controller
 
         // Caso todos os filtros estejam selecionados
         else if ($request->all){
-            $questions = Auth::user()->questions;
+            $user = Auth::user();
+
+            $sql = "SELECT * FROM questions WHERE user_id = $user->id";
+
+            // Selecionando as favoritas
+            $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
+
+            // Incluindo as favoritas na query
+            foreach ($favorites as $key => $fav) {
+                if ($key == 0) $sql .= " OR (id = $fav->question_id";
+                else $sql .= " OR id = $fav->question_id";
+                if ($key == count($favorites)-1) $sql .= ')';
+            }
+
+            // Selecionando as questões do usuário
+            $questions = Question::hydrate(DB::select($sql));
 
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
@@ -148,7 +193,7 @@ class FilterMyQuestionsController extends Controller
             }
         }
 
-        echo json_encode($questions);
+        echo json_encode(['questions' => $questions, 'favorites' => $favorites]);
     }
 
     public function search(Request $request) {

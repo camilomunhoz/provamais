@@ -379,6 +379,14 @@
         font-size: 20px;
         color: #aaa;    
     }
+    #instruction {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+    }
         /* Cards das questões */
         .result {
             display: flex;
@@ -458,6 +466,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 25px;
         }
         #quest-details-content{
             display: flex;
@@ -573,6 +582,45 @@
         }
         .x:hover{
             opacity: .6;
+        }
+        .favorite{
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: -10px;
+            opacity: .15;
+            transition: opacity .2s ease;
+            transition: transform .2s ease;
+            transform: rotate(0deg);
+            cursor: pointer;
+        }
+        .favorite:hover{
+            opacity: .4;
+        }
+        .favorited {
+            opacity: 1 !important;
+            transform: rotate(72deg) !important;
+        }
+        .favorited:hover {
+            opacity: 1 !important;
+            transform: rotate(144deg) !important;
+        }
+        .star{
+            width: 20px;
+        }
+        #favorite-this {
+            width: 22px;
+            opacity: .15;
+            transform: rotate(0deg);
+            transition: opacity .2s ease;
+            transition: transform .2s ease;
+            transform: rotate(0deg);
+            cursor: pointer;
+        }
+        #favorite-this:hover{
+            opacity: .4;
         }
 
 /* Footer */

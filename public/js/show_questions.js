@@ -17,7 +17,7 @@ $(document).ready(function(){
         if (questions.length && questions[0] != 'empty') {
             $('#results').empty();
             
-            /************** Exibe o termo de busca esteja sendo buscado **************/
+            /************** Exibe o termo de busca que esteja sendo buscado **************/
 
             if ($('#search-box').val()) {
                 $('#results').append(
@@ -29,6 +29,7 @@ $(document).ready(function(){
 
             for (q in questions) {
 
+                // Insere a estrutura do card já com as tags
                 $('#results').append(
                     '<div id="card-'+q+'">'+
                         '<div id="'+questions[q].id+'" class="question-card simple-box">'+
@@ -39,18 +40,57 @@ $(document).ready(function(){
                         '</div>'+
                     '</div>'
                 );
-
+                // Insere icone de cadeado caso a questão seja privada
                 if (questions[q].private) {
                     $('#card-'+q+' > div').prepend(
                         '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
                     );
                 }
-
-                if ($('#public-questions').length) {  // Micro gambiarra pra exibir o "edit" e "delete" somente em "Minhas questões"
-                    $('#card-'+q+' > div').append(
-                        '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'+
-                        '<div class="question-action remove" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'
-                    );
+                // Exibe o "edit", o "delete" e a estrelinha somente em "Minhas questões"
+                if ($('#public-questions').length) { 
+                    
+                    try {
+                        // Se for favorita, adiciona estrela
+                        if (favorites.find((fav) => {
+                                if (questions[q].user_id != fav.user_id) return true;
+                                else return false;
+                            })
+                        ) {
+                            $('#card-'+q+' > div').prepend(
+                                '<img style="width: 15px" src="/img/icons/ico_favorite_selected.svg" title="Você favoritou essa questão.">'
+                            );
+                        }
+                        // Se não for favorita, adiciona botão de editar e apagar 
+                        else {
+                            $('#card-'+q+' > div').append(
+                                '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'+
+                                '<div class="question-action remove" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'
+                            );
+                        }
+                    
+                    } catch (e) {}
+                }
+                // Exibe a estrela para favoritar só em "Procurar questões"
+                else { 
+                    
+                    try {
+                        if (questions[q].user_id != userId) {
+                            $('#card-'+q+' > div').append(
+                                '<div data-question-id='+questions[q].identifier+' class="favorite" title="Favoritar">'+
+                                    '<img data-question-id='+questions[q].identifier+' class="star" src="/img/icons/ico_favorite_unselected.svg">'+
+                                '</div>'
+                            );
+                        }
+                    
+                        if (favorites.find((fav) => {
+                                if (fav.question_id == questions[q].id) return true;
+                                else return false;
+                            })
+                        ) {
+                            $('.star[data-question-id="'+questions[q].identifier+'"]').attr('src', '/img/icons/ico_favorite_selected.svg');
+                            $('.favorite[data-question-id="'+questions[q].identifier+'"]').addClass('favorited').attr('title', 'Desfavoritar');
+                        }
+                    } catch (e) {}
                 }
             }
 
@@ -84,6 +124,7 @@ $(document).ready(function(){
             );
         }
             
+        $('.favorite').on('click', (e) => { favorite($(e.target).data('question-id')); })
         $('#results').css({display: 'flex'}).hide().fadeIn(300);
     }
     appendQuests();
@@ -121,9 +162,10 @@ $(document).ready(function(){
         let questId = questCard.attr('id');
         
         if ( // Caso clique em "apagar" ou "editar"
-            ($(e.target).attr('id') == 'remove') ||
-            ($(e.target).attr('id') == 'edit')   ||
-            ($(e.target).hasClass('btn-remove')) ||
+            ($(e.target).attr('id') == 'remove')    ||
+            ($(e.target).attr('id') == 'edit')      ||
+            ($(e.target).attr('id') == 'favorite')  ||
+            ($(e.target).hasClass('btn-remove'))    ||
             ($(e.target).prop('nodeName') == 'IMG')
         ){
             if ($(e.target).hasClass('trash') && !questCard.children('.btn-remove').length) {
@@ -165,13 +207,38 @@ $(document).ready(function(){
                         '<div class="question-tag tag-type">'+question.type+'</div>'+
                     '</div>'+
                 '</div>'+
-                '<img class="x" src="/img/icons/ico_plus.svg" alt="X" title="Fechar">'+
+                '<div id="right-info">'+
+                    '<img class="x" src="/img/icons/ico_plus.svg" alt="X" title="Fechar">'+
+                '</div>'+
             '</div>'+
             '<div class="simple-line"></div>'+
             '<div id="quest-details-content">'+
                 '<span id="question-statement"></span>'+
             '</div>'
         );
+
+        // Adiciona a estrela de favorito caso a questão não seja do próprio user
+        try {
+            if (question.user_id != userId) {
+                if (favorites.find((fav) => {
+                        if (fav.question_id == question.id) return true;
+                        else return false;
+                    })
+                ) {
+                    $('#right-info').prepend(
+                        '<img id="favorite-this" class="favorited" src="/img/icons/ico_favorite_selected.svg" title="Desfavoritar">'
+                    );
+                }
+                else {
+                    $('#right-info').prepend(
+                        '<img id="favorite-this" src="/img/icons/ico_favorite_unselected.svg" title="Favoritar">'
+                    );
+                }
+                $('#favorite-this').on('click', () => { favoriteThis(question.identifier) });
+            }
+        } catch (e) {}
+
+        // Caso seja privada
         if (questions[q].private) {
             $('#tags').prepend(
                 '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
@@ -230,6 +297,73 @@ $(document).ready(function(){
 
         $('.x').on('click', closeDetails);
         $('.showing-quest').fadeIn(200).css('display', 'flex');
+    }
+
+/*****************************************************/
+/********* Favorita ou desfavorita a questão *********/
+/*****************************************************/
+
+    function favorite(id) {
+        $('.favorite[data-question-id="'+id+'"]').off('click');
+        $('.favorite[data-question-id="'+id+'"]').css({cursor: 'progress'});
+
+        $.post('/favorite_question', {question_id: id, _token: $('input[name="_token"').val()}, function (response) {
+            response = JSON.parse(response);
+
+            if (response.message == 'favorited') {
+                $('.star[data-question-id="'+id+'"]').attr('src', '/img/icons/ico_favorite_selected.svg');
+                $('.favorite[data-question-id="'+id+'"]').addClass('favorited').attr('title', 'Desfavoritar');
+            }
+            else if (response.message == 'unfavorited') {
+                $('.star[data-question-id="'+id+'"]').attr('src', '/img/icons/ico_favorite_unselected.svg');
+                $('.favorite[data-question-id="'+id+'"]').removeClass('favorited').attr('title', 'Favoritar');
+            }
+
+            $('.favorite[data-question-id="'+id+'"]').removeAttr('style');
+            $('.favorite[data-question-id="'+id+'"]').on('click', () => { favorite(id) });
+
+            favorites = response.favorites; // Atualiza as favoritas
+
+        });
+    }
+
+    function favoriteThis(id) { // Para quando favorita via "Detalhes da questão"
+
+        // Desativa os eventos da estrela enquanto não retorna
+        $('#favorite-this').off('click');
+        $('#favorite-this').css({cursor: 'progress'});
+
+        $.post('/favorite_question', {question_id: id, _token: $('input[name="_token"').val()}, function (response) {
+            response = JSON.parse(response);
+
+            if (response.message == 'favorited') {
+                $('#favorite-this').attr('src', '/img/icons/ico_favorite_selected.svg');
+                $('#favorite-this').addClass('favorited').attr('title', 'Desfavoritar');
+            }
+            else if (response.message == 'unfavorited') {
+                $('#favorite-this').attr('src', '/img/icons/ico_favorite_unselected.svg');
+                $('#favorite-this').removeClass('favorited').attr('title', 'Favoritar');
+            }
+
+            // Caso esteja em "Minhas questões" e for desfavoritada, remove o registro
+            if ($('#public-questions').length && response.message == 'unfavorited') {
+                let index = questions.findIndex((q) => { 
+                    if (q.identifier == id) return true;   
+                    else return false;
+                });
+                if (index != -1) questions.splice(index,1);
+                setTimeout(() => {closeDetails(); appendQuests()}, 500);
+                return true;
+            }
+            
+            // Reativa os eventos da estrela
+            $('#favorite-this').removeAttr('style');
+            // $('#favorite-this').on('click', () => { favoriteThis(id) });
+
+            favorites = response.favorites; // Atualiza as favoritas
+
+            appendQuests();
+        });
     }
 
 /***************************************************/
@@ -335,6 +469,7 @@ $(document).ready(function(){
     /******** Aplica os filtros ********/
     $('#filters').on('submit', (e) => {
         e.preventDefault();
+        $('#filter-btn').attr('type', 'button').css('cursor', 'progress');
 
         // Caso todos os filtros estejam selecionados, envia somente "all: 1", senão, envia todos os marcados
         let data;     
@@ -356,11 +491,17 @@ $(document).ready(function(){
             data: data,
             dataType: 'json',
             success: (response) => {
-                questions = response;
-                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
-                questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de conteúdo
-                console.log(questions);
+                try {
+                    favorites = response.favorites;
+                    questions = response.questions;
+                    questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                    questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                } catch (e) {
+                    // favorites = response;
+                    questions = response;
+                }
                 appendQuests();
+                setTimeout(() => { $('#filter-btn').attr('type', 'submit').removeAttr('style') }, 300); // Para não poder spammar a filtragem
             }
         });
     });
@@ -368,6 +509,7 @@ $(document).ready(function(){
     /******** Procura por palavra-chave ********/
     $('#header-right-items').on('submit', (e) => {
         e.preventDefault();
+        $('#search-submit').attr('type', 'button');
 
         // Marca todos os filtros
         for ($i of $('#filters input')) {
@@ -384,8 +526,9 @@ $(document).ready(function(){
                 questions = response;
                 questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
-                console.log(questions);
+                // console.log(questions);
                 appendQuests();
+                setTimeout(() => { $('#search-submit').attr('type', 'submit'); }, 1000); // Para não poder spammar a filtragem
             },
         });
     });

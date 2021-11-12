@@ -74,6 +74,12 @@
         {{-- Define variável que será usada em /js/show_questions.js para acessar os detalhes da questão --}}
         <script> var questions = {!! json_encode($questions) !!}; </script>
 
+        {{-- Define variável que será usada em /js/show_questions.js para acessar as questões favoritas --}}
+        <script> var favorites = {!! json_encode($favorites) !!}; </script>
+
+        {{-- Define variável que será usada em /js/show_questions.js para acessar o id do usuário --}}
+        <script> var userId = {{ $user->id }}; </script>
+
         {{-- Resultados da pesquisa --}}
         <div id="results">
             @if ($questions[0] == 'empty')

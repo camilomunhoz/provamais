@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Question;
 use App\Models\Document;
 use App\Models\DocumentQuestion;
+use App\Models\FavoriteQuestion;
 
 class DocQuestionsController extends Controller
 {
@@ -18,32 +19,70 @@ class DocQuestionsController extends Controller
         if (!$request->all){
 
             $user_id = Auth::user()->id;
+            $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
 
             $sql = "SELECT * FROM questions WHERE";
             $concatenated = false; // Para saber se algo já foi concatenado
 
             // Questões de qualquer usuário
-            if ($request->all_questions) {
-                $sql .= " (private = 0";
-                if (!($request->my_questions || $request->private)) {
+            if ($request->others_questions) {
+                $sql .= " ((user_id <> $user_id AND private = 0)";
+                if (!($request->my_questions || $request->private || $request->favorite)) {
                     $sql .= ")";
                 }
                 $concatenated = true;
             }
 
-            // Minhas questões
+            // Minhas questões públicas
             if ($request->my_questions) {
                 $concatenated ? $sql .= " OR (user_id = $user_id AND private = 0)" : $sql .= " ((user_id = $user_id AND private = 0)";
-                if (!($request->private)) {
+                if (!($request->private || $request->favorite)) {
                     $sql .= ")";
                 }
                 $concatenated = true;
             }
 
-            // Questões de qualquer usuário
+            // Minhas questões privadas
             if ($request->private) {
-                $concatenated ? $sql .= " OR (user_id = $user_id AND private = 1))" : $sql .= " ((user_id = $user_id AND private = 1))";
+                if ($concatenated && $request->favorite) {
+                    $sql .= " OR (user_id = $user_id AND private = 1)";
+                }
+                else if ($concatenated && !$request->favorite) {
+                    $sql .= " OR (user_id = $user_id AND private = 1))";
+                } 
+                else if (!$concatenated && !$request->favorite) {
+                    $sql .= " ((user_id = $user_id AND private = 1))";
+                } 
+                else if (!$concatenated && $request->favorite) {
+                    $sql .= " ((user_id = $user_id AND private = 1)";
+                } 
                 $concatenated = true;
+            }
+
+            // Questões favoritas
+            if ($request->favorite && !$concatenated) { // Caso apenas o filtro "Favoritas" esteja selecionado, muda a query inicial
+
+                $sql = "SELECT * FROM questions WHERE ";
+
+                $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
+
+                if (count($favorites) > 0) {
+                    foreach ($favorites as $key => $fav) {
+                        if ($key == 0) $sql .= " (id = $fav->question_id";
+                        else $sql .= " OR id = $fav->question_id";
+                        if ($key == count($favorites)-1) $sql .= ')';
+                    }
+                } else {
+                    echo json_encode([]);
+                    die;
+                }
+            }
+            else if ($request->favorite) { // Se não, apenas concatena
+                foreach ($favorites as $key => $fav) {
+                    if ($key == 0) $sql .= " OR (id = $fav->question_id";
+                    else $sql .= " OR id = $fav->question_id";
+                    if ($key == count($favorites)-1) $sql .= '))';
+                }
             }
             
             // Disciplinas
@@ -64,7 +103,7 @@ class DocQuestionsController extends Controller
             }
             else {
                 echo json_encode([]);
-                die();
+                die;
             }
 
             // Tipos das questões
@@ -80,7 +119,7 @@ class DocQuestionsController extends Controller
             }
             else {
                 echo json_encode([]);
-                die();
+                die;
             }
 
             // Caso tenha termo de busca
@@ -127,6 +166,7 @@ class DocQuestionsController extends Controller
         else if ($request->all){
 
             $user_id = Auth::user()->id;
+            $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
 
             $sql = "SELECT * FROM questions WHERE (private = 0 OR user_id = $user_id)";
             if ($request->search) $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
@@ -165,8 +205,8 @@ class DocQuestionsController extends Controller
                 unset($q->user['updated_at']);
             }
         }
-
-        echo json_encode($questions);
+        
+        echo json_encode(['questions' => $questions, 'favorites' => $favorites]);
     }
 
     public function get(Request $request) {

@@ -7,15 +7,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Models\User;
 use App\Models\Question;
+use App\Models\FavoriteQuestion;
 
 class FilterQuestionsController extends Controller
 {
     public function filter(Request $request) {
         
+        $user_id = Auth::user()->id;
+        
         // Caso todos os filtros não estejam selecionados
         if (!$request->all){
 
-            $user_id = Auth::user()->id;
 
             $sql = "SELECT * FROM questions WHERE private = 0";
             
@@ -128,7 +130,9 @@ class FilterQuestionsController extends Controller
             }
         }
 
-        echo json_encode($questions);
+        $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
+
+        echo json_encode(['questions' => $questions, 'favorites' => $favorites]);
     }
 
     public function search(Request $request) {
@@ -164,5 +168,34 @@ class FilterQuestionsController extends Controller
         }
 
         echo json_encode($questions);
+    }
+
+    public function favorite(Request $request) { //dd($request);
+
+        $question = Question::firstWhere('identifier', $request->question_id); //dd($question);
+        $user_id = Auth::user()->id;
+
+        // Caso esteja marcada como favorita, remove das favoritas
+        if (count($current = DB::select("SELECT * FROM favorite_questions WHERE user_id = $user_id AND question_id = $question->id"))) {
+            DB::statement("DELETE FROM favorite_questions WHERE user_id = $user_id AND question_id = $question->id");
+            $message = 'unfavorited';
+        }
+
+        // Caso a questão não seja privada e nem do próprio usuário, adiciona às favoritas
+        else if ($question->private == 0 && $question->user_id != $user_id) {
+            $favorite = new FavoriteQuestion;
+            $favorite->user_id = $user_id;
+            $favorite->question_id = $question->id;
+            $favorite->timestamps = false;
+            $favorite->save();
+            $message = 'favorited';
+        }
+        else {
+            echo ''; die;
+        }
+        
+        $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
+
+        echo json_encode(['message' => $message, 'favorites' => $favorites]);
     }
 }

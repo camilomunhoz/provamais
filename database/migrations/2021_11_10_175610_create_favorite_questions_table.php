@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFavoritesTable extends Migration
+class CreateFavoriteQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('favorites', function (Blueprint $table) {
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_quest')->constrained('questions');
+        Schema::create('favorite_questions', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('question_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -26,6 +26,6 @@ class CreateFavoritesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favorites');
+        Schema::dropIfExists('favorite_questions');
     }
 }
