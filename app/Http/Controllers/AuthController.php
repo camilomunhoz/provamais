@@ -18,7 +18,7 @@ class AuthController extends Controller
         $user->name = $request->name;
         trim($user->name);                                      // Tira espaços no início e fim
         $user->name = preg_replace('/\s+/', ' ', $user->name);  // Tira espaços múltiplos
-        $user->name = strtolower($user->name);                  // Passa caracteres para lowercase
+        $user->name = mb_strtolower($user->name, 'utf-8');      // Passa caracteres para lowercase
         $user->name = ucwords($user->name);                     // Capitaliza as primeiras letras
         
         $user->email = $request->email;

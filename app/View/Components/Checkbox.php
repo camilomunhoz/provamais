@@ -14,7 +14,7 @@ class Checkbox extends Component
     {
         $this->id = $id;
         $this->value = $value;
-        $this->name = strtolower($name);
+        $this->name = mb_strtolower($name, 'utf-8');
         $this->checked = $checked;
     }
 

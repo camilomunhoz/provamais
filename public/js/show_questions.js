@@ -486,7 +486,7 @@ $(document).ready(function(){
 
         // Posta via AJAX
         $.ajax({
-            url: $('#public-questions').length ? '/filter_my_quests' : '/filter_quests', // Micro gambiarra pra saber se filtra "Minhas questões" ou "Procurar questões"
+            url: $('#public-questions').length ? '/filter_my_quests' : '/filter_quests', // Para saber se filtra "Minhas questões" ou "Procurar questões"
             type: 'post',
             data: data,
             dataType: 'json',
@@ -518,17 +518,17 @@ $(document).ready(function(){
         
         // Posta via AJAX
         $.ajax({
-            url: '/search_my_quests',
+            url: $('#public-questions').length ? '/search_my_quests' : '/search_quests', // Para saber se procura em "Minhas questões" ou "Procurar questões"
             type: 'post',
             data: $(e.target).serialize(),
             dataType: 'json',
             success: (response) => {
                 questions = response;
-                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                 // console.log(questions);
                 appendQuests();
-                setTimeout(() => { $('#search-submit').attr('type', 'submit'); }, 1000); // Para não poder spammar a filtragem
+                setTimeout(() => { $('#search-submit').attr('type', 'submit'); }, 300); // Para não poder spammar a filtragem
             },
         });
     });

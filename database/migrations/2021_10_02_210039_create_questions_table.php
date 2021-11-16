@@ -21,11 +21,11 @@ class CreateQuestionsTable extends Migration
             $table->string('type');
             $table->boolean('private');
             $table->string('content');
-            $table->json('statement');
+            $table->longText('statement');
             $table->string('image')->nullable();
             $table->tinyInteger('n_lines')->nullable();
             $table->text('answer_suggestion')->nullable();
-            $table->json('other_terms')->nullable();
+            $table->longText('other_terms')->nullable();
             $table->integer('denunciations')->nullable();
             $table->timestamps();
         });
