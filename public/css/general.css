@@ -192,3 +192,27 @@ input:focus, textarea:focus, select:focus{
 #loading-overlay{
     display: none;
 }
+
+/* Animações */
+@keyframes lookAtMe {
+    from { transform: rotate(0) }
+    33% { transform: rotate(5deg); filter: brightness(1.5)}
+    66% { transform: rotate(-5deg) }
+    to { transform: rotate(0); filter: brightness(1)}
+}
+@keyframes lookAtMeMild {
+    from { transform: rotate(0) }
+    33% { transform: rotate(0.5deg); filter: brightness(1.2)}
+    66% { transform: rotate(-0.5deg) }
+    to { transform: rotate(0); filter: brightness(1)}
+}
+.look-at-me {
+    animation-name: lookAtMe;
+    animation-duration: .3s;
+    animation-iteration-count: 2;
+}
+.look-at-me-mild {
+    animation-name: lookAtMeMild;
+    animation-duration: .3s;
+    animation-iteration-count: 2;
+}

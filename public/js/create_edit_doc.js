@@ -558,14 +558,23 @@ $(document).ready(function() {
         );
         if (question.type == 'Dissertativa') {
             $('#quest-details-content').append(
-                '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'
+                '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'+
+                '<div class="simple-line"></div>'
             );
         }
-        // if(question.other_terms){
+        if(question.other_terms){
+            let tags = JSON.parse(question.other_terms);
             $('#quest-details-content').append(
-                '<span id="other-terms"><strong>Outros termos relacionados:</strong> de alguma forma aqui vão os termos</span>'
+                '<div id="other-terms"><span>Termos relacionados: </span></div>'
             );
-        // }
+            for (let i in tags) {
+                $('#other-terms').append(
+                    '<div>'+
+                        '<span>'+tags[i]+'</span>'+
+                    '</div>'
+                );
+            }
+        }
                 
         // Botão de selecionar
 
@@ -632,10 +641,11 @@ $(document).ready(function() {
                     userSelect: 'none',
                     opacity: '.3',
                     cursor: 'default'
-                }).attr('title', 'Questão já inserida')
+                });
                 $('#q-current').removeAttr('id');
                 $('#select-current').html('Inserida <div class="checkmark"></div>')
                 $('#select-current').off('click');
+                $('#select-current').attr('title', 'Questão já inserida');
             }
 
         $('#quest-details').slideDown(200).css('display', 'grid');
@@ -810,14 +820,14 @@ $(document).ready(function() {
                 '<div class="options"></div>'
             );
             for(let i = 0; i < q.options.length; i++){
-                $('.options').append(
+                $('.question-content[data-question-id="'+q.identifier+'"] .options').append(
                     '<div class="option-container opt-'+i+'"></div>'
                 );
-                $('.opt-'+i).append(
+                $('.question-content[data-question-id="'+q.identifier+'"] .opt-'+i).append(
                     '<span class="option-enumerator"><b>&#'+(97+i)+';)</b></span>'+
                     '<div class="option o-'+i+'"></div>'
                 );
-                let option = new Quill('.o-'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
+                let option = new Quill('.question-content[data-question-id="'+q.identifier+'"] .o-'+i, {theme: 'bubble', enable: 'false', readOnly: 'true'});
                 option.setContents(JSON.parse(q.options[i].content));
                 option.disable();
             }
@@ -877,8 +887,6 @@ $(document).ready(function() {
         }
     }
     updateEnumerators()
-
-    // Atualiza o que é necessário quando ocorre reordenação
 
 /*******************************************************************************************************************************************/
 /*******************************************************************************************************************************************/

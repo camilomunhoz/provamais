@@ -70,10 +70,11 @@ class ViewController extends Controller
                 $question[0]->options;
                 array_push($questions, $question[0]);
             }
-            // dd($questions);
+
+            $user = Auth::user();
 
             $subjects = Subject::all();
-            return view('edit_doc', ['subjects' => $subjects, 'questions' => $questions, 'document' => $document[0]]);
+            return view('edit_doc', ['user' => $user, 'subjects' => $subjects, 'questions' => $questions, 'document' => $document[0]]);
         }
         return redirect('/');
     }

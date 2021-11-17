@@ -95,4 +95,19 @@ class DocController extends Controller
         }
         else return redirect('/');
     }
+
+    public function search(Request $request) {
+        $user_id = Auth::user()->id;
+
+        if ($request->search != '') { 
+            $sql = "SELECT * FROM documents WHERE (user_id = $user_id AND (name LIKE '%$request->search%'))";
+            $docs = DB::select($sql);
+            $docs = Document::hydrate($docs);
+        }
+        else {
+            $docs = Document::where('user_id', $user_id)->get();
+        }
+
+        echo json_encode($docs);
+    }
 }

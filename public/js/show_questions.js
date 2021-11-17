@@ -21,7 +21,7 @@ $(document).ready(function(){
 
             if ($('#search-box').val()) {
                 $('#results').append(
-                    '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
+                    '<span class="search-msg">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
                 );  
             } 
             
@@ -116,11 +116,11 @@ $(document).ready(function(){
 
             if ($('#search-box').val()) {
                 $('#results').append(
-                    '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
+                    '<span class="search-msg">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
                 );  
             } 
             $('#results').append(
-                '<span id="no-quests">Nenhuma questão corresponde aos filtros aplicados.</span>'
+                '<span class="search-msg">Nenhuma questão corresponde aos filtros aplicados.</span>'
             );
         }
             
@@ -286,14 +286,23 @@ $(document).ready(function(){
         );
         if (question.type == 'Dissertativa') {
             $('#quest-details-content').append(
-                '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'
+                '<span id="n-lines">Resposta de no máximo <strong>'+question.n_lines+'</strong> linhas.</span>'+
+                '<div class="simple-line"></div>'
             );
         }
-        // if(question.other_terms){
+        if(question.other_terms){
+            let tags = JSON.parse(question.other_terms);
             $('#quest-details-content').append(
-                '<span id="other-terms"><strong>Outros termos relacionados:</strong> de alguma forma aqui vão os termos</span>'
+                '<div id="other-terms"><span>Termos relacionados: </span></div>'
             );
-        // }
+            for (let i in tags) {
+                $('#other-terms').append(
+                    '<div>'+
+                        '<span>'+tags[i]+'</span>'+
+                    '</div>'
+                );
+            }
+        }
 
         $('.x').on('click', closeDetails);
         $('.showing-quest').fadeIn(200).css('display', 'flex');
@@ -474,8 +483,7 @@ $(document).ready(function(){
         // Caso todos os filtros estejam selecionados, envia somente "all: 1", senão, envia todos os marcados
         let data;     
         if ($('#all-questions')[0].checked) {
-            data = {all: $('#all-questions').val(), _token: $("#filters :input[name='_token']").val()};
-            $('#search-box').val('');
+            data = {all: $('#all-questions').val(), _token: $("#filters :input[name='_token']").val(), search: $('#search-box').val()};
         }
         else {
             data = $(e.target).serialize();
@@ -504,33 +512,59 @@ $(document).ready(function(){
                 setTimeout(() => { $('#filter-btn').attr('type', 'submit').removeAttr('style') }, 300); // Para não poder spammar a filtragem
             }
         });
+        
     });
 
     /******** Procura por palavra-chave ********/
     $('#header-right-items').on('submit', (e) => {
         e.preventDefault();
         $('#search-submit').attr('type', 'button');
-
-        // Marca todos os filtros
-        for ($i of $('#filters input')) {
-            $i.checked = true;
-        }
+        $('#search-box').blur().attr('disabled', 'disabled');
         
-        // Posta via AJAX
-        $.ajax({
-            url: $('#public-questions').length ? '/search_my_quests' : '/search_quests', // Para saber se procura em "Minhas questões" ou "Procurar questões"
-            type: 'post',
-            data: $(e.target).serialize(),
-            dataType: 'json',
-            success: (response) => {
-                questions = response;
-                questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
-                questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
-                // console.log(questions);
-                appendQuests();
-                setTimeout(() => { $('#search-submit').attr('type', 'submit'); }, 300); // Para não poder spammar a filtragem
-            },
-        });
+        setTimeout(() => { $('#search-submit').attr('type', 'submit'); $('#search-box').removeAttr('disabled');}, 600); // Para não poder spammar a filtragem
+
+        //***************************** Não permitirá enviar se os filtros não estiverem marcados
+        let filterSubjectsCheck = false;
+
+        // Na aba "Procurar questões", não há esses filtros, então a condição será verdadeira sempre
+        let filterPublicCheck = true;
+        let filterPrivateCheck = true;
+        let filterFavoriteCheck = true;
+
+        let subjectsInputs = $('#filter-subjects input');
+        
+        // Somente mudará de estado caso exista "#public-questions", isto é, em "Minhas questões"
+        if ($('#public-questions').length) {
+            filterPublicCheck = $('#public-questions')[0].checked;
+            filterPrivateCheck = $('#private-questions')[0].checked;
+            filterFavoriteCheck = $('#favorite-questions')[0].checked;
+        }
+
+        for (i = 0; i < subjectsInputs.length; i++) {
+            if (subjectsInputs[i].checked == true) {
+                filterSubjectsCheck = true;
+                break;
+            }
+        }
+
+        if ( (!filterPublicCheck && !filterPrivateCheck && !filterFavoriteCheck)
+            || (!filterSubjectsCheck)
+            || (!$('#alternative')[0].checked && !$('#essay')[0].checked) ) {
+            
+            $('#filters').addClass('look-at-me-mild');
+            setTimeout(() => {$('#filters').removeClass('look-at-me-mild')}, 600);  
+        }
+
+        //***************************** Faz a pesquisa. Se pesquisar sem inserir nada, não faz nada ou retorna todas as questões
+        else if (!$('#search-box').val() || $('#search-box').val().match(/^(\s+)$/)) {
+            if ($('.search-msg').is(':visible')) {
+                $('#filters').submit();
+            }
+            $('#search-box').val('');
+        }
+        else {
+            $('#filters').submit();
+        }
     });
 
 

@@ -48,13 +48,13 @@ $(document).ready(function() {
     var barraSnow = [
         ['bold', 'italic', 'underline', 'strike'],['clean'],
         [{'script':'super'}, {'script':'sub'}],
-        [{'align':[]}, {'indent':'-1'}, {'indent':'+1'}],
+        [{'indent':'-1'}, {'indent':'+1'}],
         [{'list':'ordered'},{'list':'bullet'}],
         ['formula'],
     ];
     var barraBubble = [['bold'], ['italic'], ['underline'], ['strike'], ['formula']];
 
-    var allowedFormats = ['bold', 'italic', 'strike', 'underline', 'formula', 'indent', 'list', 'align', 'script'];
+    var allowedFormats = ['bold', 'italic', 'strike', 'underline', 'formula', 'indent', 'list', 'script'];
 
     var configEnunciado = {
         modules: {
@@ -199,6 +199,87 @@ $(document).ready(function() {
     }
     
 
+    /************************************************/
+    /********* Tags para os "outros termos" *********/
+    /************************************************/
+    // Minha autoria, disponível em https://codepen.io/kamilgaz/pen/mdMabzR
+    
+    // Will store the inserted tags
+    let tags = [];
+    if (typeof question !== 'undefined') {
+        if (question.other_terms != null) {
+            existentTags = JSON.parse(question.other_terms);
+        }
+    }
+    
+    // Declare the keys which triggers tag insertion
+    const appendTagTriggers = ['Enter', 'Tab']
+
+    /***** Listen to the keys pressed *****/
+    
+    $('#other-terms').on('keydown', e => {
+        
+        // Get the input value and clean excessive whitespaces
+        let input = e.target.value;
+        input = input.trim();
+        input = input.replace(/^(\s+)$/, '');
+        
+        // Define if the pressed key was a trigger
+        let triggerPressed = appendTagTriggers.find((trigger) => { return (trigger == e.key ? true : false) });
+        
+        // If a trigger is pressed...
+        if (triggerPressed) {
+            // ... validate if input is not a duplicate and if it's empty
+            let duplicated = tags.find((tag) => { return (tag == input ? true : false) });
+            if (!duplicated && input != '' && !input.match(/^(\s+)$/) && input.length <= 80) {
+                // Append the tag
+                appendTag(input);
+                e.target.value = '';
+            }
+            // If duplicated, draw attention to the existent tag
+            else if (duplicated) {
+                $('.tag[data-content="'+input+'"]').addClass('look-at-me');
+                setTimeout(() => {$('.tag[data-content="'+input+'"]').removeClass('look-at-me')}, 600);
+                e.target.value = '';
+            }
+        }
+    });
+    
+    /********** Append a new tag **********/
+    
+    function appendTag(content) {
+        
+        // Append tag structure
+        $('#tags').append(
+            '<div class="tag" data-content="'+content+'">'+
+                '<span class="tag-content">'+content+'</span>'+
+                '<span class="tag-delete-btn" title="Delete">x</span>'+
+            '</div>'
+        );
+        
+        // Animate tag entrance
+        $('.tag[data-content="'+content+'"]').hide().show(200);
+        
+        // Set up the deletion button
+        $('.tag[data-content="'+content+'"] .tag-delete-btn')
+            .on('click', () => { deleteTag(content) });
+        
+        // Store the inserted tag
+        tags.push(content);
+    }
+    
+    /************ Delete a tag ************/
+    
+    function deleteTag(content) {
+        
+        // Remove tag from the storage array
+        tags.splice(tags.findIndex((tag) => { return (tag == content ? true : false) }), 1); console.log(tags)
+        
+        // Animate tag removal from DOM
+        $('.tag[data-content="'+content+'"]').hide(200);
+        setTimeout(() => {$('.tag[data-content="'+content+'"]').remove()}, 200);
+    }
+
     /***********************************************/
     /********* Envia o formulário via AJAX *********/
     /***********************************************/
@@ -246,7 +327,7 @@ $(document).ready(function() {
             altDeltas = 'none';
         }
 
-        // Trata a alternativa correta de acordo com o tipo da questão
+        // Trata a resposta correta de acordo com o tipo da questão
         let correct;
         if(questType == 'objetiva'){
             correct = $('#correct').find(':selected').val();
@@ -266,7 +347,7 @@ $(document).ready(function() {
         formData.append("private", $("#new-quest :input[type='radio']:checked").val());    // Opção de privacidade
         formData.append("subject_id", $('#subject').find(':selected').val());              // Disciplina. Envia o id, não o nome.
         formData.append("content", $('#content-tag').val());                               // Conteúdo
-        formData.append("other_terms", $('#other-terms').val());                           // Outros termos
+        formData.append("other_terms", tags.length > 0 ? JSON.stringify(tags) : "");       // Outros termos
         formData.append("image", image);                                                   // Imagem
         formData.append("image_flag", $('#quest-img-flag').val());                         // Confirmação se existe imagem
         formData.append("correct", correct);                                               // Alternativa correta
@@ -291,14 +372,14 @@ $(document).ready(function() {
                     location.reload();
                 }
             }
-            return response.json();
-        }).then( response => {
-            console.log(response);
             //Reseta os spans de erro
-                $('.error-feedback').hide().html('');
-                $('.error-feedback').parent().css({background: 'transparent'});
-                if ($('#add-alter').attr('style')) $('#add-alter').removeAttr('style');
-                
+            $('.error-feedback').hide().html('');
+            $('.error-feedback').parent().css({background: 'transparent'});
+            if ($('#add-alter').attr('style')) $('#add-alter').removeAttr('style');
+
+            return response.json();
+
+        }).then( response => {
             // Exibe os erros e colore as divs
             for (let key in response.errors) {
                 if (key == 'options') $('#add-alter').css({opacity: .6});
@@ -414,7 +495,6 @@ $(document).ready(function() {
             $('#quest-img-label').html('Alterar imagem');
             $('#quest-img-x').show();
         }
-
         /******** Setando disciplina ********/
         $('#subject option[value='+question.subject_id+']')[0].selected = true;
 
@@ -422,8 +502,11 @@ $(document).ready(function() {
         $('#content-tag').val(question.content);
         
         /******** Setando outros termos ********/
-        $('#other-terms').val(question.other_terms);
-
+        if (typeof existentTags !== 'undefined') {
+            for (let i in existentTags) {
+                appendTag(existentTags[i]);
+            }
+        }
         /******** Setando privacidade ********/
         question.private ? $('#yes')[0].checked = true : $('#no')[0].checked = true;
     }

@@ -60,7 +60,7 @@ class FilterQuestionsController extends Controller
 
             // Caso tenha termo de busca
             if ($request->search) {
-                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%')";
             }
 
             // Resgatando as questões
@@ -100,7 +100,16 @@ class FilterQuestionsController extends Controller
 
         // Caso todos os filtros estejam selecionados
         else if ($request->all){
-            $questions = Question::where('private', 0)->get();
+            
+            $sql = "SELECT * FROM questions WHERE private = 0";
+            
+            // Caso tenha termo de busca
+            if ($request->search) {
+                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%')";
+            }
+
+            // Selecionando as questões
+            $questions = Question::hydrate(DB::select($sql));
 
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
@@ -137,7 +146,7 @@ class FilterQuestionsController extends Controller
 
     public function search(Request $request) {
 
-        $sql = "SELECT * FROM questions WHERE private = 0 AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+        $sql = "SELECT * FROM questions WHERE private = 0 AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%')";
 
         // Resgatando as questões
         $questions = DB::select($sql);

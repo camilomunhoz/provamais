@@ -122,6 +122,19 @@
 
 /* Quando não há resultados */ 
 
+#search-messages {
+    padding: 30px;
+    padding-bottom: 0;
+    display: none;
+    color: #888;
+    font-size: 22px;
+}
+#search-messages span{
+    display: block;
+}
+#search-messages span:not(#search-messages span:first-of-type){
+    margin-top: 20px;
+}
 #create-tip{
     position: absolute;
     bottom: 70px;
@@ -137,4 +150,8 @@
     width: 100px;
     opacity: .1;
     transform: rotate(70deg);
+}
+#get-all {
+    text-decoration: underline;
+    cursor: pointer;
 }

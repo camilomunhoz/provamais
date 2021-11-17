@@ -25,7 +25,7 @@ class CreateQuestionsTable extends Migration
             $table->string('image')->nullable();
             $table->tinyInteger('n_lines')->nullable();
             $table->text('answer_suggestion')->nullable();
-            $table->longText('other_terms')->nullable();
+            $table->text('other_terms')->nullable();
             $table->integer('denunciations')->nullable();
             $table->timestamps();
         });

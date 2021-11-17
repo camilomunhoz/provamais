@@ -43,6 +43,9 @@
     <script> var docs = {!! json_encode($docs) !!}; </script>
     <script src="/js/show_docs.js"></script>
 
+    {{-- Aqui vão as mensagens de quando se procura um doc por palavra-chave --}}
+    <div id="search-messages"></div>
+
     <div id="docs">
 
         {{-- Aqui vão os cards dos documentos --}}

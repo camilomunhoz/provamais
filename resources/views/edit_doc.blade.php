@@ -36,6 +36,9 @@
     <script> var oldQuestions = {!! json_encode($questions) !!}; </script>
     <script> var doc = {!! json_encode($document) !!}; </script>
 
+    {{-- Define variável que será usada em /js/create_edit_doc.js para acessar o id do usuário --}}
+    <script> var userId = {{ $user->id }}; </script>
+
     {{-- DOCUMENTO --}}
     <div id="doc">
         <div id="add-question-btn">Adicionar questões</div>
@@ -90,7 +93,7 @@
                         <div id="filter-checkboxes">
             
                             <span class="filter-section">Marcadores</span>
-                            <x-checkbox id="all-questions" name="all_questions" checked="checked">De qualquer usuário</x-checkbox>
+                            <x-checkbox id="others-questions" name="others_questions" checked="checked">De qualquer usuário</x-checkbox>
                             <x-checkbox id="my-questions" name="my_questions" checked="checked">Minhas questões públicas</x-checkbox>
                             <x-checkbox id="private-questions" name="private" checked="checked">Minhas questões privadas</x-checkbox>
                             <x-checkbox id="favorite-questions" name="favorite">Favoritas</x-checkbox>

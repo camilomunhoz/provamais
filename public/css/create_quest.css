@@ -107,6 +107,9 @@
     height: auto;
     min-height: 60px;
 }
+.statement .ql-editor {
+    text-align: justify;
+}
 
 /* Alternativas */
 
@@ -250,14 +253,14 @@
 
 #subject{
     padding: 10px 16px;
-    font-size: 14px;
+    font-size: 16px;
     /* appearance: none; */
     cursor: pointer;
 }
 
-/* Conteúdo, outros termos, número de linhas, sugestão de resposta*/
+/* Conteúdo, número de linhas, sugestão de resposta*/
 
-#content-tag, #other-terms, #n-lines, #answer{
+#content-tag, #n-lines, #other-terms, #answer{
     padding: 10px 20px;
     font-size: 14px;
     min-width: 400px;
@@ -275,6 +278,54 @@
 #n-lines:out-of-range{
     border-color: var(--color2);
     background-color: #FEE;
+}
+
+/* Outros termos para pesquisa */
+
+#other-terms {
+    margin-bottom: 10px;
+}
+#other-terms-label {
+    padding-top: 15px;
+}
+#tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 70%;
+}
+.tag {
+    padding: 10px 0 10px 12px;
+    background-color: #eee;
+    border-radius: 99px;
+    font-size: 14px;
+}
+.tag-content {
+    color: grey;
+}
+.tag-delete-btn {
+    padding: 10px;
+    cursor: pointer;
+    color: grey;
+    font-weight: bold;
+    user-select: none;
+    opacity: .5;
+}
+#other-terms:focus::-webkit-input-placeholder{
+    text-align: right;
+}
+#other-terms:focus:-moz-placeholder{
+    text-align: right;
+}
+#other-terms::-webkit-input-placeholder{
+    color: #aaa;
+    font-style: italic;
+    font-size: 14px;
+}
+#other-terms:-moz-placeholder{
+    color: #aaa;
+    font-style: italic;
+    font-size: 14px;
 }
 
 /* Privacidade */

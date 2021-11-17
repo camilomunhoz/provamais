@@ -37,6 +37,7 @@ Route::post('/my_docs/rename/{id}', [DocController::class, 'rename']);
 Route::get('/my_docs/remove/{id}', [DocController::class, 'remove']);
 Route::get('/my_docs/duplicate/{id}', [DocController::class, 'duplicate']);
 Route::get('/my_docs/get', [DocController::class, 'get']);
+Route::post('/search_docs', [DocController::class, 'search']);
 
 // Questões
 Route::get('/my_quests', [ViewController::class, 'my_quests']);

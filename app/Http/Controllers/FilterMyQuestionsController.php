@@ -67,6 +67,9 @@ class FilterMyQuestionsController extends Controller
                     if ($key == count($favorites)-1) $sql .= ')';
                 }
             }
+            else {
+                $favorites = [];
+            }
 
             // Disciplinas
             if ($request->subjects) {
@@ -107,7 +110,7 @@ class FilterMyQuestionsController extends Controller
 
             // Caso tenha termo de busca
             if ($request->search) {
-                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%')";
+                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%')";
             }
 
             // Resgatando as questões
@@ -150,6 +153,11 @@ class FilterMyQuestionsController extends Controller
             $user = Auth::user();
 
             $sql = "SELECT * FROM questions WHERE user_id = $user->id";
+
+            // Caso tenha termo de busca
+            if ($request->search) {
+                $sql .= " AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%')";
+            }
 
             // Selecionando as favoritas
             $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
@@ -200,14 +208,14 @@ class FilterMyQuestionsController extends Controller
 
         $user_id = Auth::user()->id;
 
-        $sql = "SELECT * FROM questions WHERE (user_id = $user_id AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%'))";
+        $sql = "SELECT * FROM questions WHERE (user_id = $user_id AND (statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%'))";
 
         // Selecionando as favoritas
         $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
 
         // Incluindo as favoritas na query
         foreach ($favorites as $key => $fav) {
-            if ($key == 0) $sql .= " OR ((statement LIKE '%$request->search%' OR content LIKE '%$request->search%') AND (id = $fav->question_id";
+            if ($key == 0) $sql .= " OR ((statement LIKE '%$request->search%' OR content LIKE '%$request->search%' OR other_terms LIKE '%$request->search%') AND (id = $fav->question_id";
             else $sql .= " OR id = $fav->question_id";
             if ($key == count($favorites)-1) $sql .= '))';
         }

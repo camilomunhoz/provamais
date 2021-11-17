@@ -13,6 +13,7 @@
 #results::-webkit-scrollbar,
 #filter-checkboxes::-webkit-scrollbar,
 #quest-details-content::-webkit-scrollbar,
+#quest-details::-webkit-scrollbar,
 #content::-webkit-scrollbar,
 #save-dialog::-webkit-scrollbar{
     width: 8px;
@@ -20,6 +21,7 @@
 #results::-webkit-scrollbar-thumb,
 #filter-checkboxes::-webkit-scrollbar-thumb,
 #quest-details-content::-webkit-scrollbar-thumb,
+#quest-details::-webkit-scrollbar-thumb,
 #content::-webkit-scrollbar-thumb,
 #save-dialog::-webkit-scrollbar-thumb{
     background-color: #ccc;
@@ -461,6 +463,7 @@
             gap: 20px;
             position: absolute;
             background-color: white;
+            overflow-x: auto;
         }
         #quest-details-header{
             display: flex;
@@ -505,10 +508,30 @@
         }
         #question-answer{
             color: var(--bgcolor2);
+            text-align: justify;
         }
         #question-image{
             width: 60%;
             margin: 0 auto;
+        }
+        #other-terms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: auto;
+        }
+        #other-terms > span {
+            align-self: center;
+            font-size: 16px;
+        }
+        #other-terms > div {
+            padding: 8px;
+            background-color: #eee;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        #other-terms > div > span {
+            color: grey;
         }
         #left-info{
             display: flex;

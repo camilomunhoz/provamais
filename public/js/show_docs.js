@@ -13,7 +13,6 @@ $(document).ready(function(){
             if (docs[0] != 'empty') {    
                 docs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             }
-            console.log(docs);
 
             // Insere os cards dos docs
             for (d of docs) {
@@ -25,6 +24,7 @@ $(document).ready(function(){
                 );
                 $('#'+d.id).on('click', showDetails);
             }
+            $('#docs').hide().fadeIn(300);
         }
         else {
             // Insere a instrução de criação
@@ -210,7 +210,11 @@ $(document).ready(function(){
             $.post('/my_docs/rename/'+id,
                 {name: $('#doc-name textarea').val(), _token: $('input[name="_token"]').val()},
                 function (response) {
-                    getDocs();
+                    // Caso haja uma pesquisa vigente, repete ela para manter os docs que já estavam
+                    if ($('#search-messages').is(':visible')) {
+                        $('#header-right-items').submit();
+                    }
+                    else getDocs();
                     $('#doc-name textarea').data('name', response);
                     $('#doc-name textarea').val(response);
                 }
@@ -226,7 +230,11 @@ $(document).ready(function(){
 
     function duplicateDoc(id) {
         $.get('/my_docs/duplicate/'+id, (data) => {
-            getDocs();
+            // Caso haja uma pesquisa vigente, repete ela para manter os docs que já estavam
+            if ($('#search-messages').is(':visible')) {
+                $('#header-right-items').submit();
+            }
+            else getDocs();
             closeDetails();
         });
     }
@@ -237,7 +245,11 @@ $(document).ready(function(){
 
     function removeDoc(id) {
         $.get('/my_docs/remove/'+id, (data) => {
-            getDocs();
+            // Caso haja uma pesquisa vigente, repete ela para manter os docs que já estavam
+            if ($('#search-messages').is(':visible')) {
+                $('#header-right-items').submit();
+            }
+            else getDocs();
             closeDetails();
         });
     }
@@ -257,4 +269,59 @@ $(document).ready(function(){
         $('.showing-doc').off('mousedown',closeDetails);
     });
 
+    /*************************************************************/
+    /***************** Procura por palavra-chave *****************/
+    /*************************************************************/
+
+    $('#header-right-items').on('submit', (e) => {
+        e.preventDefault();
+        $('#search-submit').attr('type', 'button');
+        
+        // Se pesquisar sem inserir nada, não faz nada ou retorna todos os docs
+        if (!$('#search-box').val() || $('#search-box').val().match(/^(\s+)$/)) {
+            if ($('#search-messages').is(':visible')) {
+                getDocs();
+                $('#search-messages').empty().hide();
+                $('#docs').empty();
+            }
+        }
+        // Senão, efetua a busca
+        else {
+            $('#search-messages').empty().hide();
+
+            // Posta via AJAX
+            $.ajax({
+                url: '/search_docs',
+                type: 'post',
+                data: $(e.target).serialize(),
+                dataType: 'json',
+                success: (response) => {
+                    docs = response;
+                    
+                    // Se tiver resultados, mostra eles
+                    if (docs.length > 0) {
+                        docs.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)); // Coloca os docs em ordem alfabética
+                        $('#search-messages').fadeIn(200).append('<span id="no-docs">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>');
+                        appendDocs();
+                    }
+                    // Se não tiver resultados, mostra mensagem de sem resultados e botão pra ver todos os docs
+                    else {
+                        $('#docs').empty();
+                        $('#search-messages').fadeIn(200).append(
+                            '<span>Nenhum documento encontrado ao procurar por "<b>'+$('#search-box').val()+'</b>"</span>'+
+                            '<span id="get-all">Ver todos</span>'
+                        );
+                        $('#get-all').on('click', () => {
+                            $('#search-box').val('');
+                            $('#search-messages').hide().empty();
+                            getDocs();
+                        });
+                        $('#search-messages span').css({textAlign: 'center'});
+                    }
+                    // Para não poder spammar a filtragem
+                    setTimeout(() => { $('#search-submit').attr('type', 'submit'); }, 300);
+                },
+            });
+        }
+    });
 });

@@ -79,7 +79,7 @@
 }
 
 /* Quando não há resultados */
-#no-quests{
+.search-msg{
     color: #888;
     font-size: 22px;
 }
@@ -229,11 +229,31 @@
     color: #888;
 }
 #question-answer{
-    color: var(--bgcolor2);
+    color: var(--color2);
+    text-align: justify;
 }
 #question-image{
     width: 60%;
     margin: 0 auto;
+}
+#other-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto;
+}
+#other-terms > span {
+    align-self: center;
+    font-size: 16px;
+}
+#other-terms > div {
+    padding: 8px;
+    background-color: #eee;
+    border-radius: 5px;
+    font-size: 14px;
+}
+#other-terms > div > span {
+    color: grey;
 }
 #left-info{
     display: flex;

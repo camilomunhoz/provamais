@@ -159,11 +159,12 @@
 
         {{-- Outros termos --}}
         <div class="row hidden">
-            <div class="row-content-left aligned-center-right">
+            <div id="other-terms-label" class="row-content-left aligned-top-right">
                 <span>Outros termos para pesquisa</span>
             </div>
             <div class="row-content-right">
-                <input type="text" name="other_terms" class="simple-box" id="other-terms" onkeydown="return event.key != 'Enter';">
+                <input type="text" name="other_terms" class="simple-box" id="other-terms" maxlength="80" placeholder="Digite e insira com a tecla 'Enter' " onkeydown="return event.key != 'Enter';" autocomplete="off">
+                <div id="tags"></div>
                 <span class="error-feedback" id="error-other-terms"></span>
             </div>
         </div>
