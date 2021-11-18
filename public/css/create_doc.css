@@ -169,9 +169,9 @@
     gap: 20px;
 }
 
-/* Botão de salvar */
+/* Botão de salvar e embaralhar*/
 
-#save {
+#save, #shuffle {
     height: 100%;
     display: flex;
     align-items: center;
@@ -184,19 +184,23 @@
     cursor: pointer;
     z-index: 99;
 }
-#save:hover {
+#save:hover, #shuffle:hover {
     padding-right: 30px;
 }
-#save-icon {
+#save-icon, #shuffle-icon {
     width: 30px;
     filter: invert(1);
 }
-#save-label {
+#save-label, #shuffle-label {
     font-weight: bold;
     font-size: 16px;
     color: white;
     transition: border 0.2s;
     user-select: none;
+}
+#shuffle {
+    margin-right: 0;
+    border-right: 1px solid #062046;
 }
 
 /* Conteúdo */

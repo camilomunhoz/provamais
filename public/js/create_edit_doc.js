@@ -172,6 +172,103 @@ $(document).ready(function() {
     }
 
     $('.cancel-action').on('click', closeSaveDialog)
+    
+    /********************************************************************/
+    /******************** Insere botão de embaralhar ********************/
+    /********************************************************************/
+
+    $('#header-right-items').prepend(
+        '<div id="shuffle">'+
+            '<span id="shuffle-label">Embaralhar</span>'+
+            '<img id="shuffle-icon" src="/img/icons/ico_shuffle.svg">'+
+        '</div>'
+    );
+
+    // Bloqueia ou desbloqueia o embaralhamento de acordo com as inserções
+    function blockOrUnlockShuffle() {
+        if (insertedQuestions.length < 2) {
+            $('#shuffle').css({
+                userSelect: 'none',
+                pointerEvents: 'none',
+                opacity: '.4'
+            }).off('click');
+        }
+        else {
+            $('#shuffle').off('click');
+            $('#shuffle').on('click', shuffleQuestions).removeAttr('style');
+        }
+        blockOrUnlockRedSave();
+    }
+    blockOrUnlockShuffle();
+    
+    /*******************************************************************/
+    /********************** Embaralha as questões **********************/
+    /*******************************************************************/
+
+    function shuffleQuestions() {
+
+        ///
+        /// Tirar o clique do botão
+        ///
+
+        insertedQuestions = [];
+
+        let shuffleThis = $('.question');
+        let currentIndex = shuffleThis.length, randomIndex;
+        
+        // While there are remain elements to shuffle...
+        while (currentIndex != 0) {
+        
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+        
+            // And swap it with the current element.
+            [shuffleThis[currentIndex], shuffleThis[randomIndex]] = [
+            shuffleThis[randomIndex], shuffleThis[currentIndex]];
+        }
+
+        $('#questions').empty();
+
+        for (let q of shuffleThis) {
+            $('#questions').append(q);    // Recolocando as questões no DOM
+            insertedQuestions.push(q.id); // Recolocando as questões no array
+        }
+
+        updateEnumerators();
+        
+        // Reativando evento de clique nas ações da questão
+        for (let id of insertedQuestions) {
+            // Expande a questão
+            $('.expand-question[data-question-id="'+id+'"]').on('click', (e) => {
+                $('.question-content[data-question-id="'+id+'"]').css({height: 'fit-content'}) // css-tricks do the trick (animate height/width to "auto")
+                $(e.target).hide();
+                $(e.target).siblings('.minimize-question').show();
+            })
+            // Minimiza a questão
+            $('.minimize-question[data-question-id="'+id+'"]').on('click', (e) => {
+                $('.question-content[data-question-id="'+id+'"]').animate({height: '80px'}, 200) // css-tricks do the trick (animate height/width to "auto")
+                $(e.target).hide();
+                $(e.target).siblings('.expand-question').show();
+            });
+            // Remove a questão
+            $('.remove-question[data-question-id="'+id+'"]').on('click', (e) => {
+                $('.question[id="'+id+'"]').remove();
+                insertedQuestions.splice(
+                    insertedQuestions.findIndex((iQ) => {
+                        if (iQ == id) return true;
+                        else return false;
+                    }),
+                1);
+                updateEnumerators();
+                blockOrUnlockSave();
+                blockOrUnlockShuffle();
+            });
+        }
+        ///
+        /// Restaurar clique do botão depois de 200s
+        ///
+    }
 
     /****************************************************************/
     /*********** Exibe o ambiente de seleção de questões ************/
@@ -778,6 +875,7 @@ $(document).ready(function() {
                 closeInsertionDialog();
                 updateEnumerators();
                 blockOrUnlockSave();
+                blockOrUnlockShuffle();
             })
         );
     }
@@ -858,6 +956,7 @@ $(document).ready(function() {
             1);
             updateEnumerators();
             blockOrUnlockSave();
+            blockOrUnlockShuffle();
         });
     }
 
