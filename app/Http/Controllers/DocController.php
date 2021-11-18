@@ -20,7 +20,7 @@ class DocController extends Controller
 
                 // Garante que não seja salvo um nome repetido. Concatena '(n)'.
                 while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$doc->name'"))) {
-                    if (preg_match('/^\s\(\d\)$/', substr($doc->name, -4))) {
+                    if (preg_match('/^\s\((\d+)\)$/', substr($doc->name, -4))) {
                         $doc->name = substr($doc->name, 0, -4).' ('.(substr($doc->name, -2, -1) + 1).')';
                     }
                     else {
@@ -72,7 +72,7 @@ class DocController extends Controller
 
                 // Concatena "(n)" no nome da duplicata
                 while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$new_doc->name'"))) {
-                    if (preg_match('/^\s\(\d\)$/', substr($new_doc->name, -4))) {
+                    if (preg_match('/^\s\((\d+)\)$/', substr($new_doc->name, -4))) {
                         $new_doc->name = substr($new_doc->name, 0, -4).' ('.(substr($new_doc->name, -2, -1) + 1).')';
                     }
                     else {
@@ -100,7 +100,7 @@ class DocController extends Controller
         $user_id = Auth::user()->id;
 
         if ($request->search != '') { 
-            $sql = "SELECT * FROM documents WHERE (user_id = $user_id AND (name LIKE '%$request->search%'))";
+            $sql = "SELECT * FROM documents WHERE (user_id = $user_id AND (name LIKE '%$request->search%' OR details LIKE '%$request->search%'))";
             $docs = DB::select($sql);
             $docs = Document::hydrate($docs);
         }

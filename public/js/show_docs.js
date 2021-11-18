@@ -109,6 +109,21 @@ $(document).ready(function(){
             '</div>'
         );
 
+        // Caso o documento tenha detalhes da questão
+        if (doc.details != '') {
+            $('#doc-details-header').append(
+                '<div class="tip" id="info">'+
+                    '<img src="/img/icons/ico_help.svg">'+
+                    '<div class="tip-msg">'+doc.details+
+                        '<div><div class="tip-detail"></div></div>'+
+                    '</div>'+
+                '</div>'
+            );
+            console.log($('#info .tip'));
+            $('#info').on('mouseenter', () => { $('#info .tip-msg').css('opacity', '1') } )
+            $('#info').on('mouseleave', () => { $('#info .tip-msg').css('opacity', '0') } )
+        }
+
         // Permite o redimensionamento automático da textarea do nome do doc
         $("#doc-name textarea").each(function () {
             setTimeout(() => {
@@ -162,12 +177,21 @@ $(document).ready(function(){
         });
         $('#doc-name').on('submit', (e) => {
             e.preventDefault();
-                if ($('#doc-name textarea').val() != '' && !$('#doc-name textarea').val().match(/^(\s+)$/)) {
+            if ($('#doc-name textarea').val() != '' && !$('#doc-name textarea').val().match(/^(\s+)$/)) {
                 updateName(e, docId);
             }
             else {
-                $('#doc-name textarea').val(currentName);
-            }
+                $('#doc-name textarea').val(currentName).attr('disabled', 'disabled');
+                $("#doc-name textarea").each(function () {
+                        setTimeout(() => {
+                            let scrollHeight = $('#doc-name textarea')[0].scrollHeight;
+                            this.setAttribute("style", "height:" + (scrollHeight) + "px;overflow-y:hidden;");
+                        },0);
+                    }).on("input", function () {
+                        this.style.height = "0px";
+                        this.style.height = ($('#doc-name textarea')[0].scrollHeight) + "px";
+                    });
+                }
         });
         $('#doc-name textarea').on('keydown', (e) => {
             if (e.key == 'Enter') {

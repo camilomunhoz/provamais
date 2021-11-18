@@ -18,6 +18,7 @@ class CreateDocumentsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             // $table->foreignId('header_id')->constrained('headers');
             $table->string('name');
+            $table->string('details')->nullable();
             $table->string('question_enumerator');
             $table->string('options_enumerator');
             $table->timestamps();

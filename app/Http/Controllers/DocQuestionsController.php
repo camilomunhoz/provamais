@@ -244,7 +244,7 @@ class DocQuestionsController extends Controller
 
         // Garante que não seja salvo um nome repetido. Concatena '(n)'.
         while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$doc->name'"))) {
-            if (preg_match('/^\s\(\d\)$/', substr($doc->name, -4))) {
+            if (preg_match('/^\s\((\d+)\)$/', substr($doc->name, -4))) {
                 $doc->name = substr($doc->name, 0, -4).' ('.(substr($doc->name, -2, -1) + 1).')';
             }
             else {
@@ -254,8 +254,14 @@ class DocQuestionsController extends Controller
 
         trim($doc->name);                                     // Tira espaços no início e fim
         $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
+        
+        $doc->details = $request->details;
+        trim($doc->details);                                        // Tira espaços no início e fim
+        $doc->details = preg_replace('/\s+/', ' ', $doc->details);  // Tira espaços múltiplos
+
         $doc->question_enumerator = $request->question_enumerator;
         $doc->options_enumerator = $request->options_enumerator;
+
         $doc->save();
 
         $questions_ids = json_decode($request->questions);
@@ -287,7 +293,7 @@ class DocQuestionsController extends Controller
                     
                     $was_equal = true;
 
-                    if (preg_match('/^\s\(\d\)$/', substr($request->name, -4))) {
+                    if (preg_match('/^\s\((\d+)\)$/', substr($request->name, -4))) {
                         $doc->name = substr($request->name, 0, -4).' ('. (substr($request->name, -2, -1) + 1) .')';
                         $request->name = $doc->name;
                     }
@@ -303,10 +309,12 @@ class DocQuestionsController extends Controller
                 trim($doc->name);                                     // Tira espaços no início e fim
                 $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
             }
+            $doc->details = $request->details;
+            trim($doc->details);                                        // Tira espaços no início e fim
+            $doc->details = preg_replace('/\s+/', ' ', $doc->details);  // Tira espaços múltiplos
 
             $doc->question_enumerator = $request->question_enumerator;
             $doc->options_enumerator = $request->options_enumerator;
-            // $doc->details = $request->details;
 
             $doc->save();
 

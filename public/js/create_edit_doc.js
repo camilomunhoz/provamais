@@ -97,6 +97,7 @@ $(document).ready(function() {
             $('#save-dialog').attr('action', '/update_doc');
             $('#save-dialog').prepend('<input name="doc_id" value="'+doc.id+'" type="hidden">');
             $('#name-input').val(doc.name);
+            $('#details-input').val(doc.details);
             $('#enum-quests option[value="'+doc.question_enumerator+'"]').attr('selected', 'selected');
             $('#enum-opts option[value="'+doc.options_enumerator+'"]').attr('selected', 'selected');
         }
@@ -319,7 +320,7 @@ $(document).ready(function() {
             // Exibe o termo de busca que esteja sendo buscado
             if ($('#search-box').val()) {
                 $('#results').append(
-                    '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
+                    '<span class="search-msg">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
                 );  
             } 
             
@@ -404,11 +405,11 @@ $(document).ready(function() {
 
             if ($('#search-box').val()) {
                 $('#results').append(
-                    '<span id="no-quests">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
+                    '<span class="search-msg">Procurando por "<b>'+$('#search-box').val()+'</b>"</span>'
                 );  
             } 
             $('#results').append(
-                '<span id="no-quests">Nenhuma questão corresponde aos filtros aplicados.</span>'
+                '<span class="search-msg">Nenhuma questão corresponde aos filtros aplicados.</span>'
             );
         }
             
@@ -746,7 +747,7 @@ $(document).ready(function() {
             }
 
         $('#quest-details').slideDown(200).css('display', 'grid');
-        $('#no-quests').hide();
+        $('#search-msg').hide();
 
         $('.x').on('click', closeDetails);
     }
@@ -757,7 +758,7 @@ $(document).ready(function() {
 
     function closeDetails() {
         $('#quest-details').slideUp(200);
-            setTimeout(() => {$('#no-quests').show()}, 200);
+            setTimeout(() => {$('#search-msg').show()}, 200);
     }
 
     /*********************************************************************/
@@ -855,7 +856,6 @@ $(document).ready(function() {
     /**************** Puxa do banco as questões selecionadas ***************/
     /***********************************************************************/
 
-    // Traz via AJAX as questões selecionadas
     function getQuestions() {
         $('#insert-questions').off('click');
         let questionsIds = '';
@@ -987,10 +987,4 @@ $(document).ready(function() {
     }
     updateEnumerators()
 
-/*******************************************************************************************************************************************/
-/*******************************************************************************************************************************************/
-/********************************************************* Código para a edição de documentos **********************************************/
-/*******************************************************************  a seguir  ************************************************************/
-/*******************************************************************************************************************************************/
-/*******************************************************************************************************************************************/
 });

@@ -185,7 +185,7 @@
     z-index: 99;
 }
 #save:hover, #shuffle:hover {
-    padding-right: 30px;
+    padding: 0 30px;
 }
 #save-icon, #shuffle-icon {
     width: 30px;

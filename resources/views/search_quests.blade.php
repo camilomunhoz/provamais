@@ -78,7 +78,7 @@
         {{-- Resultados da pesquisa --}}
         <div id="results">
             @if ($questions[0] == 'empty')
-                <span id="no-quests">Não há questões para exibir.</span>
+                <span class="search-msg">Não há questões para exibir.</span>
                 <div id="create-tip">
                     <span>Clique aqui para<br>cadastrar uma questão</span><br>
                     <img src="/img/icons/ico_curved_arrow.svg">

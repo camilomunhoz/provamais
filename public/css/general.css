@@ -79,6 +79,62 @@ input:focus, textarea:focus, select:focus{
     color: var(--color1) !important;
 }
 
+/* Tip para dicas ou explicações */
+
+.tip {
+    height: 20px;
+    width: 20px;
+    background-color: var(--color1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.small-tip {
+    height: 15px;
+    width: 15px;
+    background-color: var(--color1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tip img, .small-tip img {
+    height: 70%;
+    filter: brightness(2);
+    margin-left: 1px;
+}
+.tip-msg {
+    padding: 10px;
+    background-color: #333;
+    color: #ddd;
+    position: absolute;
+    transform: translateY(calc(-50% - 22px));
+    border-radius: 8px;
+    font-size: 14px;
+    max-width: 300px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+.tip-msg > div {
+    position: relative;
+    bottom: -9px;
+    margin: auto;
+    width: 20px;
+}
+.tip-detail {
+    background-color: #333;
+    position: absolute;
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    width: 100%;
+    height: 10px;
+    bottom: -10px;
+}
+.tip:hover {
+    background-color: var(--color2);
+}
+
 /* Overlay de confirmação de saída */
 
 .cancel-overlay{

@@ -64,6 +64,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 #doc-name{
     display: flex;
@@ -118,6 +119,13 @@
 }
 .x:hover{
     opacity: .6;
+}
+#info {
+    position: absolute;
+    bottom: -31px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bgcolor2);
 }
 
 /* Quando não há resultados */ 
