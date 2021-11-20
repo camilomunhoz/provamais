@@ -66,8 +66,8 @@ class ViewController extends Controller
 
             foreach ($doc_quest as $dc) {
                 $question = Question::where('id', $dc->question_id)->get();
-                // dd($question);
                 $question[0]->options;
+                $question[0]->order = $dc->order;
                 array_push($questions, $question[0]);
             }
 

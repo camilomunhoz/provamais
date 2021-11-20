@@ -9,6 +9,7 @@
     flex-direction: column;
     gap: 40px;
     padding-top: 40px;
+    position: relative;
 }
 .row{
     display: flex;

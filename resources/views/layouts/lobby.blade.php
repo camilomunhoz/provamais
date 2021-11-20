@@ -9,8 +9,7 @@
 
         <div id="nav-left-items">
         
-            <div id="profile">
-                <img src="/img/users_profile_pics/{{($user->profile_pic)}}" id="profile-picture" title="Menu">
+            <div id="profile">             <img src="/img/users_profile_pics/{{($user->profile_pic)}}" id="profile-picture" title="Menu">
             </div>
 
             {{-- nav 2 / Profile --}}
@@ -86,3 +85,4 @@
     @yield('lobby_content')
 
 @endsection
+   

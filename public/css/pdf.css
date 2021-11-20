@@ -1,0 +1,306 @@
+@import url('main.css');
+
+/********* GERAL *********/
+
+body, html{
+    overflow: visible !important;
+}
+#view {
+    min-height: 100%;
+    width: 100%;
+    background-color: var(--bgcolor3);
+    padding: 15vw 20%;
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: var(--color1);
+}
+
+/********* DIÁLOGO *********/
+
+#dialog-box {
+    height: fit-content;
+    width: 100%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+    padding: 30px;
+    padding-bottom: 10px;
+    display: block;
+    margin: 0 auto;
+}
+#logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-85%);
+    height: 60px;
+    width: 100px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(to top, white 9px, #e9e9e9 9px, white 17px )
+}
+#logo img {
+    width: 80%;
+    margin-top: -8px;
+}
+#doc-name {
+    margin: 0;
+    margin-bottom: 20px;
+    color: var(--bgcolor3);
+    word-break: break-word;
+    font-weight: 100;
+}
+#save-btn {
+    width: 100%;
+    max-width: 700px;
+    min-height: 70px;
+    padding: 15px;
+    cursor: pointer;
+    color: white;
+    font-size: 22px;
+    user-select: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background-color .3s ease;
+    background-color: var(--color2);
+    text-align: center;
+    line-height: 40px;
+    display: auto;
+    margin: 35px auto 10px auto;
+}
+#save-btn:hover {
+    background-color: var(--color1);
+}
+#help-btn {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 15px;
+    transition: filter .3s ease, opacity .3s ease;
+    filter: grayscale(1);
+    color: var(--color2);
+    opacity: .8;
+    user-select: none;
+}
+#help-btn:hover {
+    filter: grayscale(0);
+    opacity: 1;
+
+}
+.simple-line {
+    width: 100%;
+}
+
+/********* INSTRUÇÕES *********/
+
+#save-instructions {
+    display: none;
+    padding-top: 35px;
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.arrow-down {
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 10px;
+    width: 20px;
+    transform: translateX(-50%);
+    background-color: #ccc;
+    border-radius: 5px;
+}
+#save-instructions > span {
+    color: grey;
+    font-weight: bold;
+    font-size: 18px;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.browser {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    color: #666;
+}
+.browser:last-of-type {
+    margin-bottom: 20px;
+}
+.browser .arrow-down {
+    position: static;
+    float: right;
+    transform: translateX(0);
+    margin-top: 5px;
+    height: 7px;
+    width: 15px;
+}
+.browser-instruction {
+    display: none;
+    border-top: 1px solid #e9e9e9;
+    margin-top: 9px;
+}
+.browser-instruction img {
+    width: 80%;
+    display: block;
+    margin: auto;
+    margin-top: 12px;
+    border-radius: 5px;
+    border: 1px solid #e9e9e9;
+}
+.browser-instruction > span {
+    margin-top: 16px;
+    margin-left: 20px;
+    display: inline-block;
+}
+
+/********* MEDIA QUERIES *********/
+
+@media all and (max-width: 584px) {
+    #view {
+        padding: 20px;
+        padding-top: 70px;
+    }
+}
+
+
+/* ==================================================================================================================================== */
+/* ==================================================================================================================================== */
+/* ==================================================================================================================================== */
+
+/********* CONTAINER DO PDF *********/
+#pdf {
+    height: 100%;
+    display: none;
+}
+#pdf * {
+    font-size: 12pt !important;
+}
+#pdf img {
+    break-inside: avoid;
+}
+
+/********* MEDIA PRINT *********/
+@page {
+    size: A4 portrait !important;
+    margin: 15mm
+}
+@page:first{
+    margin-top: 10mm;
+}
+@media print {
+    #pdf {
+        display: block;
+    }
+    #view {
+        display: none;
+    }
+}
+
+/********* HEADER *********/
+header {
+    border-bottom: 1pt solid black;
+    /* background: grey; */
+    display: grid;
+    grid-template-columns: 5fr auto 40mm;
+    padding-bottom: 4mm;
+    gap: 5mm;
+}
+.blanket {
+    height: 100%;
+    border-bottom: 1pt solid black;
+    flex: 1;
+}
+
+/* Esquerda e centro */
+
+#left > div, #center > div {
+    width: 100%;
+    display: flex;
+    gap: 1mm;
+    height: 12pt;
+    margin-bottom: 2mm;
+}
+#left > div:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Centro */
+
+#center > div {
+    justify-content: flex-end;
+}
+#center .blanket {
+    min-width: 20mm !important;
+    flex: 0;
+}
+
+/* Direita */
+
+#right {
+    height: 100%;
+    width: 100%;
+}
+#right img{
+    width: 80%;
+    max-width: 80%;
+    max-height: 100%;
+    float: right;
+}
+
+/********* INSTRUÇÕES *********/
+
+#instructions {
+    margin: 5mm 0;
+    width: 100%;
+    /* padding: 5mm; */
+    border: 1pt solid black;
+}
+#instructions li {
+    margin-bottom: 1mm;
+}
+
+/********* QUESTÕES *********/
+
+.question {
+    margin-bottom: 5mm;
+}
+.statement .ql-editor, .option .ql-editor{
+    padding: 0;
+    text-align: justify;
+    height: fit-content;
+}
+.statement .ql-editor {
+    padding-bottom: 4pt;
+}
+.option .ql-editor {
+    padding: 2pt 0 2pt 5mm;
+}
+.line {
+    width: 100%;
+    height: 18pt;
+    border-bottom: 1pt solid black;
+}
+.question img{
+    margin: 4mm 0 4mm 5mm;
+    max-width: 60%;
+    max-height: 8cm;
+}
+
+/********* GABARITO *********/
+
+.essay-answer {
+    border-bottom: 1pt solid black;
+    padding: 1pt 0;
+    color: red;
+}

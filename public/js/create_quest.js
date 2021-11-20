@@ -380,11 +380,26 @@ $(document).ready(function() {
             return response.json();
 
         }).then( response => {
+            
             // Exibe os erros e colore as divs
+            let i = 0;
             for (let key in response.errors) {
+                if (i == 0) {
+                    let pos;
+                    setTimeout(() => {
+                        pos = $('#error-'+key).parent().prop('offsetTop');
+                        document.getElementById('content').scrollTo({top: 0, behavior: 'smooth'});
+                        // document.getElementById('content').scrollTo({top: (pos-20), behavior: 'smooth'});
+                        // console.log(response.errors)
+                        // console.log($('#error-'+key).parent())
+                        // console.log(pos)
+                    }, 2);
+                }
+                // console.log(key)
                 if (key == 'options') $('#add-alter').css({opacity: .6});
                 $('#error-'+key).html(response.errors[key]).fadeIn(300);
                 $('#error-'+key).parent().animate({backgroundColor: 'rgb(255, 190, 190)'}, 300);
+                i++;
             }
         });
     

@@ -19,6 +19,7 @@
         {{-- Previne que HTML cru seja mostrado antes do CSS carregar --}}
         <div id="loading-overlay" style="background: rgb(228, 228, 228); position: absolute; height: 100%; width: 100%;"></div>
         @yield('banner')
+        
         @yield('content')
 
     </body>

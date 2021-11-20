@@ -68,11 +68,11 @@ $(document).ready(function() {
                         '<option value="1-">1-&nbsp;&nbsp;2-&nbsp;&nbsp;3-</option>'+
                         '<option value="Q1.">Questão 1.</option>'+
                         '<option value="Q1-">Questão 1 -</option>'+
-                        '<option value="01.">01.&nbsp;&nbsp;02.&nbsp;&nbsp;03.</option>'+
-                        '<option value="01)">01)&nbsp;&nbsp;02)&nbsp;&nbsp;03)</option>'+
-                        '<option value="01-">01-&nbsp;&nbsp;02-&nbsp;&nbsp;03-</option>'+
-                        '<option value="Q01.">Questão 01.</option>'+
-                        '<option value="Q01-">Questão 01 -</option>'+
+                        // '<option value="01.">01.&nbsp;&nbsp;02.&nbsp;&nbsp;03.</option>'+
+                        // '<option value="01)">01)&nbsp;&nbsp;02)&nbsp;&nbsp;03)</option>'+
+                        // '<option value="01-">01-&nbsp;&nbsp;02-&nbsp;&nbsp;03-</option>'+
+                        // '<option value="Q01.">Questão 01.</option>'+
+                        // '<option value="Q01-">Questão 01 -</option>'+
                     '</select>'+
                 '</label>'+
                 '<label id="label-enum-options-input" for="enum-opts" class="save-dialog-label">Enumerador das alternativas:'+
@@ -187,7 +187,7 @@ $(document).ready(function() {
 
     // Bloqueia ou desbloqueia o embaralhamento de acordo com as inserções
     function blockOrUnlockShuffle() {
-        if (insertedQuestions.length < 2) {
+        if (insertedQuestions.length < 3) {
             $('#shuffle').css({
                 userSelect: 'none',
                 pointerEvents: 'none',

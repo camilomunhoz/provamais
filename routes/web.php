@@ -23,6 +23,7 @@ use App\Http\Controllers\FilterMyQuestionsController;
 use App\Http\Controllers\DocQuestionsController;
 use App\Http\Controllers\DocController;
 use App\Http\Controllers\RemoveQuestionController;
+use App\Http\Controllers\PDFController;
 
 // Página inicial
 Route::get('/', [ViewController::class, 'index']);
@@ -60,6 +61,10 @@ Route::post('/filter_doc_quests', [DocQuestionsController::class, 'filter']);
 Route::get('/my_profile', [ViewController::class, 'my_profile']);
 Route::get('/profile/{id}', [ViewController::class, 'show_profile']);
 Route::post('/update_profile', [UpdateProfileController::class, 'update_profile']);
+
+// PDF
+Route::get('/pdf/{id}', [PDFController::class, 'pdf_doc']);
+Route::get('/pdf/{id}/answers', [PDFController::class, 'pdf_answers']);
 
 // Ajuda
 Route::get('/help', [ViewController::class, 'help']);

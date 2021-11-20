@@ -86,12 +86,12 @@ $(document).ready(function(){
                     '<span>Editar</span>'+
                 '</a>'+
 
-                '<a id="pdf" class="doc-action" href="/pdf_doc/'+docId+'" alt="Gerar PDF" title="Gerar PDF">'+
+                '<a id="pdf" class="doc-action" href="/pdf/'+docId+'" alt="Gerar PDF" title="Gerar PDF">'+
                     '<img src="/img/icons/ico_pdf.svg">'+
                     '<span>Gerar PDF</span>'+
                 '</a>'+
 
-                '<a id="answers" class="doc-action" href="/pdf_gabarito/'+docId+'" alt="Gabarito" title="Gabarito">'+
+                '<a id="answers" class="doc-action" href="/pdf/'+docId+'/answers" alt="Gabarito" title="Gabarito">'+
                     '<img src="/img/icons/ico_answers.svg">'+
                     '<span>Gabarito</span>'+
                 '</a>'+
