@@ -171,8 +171,14 @@ $(document).ready(function(){
             if ($(e.target).hasClass('trash') && !questCard.children('.btn-remove').length) {
                 $(e.target).attr('title', 'Cancelar');
                 questCard.append(
-                    '<a href="/remove_quest/'+questId+'" class="confirmation-btn-hard btn-remove">Apagar</a>'
+                    '<div data-question-id="'+questId+'" class="confirmation-btn-hard btn-remove">Apagar</div>'
                 );
+                $('.btn-remove[data-question-id="'+questId+'"]').on('click', () => {
+                    $('.btn-remove[data-question-id="'+questId+'"]').off('click').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
+                    $.get('/remove_quest/'+questId, (response) => {
+                        $('#filters').submit();
+                    });
+                });
             }
             else if ($(e.target).hasClass('trash') && questCard.children('.btn-remove').length) {
                 $(e.target).attr('title', 'Apagar');
@@ -237,6 +243,22 @@ $(document).ready(function(){
                 $('#favorite-this').on('click', () => { favoriteThis(question.identifier) });
             }
         } catch (e) {}
+
+        // Insere botões de editar e apagar nas questões próprias (nos detalhes)
+        if (question.user_id == userId) {
+            $('#right-info').prepend(
+                '<div class="question-action remove" data-this-question-id="'+questions[q].id+'" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'+
+                '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'
+            );
+            $('.remove[data-this-question-id="'+questions[q].id+'"]').on('click', () => {
+                $('.remove[data-this-question-id="'+questions[q].id+'"]').off('click').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
+                $('.remove[data-this-question-id="'+questions[q].id+'"] img').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
+                $.get('/remove_quest/'+questions[q].id, (response) => {
+                    $('#filters').submit();
+                    closeDetails();
+                });
+            });
+        }
 
         // Caso seja privada
         if (questions[q].private) {

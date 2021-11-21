@@ -14,7 +14,7 @@ class RemoveQuestionController extends Controller
             
             if($question && $question->user_id === Auth::id()) {
                 $question->delete();
-                return back();
+                // return back();
             }
             else return redirect('/my_quests');
         }

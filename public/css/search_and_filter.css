@@ -321,6 +321,7 @@
 }
 .remove img{
     width: 22px;
+    cursor: pointer;
 }
 #removing-quest{
     display: flex;
