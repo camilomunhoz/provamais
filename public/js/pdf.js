@@ -5,7 +5,7 @@ $(document).ready(function() {
     /******************* Insere as questões selecionadas *******************/
     /***********************************************************************/
     
-    var count = 1; // Conta o número de questões inseridas. Incrementada em getQuestEnumerator()
+    var count = 0; // Conta o número de questões inseridas. Incrementada em getQuestEnumerator()
 
     function insertQuestion(q) {
         // Insere a questão
@@ -48,6 +48,15 @@ $(document).ready(function() {
                 optAndEnum.ops.unshift({insert: getOptionEnumerator(i), attributes: {bold: true} });
                 option.setContents(optAndEnum);
                 option.disable();
+
+                // Destaca a resposta correta caso seja gabarito
+                try {
+                    if (typeof answers !== 'undefined') {
+                        if (answers[count-1] == i) {
+                            $('.question-content[data-question-id="'+q.identifier+'"] .o-'+i).css({fontWeight: 'bold', color: 'red', border: '1px dashed red'});
+                        } 
+                    }
+                } catch (e) {}
             }
         }
         // Adiciona linhas caso seja dissertativa e não seja gabarito
@@ -61,9 +70,16 @@ $(document).ready(function() {
                     }
                 }
             }
-            // Se for gabarito adiciona a resposta
+            // Se for gabarito, adiciona a resposta
             else {
-                $('.question[id="'+q.identifier+'"]').append('<div class="essay-answer"></div>');
+                if (q.type == 'Dissertativa') {
+                    if (answers[count-1] != '') {
+                        $('.question[id="'+q.identifier+'"]').append('<div class="essay-answer">'+answers[count-1]+'</div>');
+                    }
+                    else {
+                        $('.question[id="'+q.identifier+'"]').append('<div class="essay-answer">-</div>');
+                    }
+                }
             }
         } catch (e) {}
     }
@@ -79,6 +95,7 @@ $(document).ready(function() {
     // Atualiza os enumeradores das questões
     function getQuestEnumerator() {
         let enu = '';
+        count++;
         if (doc.question_enumerator == '1.') {
             enu = String(count)+'. ';
         }
@@ -94,7 +111,6 @@ $(document).ready(function() {
         else if (doc.question_enumerator == 'Q1-') {
             enu = 'Questão '+String(count)+' - ';
         }
-        count++;
         return enu;
     }
 

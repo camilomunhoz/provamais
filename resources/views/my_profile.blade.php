@@ -41,7 +41,7 @@
         <div id="my-profile-extras">
             <label>
                 Descrição:<br>
-                <textarea name="desc" placeholder="Dê mais detalhes sobre você ao público" class="my-profile-desc simple-box">{{$user->description}}</textarea>
+                <textarea name="desc" maxlength="1024" placeholder="Dê mais detalhes sobre você ao público" class="my-profile-desc simple-box">{{$user->description}}</textarea>
             </label>
             <label>
                 Chave Pix:<br>

@@ -300,7 +300,7 @@ header {
 /********* GABARITO *********/
 
 .essay-answer {
-    border-bottom: 1pt solid black;
-    padding: 1pt 0;
     color: red;
+    width: 100%;
+    text-align: justify;
 }

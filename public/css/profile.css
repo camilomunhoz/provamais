@@ -36,3 +36,6 @@
     min-width: 450px;
     max-width: 900px;
 }
+.simple-line {
+    max-width: 900px;
+}
