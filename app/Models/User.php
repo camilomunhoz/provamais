@@ -46,4 +46,14 @@ class User extends Authenticatable
         return $this->hasMany(Question::class);
     }
 
+    // Afirma a relação 1:N de user-header_images
+    public function header_images(){
+        return $this->hasMany(HeaderImage::class);
+    }
+
+    // Afirma a relação 1:N de user-instructions
+    public function instructions(){
+        return $this->hasMany(Instruction::class);
+    }
+
 }

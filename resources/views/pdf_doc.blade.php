@@ -75,17 +75,16 @@
                 <div><span>Data:</span><div class="blanket"></div></div>
             </div>
             <div id="right">
-                <img src="/img/logo.png" alt="">
+                <img src="/img/headers/{{$header_image}}">
             </div>
         </header>
         
         {{-- Instruções para os alunos --}}
         <section id="instructions">
             <ul>
-                <li>Leia e realize as questões com atenção.</li>
-                <li>Utilize caneta esferográfica azul ou preta.</li>
-                <li>A prova terá duração de 1 hora e 30 minutos.</li>
-                <li>Ao término da prova, levante a mão e aguarde o(a) professor(a).</li>
+                @foreach($instruction as $i)
+                    <li>{{$i}}</li>
+                @endforeach
             </ul>
         </section>
         

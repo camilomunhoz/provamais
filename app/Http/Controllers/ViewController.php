@@ -54,6 +54,12 @@ class ViewController extends Controller
             // Selecionando as disciplinas
             $subjects = Subject::all();
 
+            // Selecionando as imagens de cabeçalho
+            $user->header_images;
+
+            // Selecionando as instruções
+            $user->instructions;
+
             return view('create_doc', ['user' => $user, 'subjects' => $subjects, 'favorites' => $favorites]);
         }
         return redirect('/');
@@ -75,7 +81,15 @@ class ViewController extends Controller
 
             $user = Auth::user();
 
+            // Selecionando as disciplinas
             $subjects = Subject::all();
+            
+            // Selecionando as imagens de cabeçalho
+            $user->header_images;
+
+            // Selecionando as instruções
+            $user->instructions;
+
             return view('edit_doc', ['user' => $user, 'subjects' => $subjects, 'questions' => $questions, 'document' => $document[0]]);
         }
         return redirect('/');

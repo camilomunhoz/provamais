@@ -12,4 +12,10 @@ class Document extends Model
     public function questions() {
         return $this->belongsToMany(Question::class);
     }
+    public function header_image(){
+        return $this->belongsTo(HeaderImage::class);
+    }
+    public function instruction(){
+        return $this->belongsTo(Instruction::class);
+    }
 }

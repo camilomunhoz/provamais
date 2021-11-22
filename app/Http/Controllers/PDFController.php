@@ -8,6 +8,8 @@ use App\Models\Document;
 use App\Models\DocumentQuestion;
 use App\Models\Question;
 use App\Models\User;
+use App\Models\HeaderImage;
+use App\Models\Instruction;
 
 
 class PDFController extends Controller
@@ -19,6 +21,9 @@ class PDFController extends Controller
             if($doc && $doc->user_id === Auth::id()) {
                 $user = Auth::user();
 
+                $header_image = HeaderImage::firstWhere('id', $doc->header_image_id);
+                $instruction = Instruction::firstWhere('id', $doc->instruction_id);
+
                 $doc_quest = DocumentQuestion::where('document_id', $id)->get();
                 $questions = [];
 
@@ -29,7 +34,13 @@ class PDFController extends Controller
                     array_push($questions, $question[0]);
                 }
 
-                return view('pdf_doc', ['user' => $user, 'doc' => $doc, 'questions' => $questions]);
+                return view('pdf_doc', [
+                    'user' => $user,
+                    'doc' => $doc,
+                    'questions' => $questions,
+                    'header_image' => $header_image->name,
+                    'instruction' => json_decode($instruction->instructions)
+                ]);
             }
             else return redirect('/my_docs');
         }
@@ -42,6 +53,9 @@ class PDFController extends Controller
             
             if($doc && $doc->user_id === Auth::id()) {
                 $user = Auth::user();
+
+                $header_image = HeaderImage::firstWhere('id', $doc->header_image_id);
+                $instruction = Instruction::firstWhere('id', $doc->instruction_id);
 
                 $doc_quest = DocumentQuestion::where('document_id', $id)->get();
                 $questions = [];
@@ -69,7 +83,14 @@ class PDFController extends Controller
                     }
                 }
 
-                return view('pdf_answers', ['user' => $user, 'doc' => $doc, 'questions' => $questions, 'answers' => $answers]);
+                return view('pdf_answers', [
+                    'user' => $user,
+                    'doc' => $doc,
+                    'questions' => $questions,
+                    'header_image' => $header_image->name,
+                    'instruction' => json_decode($instruction->instructions),
+                    'answers' => $answers
+                ]);
             }
             else return redirect('/my_docs');
         }

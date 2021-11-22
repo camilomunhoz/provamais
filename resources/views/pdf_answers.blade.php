@@ -10,6 +10,8 @@
     <script> var doc = {!! json_encode($doc) !!}; </script>
     {{-- Define variável que será usada em /js/pdf.js para acessar as respostas --}}
     <script> var answers = {!! json_encode($answers) !!}; </script>
+    {{-- Define variáveis que serão usadas em /js/pdf.js para personalizar o documento --}}
+    <script> var instruction = {!! json_encode($instruction) !!}; </script>
 
     {{-- View (o que aparecerá para o user) --}}
     <div id="view">
@@ -78,7 +80,7 @@
                 <div><span>Data:</span><div class="blanket"></div></div>
             </div>
             <div id="right">
-                <img src="/img/logo.png" alt="">
+                <img src="/img/headers/{{$header_image}}">
             </div>
         </header>
         

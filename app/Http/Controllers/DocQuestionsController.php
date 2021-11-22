@@ -238,12 +238,14 @@ class DocQuestionsController extends Controller
     public function store(Request $request) {
 
         $doc = new Document;
-        $doc->user_id = Auth::user()->id;
+
+        $user = Auth::user();
+        $doc->user_id = $user->id;
 
         $doc->name = $request->name;
 
         // Garante que não seja salvo um nome repetido. Concatena '(n)'.
-        while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$doc->name'"))) {
+        while (count(DB::select("SELECT * FROM documents WHERE user_id = $user->id AND name = '$doc->name'"))) {
             if (preg_match('/^\s\((\d+)\)$/', substr($doc->name, -4))) {
                 $doc->name = substr($doc->name, 0, -4).' ('.(substr($doc->name, -2, -1) + 1).')';
             }
@@ -261,6 +263,27 @@ class DocQuestionsController extends Controller
 
         $doc->question_enumerator = $request->question_enumerator;
         $doc->options_enumerator = $request->options_enumerator;
+
+        $header_images = $user->header_images;
+        $instructions = $user->instructions;
+
+        // Verificando se os ids de header e instructions pertencem ao usuário
+        $header_image_check = false;
+        $instruction_check = false;
+        foreach ($header_images as $h_i) {
+            if ($h_i->id == $request->header_image) {
+                $header_image_check = true;
+                break;
+            }
+        }
+        foreach ($instructions as $i) {
+            if ($i->id == $request->instruction) {
+                $instruction_check = true;
+                break;
+            }
+        }
+        $doc->header_image_id = $header_image_check ? $request->header_image : 1;
+        $doc->instruction_id = $instruction_check ? $request->instruction : 1;
 
         $doc->save();
 
@@ -283,6 +306,8 @@ class DocQuestionsController extends Controller
         $doc = Document::firstWhere('id', $request->doc_id);
 
         if($doc && $doc->user_id === Auth::id()) {
+
+            $user = Auth::user();
 
             $name_was_changed = ($doc->name == $request->name) ? false : true ;
 
@@ -315,6 +340,27 @@ class DocQuestionsController extends Controller
 
             $doc->question_enumerator = $request->question_enumerator;
             $doc->options_enumerator = $request->options_enumerator;
+
+            $header_images = $user->header_images;
+            $instructions = $user->instructions;
+    
+            // Verificando se os ids de header e instructions pertencem ao usuário
+            $header_image_check = false;
+            $instruction_check = false;
+            foreach ($header_images as $h_i) {
+                if ($h_i->id == $request->header_image) {
+                    $header_image_check = true;
+                    break;
+                }
+            }
+            foreach ($instructions as $i) {
+                if ($i->id == $request->instruction) {
+                    $instruction_check = true;
+                    break;
+                }
+            }
+            $doc->header_image_id = $header_image_check ? $request->header_image : 1;
+            $doc->instruction_id = $instruction_check ? $request->instruction : 1;
 
             $doc->save();
 

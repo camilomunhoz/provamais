@@ -223,6 +223,19 @@
     font-weight: bold;
     color: grey;
     height: fit-content;
+    display: block;
+}
+#save-dialog .simple-line {
+    width: 100%;
+    /* margin: 15px 0; */
+}
+#label-enum-questions-input, #label-enum-options-input, #label-header-input, #label-instructions-input {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+#label-header-input select, #label-instructions-input select {
+    width: 190px;
 }
 
 /********************************************************************************************************************/

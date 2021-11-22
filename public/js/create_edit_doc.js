@@ -61,7 +61,7 @@ $(document).ready(function() {
                     '<input id="name-input" name="name" type="text" maxlength="100" class="simple-box" onkeydown="return event.key != \'Enter\';">'+
                 '</label>'+
                 '<div class="simple-line"></div>'+
-                '<label id="label-enum-questions-input" for="enum-quests" class="save-dialog-label">Enumerador das questões:'+
+                '<label id="label-enum-questions-input" for="enum-quests" class="save-dialog-label"><span>Enumerador das questões:</span>'+
                     '<select id="enum-quests" name="question_enumerator" class="simple-box">'+
                         '<option value="1.">1.&nbsp;&nbsp;2.&nbsp;&nbsp;3.</option>'+
                         '<option value="1)">1)&nbsp;&nbsp;2)&nbsp;&nbsp;3)</option>'+
@@ -75,7 +75,7 @@ $(document).ready(function() {
                         // '<option value="Q01-">Questão 01 -</option>'+
                     '</select>'+
                 '</label>'+
-                '<label id="label-enum-options-input" for="enum-opts" class="save-dialog-label">Enumerador das alternativas:'+
+                '<label id="label-enum-options-input" for="enum-opts" class="save-dialog-label"><span>Enumerador das alternativas:</span>'+
                     '<select id="enum-opts" name="options_enumerator" class="simple-box">'+
                         '<option value="a)">a)&nbsp;&nbsp;b)&nbsp;&nbsp;c)</option>'+
                         '<option value="A)">A)&nbsp;&nbsp;B)&nbsp;&nbsp;C)</option>'+
@@ -85,14 +85,35 @@ $(document).ready(function() {
                 '<label id="label-details-input" for="details-input" class="save-dialog-label">Detalhes:'+
                     '<input id="details-input" name="details" class="simple-box">'+
                 '</label>'+
-                '<label id="label-details-input" for="details-input" class="save-dialog-label">Detalhes:'+
-                    '<input type=id="details-input" name="details" class="simple-box">'+
+                '<label id="label-header-input" for="header-input" class="save-dialog-label"><span>Imagem de cabeçalho:</span>'+
+                    '<select id="header-input" name="header_image" class="simple-box">'+
+                        '<option value="1">Padrão</option>'+
+                    '</select>'+
+                '</label>'+
+                '<label id="label-instructions-input" for="instructions-input" class="save-dialog-label"><span>Instruções:</span>'+
+                    '<select id="instructions-input" name="instruction" class="simple-box">'+
+                        '<option value="1">Padrão</option>'+
+                    '</select>'+
                 '</label>'+
                 '<div class="simple-line"></div>'+
                 '<button type="submit" id="save-btn" class="save-btn confirmation-btn-hard">Salvar</button>'+
             '</form>'+
         '</div>'
     );
+
+    // Insere as imagens de cabeçalho
+    for (let h of user.header_images) {
+        $('#header-input').append(
+            '<option value="'+h.id+'">'+h.client_name+'</option>'
+        );
+    }
+
+    // Insere as instruções
+    for (let i of user.instructions) {
+        $('#instructions-input').append(
+            '<option value="'+i.id+'">'+i.name+'</option>'
+        );
+    }
 
     // Caso seja uma edição: muda a action do form, insere o nome, os tipos de enumeradores e o id do doc
     try {
@@ -103,6 +124,8 @@ $(document).ready(function() {
             $('#details-input').val(doc.details);
             $('#enum-quests option[value="'+doc.question_enumerator+'"]').attr('selected', 'selected');
             $('#enum-opts option[value="'+doc.options_enumerator+'"]').attr('selected', 'selected');
+            $('#header-input option[value='+doc.header_image_id+']').attr('selected', 'selected');
+            $('#instructions-input option[value='+doc.instruction_id+']').attr('selected', 'selected');
         }
     } catch (e) {}  
 
@@ -147,8 +170,10 @@ $(document).ready(function() {
         setTimeout(() => { $('#save').on('click', closeSaveDialog); }, 200); // Para não acumular animações
 
         // Faz o clique na parte preta do overlay fechar o overlay
-        $('#save-dialog').on('mouseleave', () => {
-            $('#save-overlay').on('mousedown', closeSaveDialog);
+        $('#save-dialog').on('mouseleave', (e) => {
+            if ($(e.target).prop('nodeName') != 'SELECT') {
+                $('#save-overlay').on('mousedown', closeSaveDialog);
+            }
         });
         $('#save-dialog').on('mouseenter', () => {
             $('#save-overlay').off('mousedown');

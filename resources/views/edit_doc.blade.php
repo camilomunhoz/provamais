@@ -39,6 +39,9 @@
     {{-- Define variável que será usada em /js/create_edit_doc.js para acessar o id do usuário --}}
     <script> var userId = {{ $user->id }}; </script>
 
+    {{-- Define variável que será usada em /js/create_edit_doc.js para acessar dados do user --}}
+    <script> var user = {!! json_encode($user) !!}; </script>
+
     {{-- DOCUMENTO --}}
     <div id="doc">
         <div id="add-question-btn">Adicionar questões</div>
