@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocumentsTable extends Migration
+class CreateHeaderImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,14 @@ class CreateDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('header_images', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('header_image_id')->constrained();
-            $table->foreignId('instruction_id')->constrained();
             $table->string('name');
-            $table->string('details')->nullable();
-            $table->string('question_enumerator');
-            $table->string('options_enumerator');
-            $table->timestamps();
+            $table->string('client_name');
         });
+
+        DB::table('header_images')->insert(['user_id' => '1', 'name' => 'logo.png', 'client_name' => 'Padrão']);
     }
 
     /**
@@ -33,6 +30,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('header_images');
     }
 }

@@ -72,6 +72,7 @@
         </div>
 
         <form id="header-right-items">
+            @yield('layout_for_doc')
             @csrf
             <input type="text" placeholder="@yield('search-placeholder')" id="search-box" class="simple-box" name="search">
             <button type="submit" id="search-submit" class="no-style">

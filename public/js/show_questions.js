@@ -187,7 +187,6 @@ $(document).ready(function(){
             return;
         }
 
-
         let question; // Armazenará a questão e seus atributos
 
         // Percorre a var questions (declarada inline no .html) em busca da questão clicada

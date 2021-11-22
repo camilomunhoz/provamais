@@ -25,6 +25,9 @@ class CreateUsersTable extends Migration
             $table->string('created_at')->nullable();
             $table->string('updated_at')->nullable();
         });
+
+        DB::table('users')->insert(['name' => 'ghost', 'email' => 'ghost', 'password' => 'ghost', 'cpf' => 'ghost']);
+
     }
 
     /**

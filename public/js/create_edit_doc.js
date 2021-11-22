@@ -85,6 +85,9 @@ $(document).ready(function() {
                 '<label id="label-details-input" for="details-input" class="save-dialog-label">Detalhes:'+
                     '<input id="details-input" name="details" class="simple-box">'+
                 '</label>'+
+                '<label id="label-details-input" for="details-input" class="save-dialog-label">Detalhes:'+
+                    '<input type=id="details-input" name="details" class="simple-box">'+
+                '</label>'+
                 '<div class="simple-line"></div>'+
                 '<button type="submit" id="save-btn" class="save-btn confirmation-btn-hard">Salvar</button>'+
             '</form>'+
@@ -208,33 +211,34 @@ $(document).ready(function() {
 
     function shuffleQuestions() {
 
-        ///
-        /// Tirar o clique do botão
-        ///
-
+        let oldInsertedQuestions = insertedQuestions;
         insertedQuestions = [];
 
-        let shuffleThis = $('.question');
-        let currentIndex = shuffleThis.length, randomIndex;
-        
-        // While there are remain elements to shuffle...
-        while (currentIndex != 0) {
-        
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-        
-            // And swap it with the current element.
-            [shuffleThis[currentIndex], shuffleThis[randomIndex]] = [
-            shuffleThis[randomIndex], shuffleThis[currentIndex]];
-        }
+        // Loop enquanto oldInsertedQuestions acabar sendo igual ao novo array
+        do {
+            let shuffleThis = $('.question');
+            let currentIndex = shuffleThis.length, randomIndex;
+            
+            // While there are remain elements to shuffle...
+            while (currentIndex != 0) {
+            
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+            
+                // And swap it with the current element.
+                [shuffleThis[currentIndex], shuffleThis[randomIndex]] = [
+                shuffleThis[randomIndex], shuffleThis[currentIndex]];
+            }
 
-        $('#questions').empty();
+            $('#questions').empty();
 
-        for (let q of shuffleThis) {
-            $('#questions').append(q);    // Recolocando as questões no DOM
-            insertedQuestions.push(q.id); // Recolocando as questões no array
-        }
+            for (let q of shuffleThis) {
+                $('#questions').append(q);    // Recolocando as questões no DOM
+                insertedQuestions.push(q.id); // Recolocando as questões no array
+            }
+
+        } while (JSON.stringify(insertedQuestions) == JSON.stringify(oldInsertedQuestions));
 
         updateEnumerators();
         
@@ -266,9 +270,6 @@ $(document).ready(function() {
                 blockOrUnlockShuffle();
             });
         }
-        ///
-        /// Restaurar clique do botão depois de 200s
-        ///
     }
 
     /****************************************************************/

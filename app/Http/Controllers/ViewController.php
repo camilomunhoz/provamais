@@ -13,6 +13,8 @@ use App\Models\Question;
 use App\Models\Document;
 use App\Models\DocumentQuestion;
 use App\Models\FavoriteQuestion;
+use App\Models\HeaderImage;
+use App\Models\Instruction;
 
 class ViewController extends Controller
 {
@@ -255,6 +257,19 @@ class ViewController extends Controller
             }
 
             return view('profile', ['user' => $user]);
+        }
+        return redirect('/');
+    }
+
+    // View "Personalizar documentos"
+    public function customization(){
+        if(Auth::check()){
+            $user = Auth::user();
+            
+            $header_imgs = HeaderImage::where('user_id', Auth::user()->id)->get();
+            $instructions= Instruction::where('user_id', Auth::user()->id)->get();
+
+            return view('customization', ['images' => $header_imgs, 'instructions' => $instructions]);
         }
         return redirect('/');
     }

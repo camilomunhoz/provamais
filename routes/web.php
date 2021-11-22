@@ -24,6 +24,7 @@ use App\Http\Controllers\DocQuestionsController;
 use App\Http\Controllers\DocController;
 use App\Http\Controllers\RemoveQuestionController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\CustomizeController;
 
 // Página inicial
 Route::get('/', [ViewController::class, 'index']);
@@ -65,6 +66,13 @@ Route::post('/update_profile', [UpdateProfileController::class, 'update_profile'
 // PDF
 Route::get('/pdf/{id}', [PDFController::class, 'pdf_doc']);
 Route::get('/pdf/{id}/answers', [PDFController::class, 'pdf_answers']);
+
+// Personalização do documento
+Route::get('/customization', [ViewController::class, 'customization']);
+Route::post('/customization/store/img', [CustomizeController::class, 'store_image']);
+Route::post('/customization/store/instruction', [CustomizeController::class, 'store_instruction']);
+Route::get('/customization/remove/img/{id}', [CustomizeController::class, 'remove_image']);
+Route::get('/customization/remove/instruction/{id}', [CustomizeController::class, 'remove_instruction']);
 
 // Ajuda
 Route::get('/help', [ViewController::class, 'help']);

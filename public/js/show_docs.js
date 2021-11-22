@@ -119,9 +119,8 @@ $(document).ready(function(){
                     '</div>'+
                 '</div>'
             );
-            console.log($('#info .tip'));
-            $('#info').on('mouseenter', () => { $('#info .tip-msg').css('opacity', '1') } )
-            $('#info').on('mouseleave', () => { $('#info .tip-msg').css('opacity', '0') } )
+            $('#info').on('mouseenter', () => { $('#info .tip-msg').show() } )
+            $('#info').on('mouseleave', () => { $('#info .tip-msg').hide() } )
         }
 
         // Permite o redimensionamento automático da textarea do nome do doc

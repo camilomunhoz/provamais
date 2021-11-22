@@ -114,8 +114,9 @@ input:focus, textarea:focus, select:focus{
     font-size: 14px;
     max-width: 300px;
     text-align: center;
-    opacity: 0;
-    transition: opacity .2s ease;
+    /* opacity: 0; */
+    /* transition: opacity .2s ease; */
+    display: none;
 }
 .tip-msg > div {
     position: relative;

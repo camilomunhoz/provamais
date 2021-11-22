@@ -18,6 +18,18 @@
     background-color: #ccc;
     border-radius: 99px;
 }
+#customize-btn {
+    color: var(--bgcolor1);
+    font-weight: bold;
+    border-bottom: 2px solid var(--bgcolor1);
+    cursor: pointer;
+    margin-right: 20px;
+    padding-bottom: 2px;
+    transition: padding .2s ease;
+}
+#customize-btn:hover {
+    padding-bottom: 5px;
+}
 
 /* Card do documento */
 
