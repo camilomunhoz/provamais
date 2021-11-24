@@ -163,6 +163,7 @@ nav a{
         transparent 92.5%
     );
     margin-left: -20px;
+    margin-right: 10px;
     cursor: pointer;
 }
 .nav2-section:hover {
@@ -374,6 +375,7 @@ header{
     .nav-section:not(.help):not(.logout):hover {
         background-image: none;
         padding-bottom: 8px;
+        margin-right: 0px;
     }
     #search-box {
         max-width: none;

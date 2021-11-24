@@ -124,12 +124,27 @@ class ViewController extends Controller
                     
                     $q['options'] = $q->options;
 
-                    if ($q->user->name == $user->name) {
-                        $q->owner = 'você mesmo';
+                    // Se ela não é uma duplicata, ainda tem que conferir quem é o dono pois pode ser uma favoritada
+                    if (!$q->duplicated_from_user) {
+                        if ($q->user_id === Auth::id()) {
+                            $q->owner = 'você mesmo';
+                        }
+                        else {
+                            $owner_name = explode(' ', $q->user->name);
+                            $q->owner = $owner_name[0];
+                        }
                     }
+                    // Se ela é uma duplicata, é imprescindível conferir quem é o dono: o logado ou outro user
                     else {
-                        $username = explode(' ', $q->user->name);
-                        $q->owner = $username[0];
+                        $creator = User::firstWhere('id', $q->duplicated_from_user);
+                        if ($creator->id === Auth::id()) {
+                            $q->owner = 'você mesmo';
+                        }
+                        else {
+                            $creator_name = explode(' ', $creator->name);
+                            $q->owner = $creator_name[0];
+                        }
+                        $q->user->profile_pic = $creator->profile_pic;
                     }
 
                     if(!$q->user->profile_pic){
@@ -189,33 +204,38 @@ class ViewController extends Controller
             $user = Auth::user();
 
             $questions = Question::where('private', 0)->get();
-            foreach ($questions as $q){
-                $q['subject_name'] = $q->subject->name;
-                $q['options'] = $q->options;
-                
-                $q['options'] = $q->options;
+            if(count($questions) == 0) {
+                $questions[0] = 'empty';
+            }
+            else {
+                foreach ($questions as $q){
+                    $q['subject_name'] = $q->subject->name;
+                    $q['options'] = $q->options;
+                    
+                    $q['options'] = $q->options;
 
-                if ($q->user->name == $user->name) {
-                    $q->owner = 'você mesmo';
-                }
-                else {
-                    $username = explode(' ', $q->user->name);
-                    $q->owner = $username[0];
-                }
+                    if ($q->user->name == $user->name) {
+                        $q->owner = 'você mesmo';
+                    }
+                    else {
+                        $username = explode(' ', $q->user->name);
+                        $q->owner = $username[0];
+                    }
 
-                if(!$q->user->profile_pic){
-                    $q->user->profile_pic = 'user_pic_placeholder.png';
-                }
+                    if(!$q->user->profile_pic){
+                        $q->user->profile_pic = 'user_pic_placeholder.png';
+                    }
 
-                // Retirando dados sensíveis e deixando somente 'id' e 'profile_pic'
-                unset($q->user['name']);
-                unset($q->user['cpf']);
-                unset($q->user['password']);
-                unset($q->user['pix']);
-                unset($q->user['email']);
-                unset($q->user['description']);
-                unset($q->user['created_at']);
-                unset($q->user['updated_at']);
+                    // Retirando dados sensíveis e deixando somente 'id' e 'profile_pic'
+                    unset($q->user['name']);
+                    unset($q->user['cpf']);
+                    unset($q->user['password']);
+                    unset($q->user['pix']);
+                    unset($q->user['email']);
+                    unset($q->user['description']);
+                    unset($q->user['created_at']);
+                    unset($q->user['updated_at']);
+                }
             }
             $username = explode(' ', $user->name);
             $user->name = $username[0];
@@ -226,7 +246,15 @@ class ViewController extends Controller
             // Selecionando as favoritas
             $favorites = FavoriteQuestion::where('user_id', $user->id)->get();
 
-            return view('search_quests', ['user' => $user, 'questions' => $questions, 'favorites' => $favorites]);
+            // Selecionando as disciplinas
+            $subjects = Subject::all();
+
+            return view('search_quests', [
+                'user' => $user,
+                'questions' => $questions,
+                'favorites' => $favorites,
+                'subjects' => $subjects,
+            ]);
         }
         return redirect('/');
     }

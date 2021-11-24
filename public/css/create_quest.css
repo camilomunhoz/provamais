@@ -339,6 +339,12 @@
 .is-private .checkbox-label:last-of-type{
     margin-left: 15px;
 }
+#duplication-warning {
+    font-size: 14px;
+    color: #777;
+    font-style: italic;
+    margin-left: 15px;
+}
 
 /* Botões de salvar */
 

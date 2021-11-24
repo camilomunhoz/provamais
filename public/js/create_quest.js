@@ -523,6 +523,22 @@ $(document).ready(function() {
             }
         }
         /******** Setando privacidade ********/
-        question.private ? $('#yes')[0].checked = true : $('#no')[0].checked = true;
+        if (question.duplicated_from_user != null && question.duplicated_from_user != question.user_id) {
+            $('#no').parent().remove();
+            $('#yes')[0].checked = true;
+            $('#yes').attr('disabled', 'disabled');
+            $('#yes').parent().css({
+                userSelect: 'none',
+                opacity: '.3',
+                cursor: 'default',
+                marginLeft: 0,
+            });
+            $('.is-private').append(
+                '<span id="duplication-warning">Esta questão é uma adaptação de outro usuário, por isso será salva de forma privada.</span>'
+            );
+        }
+        else {
+            question.private ? $('#yes')[0].checked = true : $('#no')[0].checked = true;
+        }
     }
 });

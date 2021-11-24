@@ -78,7 +78,7 @@
                 <ul>
                     <li>Leia e realize as questões com atenção;</li>
                     <li>Utilize caneta esferográfica azul ou preta;</li>
-                    <li>Ao término da prova, levante a mão e aguarde o(a) professor(a);</li>
+                    <li>Ao término da avaliação, levante a mão e aguarde o(a) professor(a);</li>
                 </ul>
             </div>
         </div>

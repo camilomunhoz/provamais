@@ -127,7 +127,14 @@ $(document).ready(function(){
         $('.favorite').on('click', (e) => { favorite($(e.target).data('question-id')); })
         $('#results').css({display: 'flex'}).hide().fadeIn(300);
     }
-    appendQuests();
+    if ($('#public-questions').length) {
+        appendQuests();
+    }
+    else {
+        $('#results').fadeIn(200).append(
+            '<span class="search-msg">Selecione e aplique os filtros desejados para começar.</span>'
+        );
+    }
 
 
 /***************************************************/
@@ -190,7 +197,7 @@ $(document).ready(function(){
         let question; // Armazenará a questão e seus atributos
 
         // Percorre a var questions (declarada inline no .html) em busca da questão clicada
-        for(q in questions){
+        for(let q in questions){
             if(questions[q].id == questId){
                 question = questions[q];
                 break;
@@ -204,7 +211,6 @@ $(document).ready(function(){
                 '<div id="left-info">'+
                     '<div id="owner">'+
                         '<img id="owner-pic" src="/img/users_profile_pics/'+question.user.profile_pic+'">'+
-                        '<span>Cadastrada por<br><a href="/profile/'+question.user.id+'" target="_blank">'+question.owner+'</a></span>'+
                     '</div>'+
                     '<div id="tags">'+
                         '<div class="question-tag tag-subject">'+question.subject_name+'</div>'+
@@ -222,9 +228,22 @@ $(document).ready(function(){
             '</div>'
         );
 
+        // Adiciona o dono da questão
+        if (!question.duplicated_from_user) {
+            $('#owner').append(
+                '<span>Cadastrada por<br><a href="/profile/'+question.user.id+'" target="_blank">'+question.owner+'</a></span>'
+            );
+        }
+        else {
+            $('#owner').append(
+                '<span>Adaptada de<br><a href="/profile/'+question.duplicated_from_user+'" target="_blank">'+question.owner+'</a></span>'
+            );
+        }
+
         // Adiciona a estrela de favorito caso a questão não seja do próprio user
-        try {
-            if (question.user_id != userId) {
+        if (question.user_id != userId) {
+            // Botão da estrela de favorito
+            try {
                 if (favorites.find((fav) => {
                         if (fav.question_id == question.id) return true;
                         else return false;
@@ -240,19 +259,25 @@ $(document).ready(function(){
                     );
                 }
                 $('#favorite-this').on('click', () => { favoriteThis(question.identifier) });
-            }
-        } catch (e) {}
+            } catch (e) {}
 
+        }
+
+        // Insere botão de editar uma cópia da questão
+        $('#right-info').prepend(
+            '<a href="duplicate_quest/'+question.id+'"><img id="duplicate-question" src="/img/icons/ico_duplicate_quest.svg" title="Editar uma cópia"></a>'
+        );
+        
         // Insere botões de editar e apagar nas questões próprias (nos detalhes)
         if (question.user_id == userId) {
             $('#right-info').prepend(
-                '<div class="question-action remove" data-this-question-id="'+questions[q].id+'" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'+
-                '<a href="/edit_quest/'+questions[q].id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'
+                '<div class="question-action remove" data-this-question-id="'+question.id+'" title="Apagar"><img class="trash" src="/img/icons/ico_trash.png"></div>'+
+                '<a href="/edit_quest/'+question.id+'" class="question-action edit" title="Editar"><img src="/img/icons/ico_edit.svg"></a>'
             );
-            $('.remove[data-this-question-id="'+questions[q].id+'"]').on('click', () => {
-                $('.remove[data-this-question-id="'+questions[q].id+'"]').off('click').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
-                $('.remove[data-this-question-id="'+questions[q].id+'"] img').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
-                $.get('/remove_quest/'+questions[q].id, (response) => {
+            $('.remove[data-this-question-id="'+question.id+'"]').on('click', () => {
+                $('.remove[data-this-question-id="'+question.id+'"]').off('click').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
+                $('.remove[data-this-question-id="'+question.id+'"] img').css({cursor: 'progress', opacity: '.5', mouseEvents: 'none'});
+                $.get('/remove_quest/'+question.id, (response) => {
                     $('#filters').submit();
                     closeDetails();
                 });
@@ -260,7 +285,7 @@ $(document).ready(function(){
         }
 
         // Caso seja privada
-        if (questions[q].private) {
+        if (question.private) {
             $('#tags').prepend(
                 '<img src="/img/icons/ico_lock.svg" style="width: 10px;" title="Só você tem acesso a esta questão.">'
             );
@@ -388,7 +413,7 @@ $(document).ready(function(){
             
             // Reativa os eventos da estrela
             $('#favorite-this').removeAttr('style');
-            // $('#favorite-this').on('click', () => { favoriteThis(id) });
+            $('#favorite-this').on('click', () => { favoriteThis(id) });
 
             favorites = response.favorites; // Atualiza as favoritas
 
@@ -425,7 +450,10 @@ $(document).ready(function(){
             }
         }
     }
-    updateFilters();
+    // Caso seja "Minhas questões", insere somente as disciplinas que o usuário possui questões
+    if ($('#public-questions').length) {
+        updateFilters();
+    }
 
 /******************************************************/
 /********* Permite marcar todas as checkboxes *********/
@@ -457,7 +485,7 @@ $(document).ready(function(){
 /********* Impede que deixe grupos de checkboxes sem marcar nenhum *********/
 /***************************************************************************/
 
-    $('.checkbox-label input').on('change', () => {
+    function checkFilters() {
         let filterSubjectsCheck = false;
 
         // Na aba "Procurar questões", não há esses filtros, então a condição será verdadeira sempre
@@ -490,7 +518,9 @@ $(document).ready(function(){
         else {
             $('#filter-btn').removeAttr('style').attr('type', 'submit');  
         }
-    });
+    }
+    checkFilters();
+    $('.checkbox-label input').on('change', checkFilters);
 
 /******************************************************/
 /*********** Faz a filtragem dos resultados ***********/

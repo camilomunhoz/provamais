@@ -42,7 +42,7 @@
                     <span>Filtros</span>
                 </div>
                 <div>
-                    <x-checkbox id="all-questions" name="all" checked="checked">Todas</x-checkbox>
+                    <x-checkbox id="all-questions" name="all">Todas</x-checkbox>
 
                 </div>
             </div>
@@ -56,7 +56,9 @@
 
                 <span class="filter-section">Disciplinas</span>
                 <div id="filter-subjects">
-                    @if ($questions[0] == 'empty') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nenhuma @endif
+                    @foreach($subjects as $subject)
+                        <x-checkbox id="{{$subject->id}}" name="subjects[]" value="{{$subject->id}}">{{$subject->name}}</x-checkbox>
+                    @endforeach
                 </div>
 
             </div>
@@ -79,10 +81,6 @@
         <div id="results">
             @if ($questions[0] == 'empty')
                 <span class="search-msg">Não há questões para exibir.</span>
-                <div id="create-tip">
-                    <span>Clique aqui para<br>cadastrar uma questão</span><br>
-                    <img src="/img/icons/ico_curved_arrow.svg">
-                </div>
             @endif
             
             <script src="/js/show_questions.js"></script>

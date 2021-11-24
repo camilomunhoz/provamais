@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('duplicated_from_user')->unsigned()->nullable();
             $table->string('identifier');
             $table->string('type');
             $table->boolean('private');

@@ -25,6 +25,7 @@ use App\Http\Controllers\DocController;
 use App\Http\Controllers\RemoveQuestionController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\CustomizeController;
+use App\Http\Controllers\DuplicatedQuestionsController;
 
 // Página inicial
 Route::get('/', [ViewController::class, 'index']);
@@ -48,6 +49,7 @@ Route::get('/edit_quest/{id}', [ViewController::class, 'edit_quest']);
 Route::get('/remove_quest/{id}', [RemoveQuestionController::class, 'remove_quest']);
 Route::get('/search_quests', [ViewController::class, 'search_quests']);
 Route::get('/insert_doc_quests', [DocQuestionsController::class, 'get']);
+Route::get('/duplicate_quest/{id}', [DuplicatedQuestionsController::class, 'duplicate']);
 
 Route::post('/store_question', [StoreQuestionController::class, 'store_question']);
 Route::post('/update_question', [UpdateQuestionController::class, 'update_question']);

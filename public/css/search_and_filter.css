@@ -313,7 +313,7 @@
     opacity: .6;
 }
 .question-action img:hover{
-    opacity: 1;
+    opacity: .8;
 }
 .edit img{
     width: 16px;
@@ -371,4 +371,16 @@
 }
 #favorite-this:hover{
     opacity: .4;
+}
+
+/* Duplicar questão - "Editar cópia" */
+
+#duplicate-question {
+    transition: opacity .1s ease;
+    opacity: .6;
+    width: 23px;
+    cursor: pointer;
+}
+#duplicate-question:hover {
+    opacity: .8;
 }

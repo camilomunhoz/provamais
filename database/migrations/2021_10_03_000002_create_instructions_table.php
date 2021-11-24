@@ -20,7 +20,7 @@ class CreateInstructionsTable extends Migration
             $table->text('instructions');
         });
 
-        DB::table('instructions')->insert(['user_id' => '1', 'name' => 'Padrão', 'instructions' => '["Leia e realize as questões com atenção;","Utilize caneta esferográfica azul ou preta;","Ao término da prova, levante a mão e aguarde o(a) professor(a);"]']);
+        DB::table('instructions')->insert(['user_id' => '1', 'name' => 'Padrão', 'instructions' => '["Leia e realize as questões com atenção;","Utilize caneta esferográfica azul ou preta;","Ao término da avaliação, levante a mão e aguarde o(a) professor(a);"]']);
 
     }
 
