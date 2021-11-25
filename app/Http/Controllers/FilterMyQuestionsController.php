@@ -124,12 +124,27 @@ class FilterMyQuestionsController extends Controller
                 $q['subject_name'] = $q->subject->name;
                 $q['options'] = $q->options;
                 
-                if ($q->user->name == Auth::user()->name) {
-                    $q->owner = 'você mesmo';
+                // Se ela não é uma duplicata, ainda tem que conferir quem é o dono pois pode ser uma favoritada
+                if (!$q->duplicated_from_user) {
+                    if ($q->user_id === Auth::id()) {
+                        $q->owner = 'você mesmo';
+                    }
+                    else {
+                        $owner_name = explode(' ', $q->user->name);
+                        $q->owner = $owner_name[0];
+                    }
                 }
+                // Se ela é uma duplicata, é imprescindível conferir quem é o dono: o logado ou outro user
                 else {
-                    $username = explode(' ', $q->user->name);
-                    $q->owner = $username[0];
+                    $creator = User::firstWhere('id', $q->duplicated_from_user);
+                    if ($creator->id === Auth::id()) {
+                        $q->owner = 'você mesmo';
+                    }
+                    else {
+                        $creator_name = explode(' ', $creator->name);
+                        $q->owner = $creator_name[0];
+                    }
+                    $q->user->profile_pic = $creator->profile_pic;
                 }
 
                 if(!$q->user->profile_pic){

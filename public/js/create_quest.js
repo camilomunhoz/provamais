@@ -6,6 +6,7 @@ $(document).ready(function() {
 /*******                O código exclusivo para a edição de questões está ao final, após o próximo divisor.                         ********/
 /*******************************************************************************************************************************************/
 /*******************************************************************************************************************************************/
+console.log(origin);
 
     /********* Esconde os spans de erro *********/
     $('.error-feedback').hide();
@@ -287,6 +288,8 @@ $(document).ready(function() {
     $('#new-quest').on('submit', (e) => {
         e.preventDefault();
         let submitterButton = $(e.originalEvent.submitter).attr('id');
+        $('.save-btn').css({pointerEvents: 'none', userSelect: 'none', opacity: '.4', cursor: 'default'}).attr('type', 'button');
+        $('body').css('cursor', 'progress');
 
         // Define o tipo de questão de acordo com a que está selecionada
         let questType = '';
@@ -364,8 +367,13 @@ $(document).ready(function() {
             },
             body: formData,
         }).then( response => {
+            $('.save-btn').removeAttr('style').attr('type', 'submit');
+            $('body').removeAttr('style');
             if (response.ok) {
-                if (submitterButton == 'save-and-leave') {
+                if (origin == 'doc') {
+                    close();
+                }
+                else if (submitterButton == 'save-and-leave') {
                     location.replace('/my_quests');
                 }
                 else if (submitterButton == 'save-and-other') {

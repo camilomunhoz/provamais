@@ -56,6 +56,7 @@
             <div id="add-question-dialog-header">
                 <div id="add-question-dialog-left-items">
                     <span id="add-question-header-title">Selecione as questões desejadas.</span>
+                    <img id="reload" src="/img/icons/ico_reload.png" alt="Atualizar resultados" title="Atualizar resultados">
                 </div>
                 <div id="add-question-dialog-right-items">
                     <img class="x" src="/img/icons/ico_plus.svg" alt="X" title="Fechar">

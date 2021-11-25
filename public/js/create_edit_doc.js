@@ -559,6 +559,13 @@ $(document).ready(function() {
             }
         });
     });
+    // Dá reload nos resultados (filtra de novo)
+    $('#reload').on('click', (e) => {
+        $(e.currentTarget).removeClass('pulsate');
+        if (!$('#filter-btn').attr('style')) {
+            $('#filters').submit();
+        } 
+    });
 
     /***************************************************/
     /******** Exibe detalhes da questão clicada ********/
@@ -633,6 +640,20 @@ $(document).ready(function() {
                 );
             }
             $('#favorite-this').on('click', () => { favoriteThis(question.identifier) });
+        }
+        
+        // Insere botão de editar uma cópia da questão
+        $('#right-info').prepend(
+            '<a href="/duplicate_quest/'+question.id+'?fromdoc" target="_blank"><img id="duplicate-question" src="/img/icons/ico_duplicate_quest.svg" title="Duplicar e editar"></a>'
+        );
+        $('#duplicate-question').on('click', () => {$('#reload').addClass('pulsate')});
+
+        // Insere botão de editar em questões do próprio user
+        if (question.user_id == userId) {
+            $('#right-info').prepend(
+                '<a href="/edit_quest/'+question.id+'?fromdoc" class="question-action edit" title="Editar" target="_blank"><img src="/img/icons/ico_edit.svg"></a>'
+            );
+            $('.edit').on('click', () => {$('#reload').addClass('pulsate')});
         }
 
         if (questions[q].private) {

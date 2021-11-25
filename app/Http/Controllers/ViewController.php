@@ -121,7 +121,6 @@ class ViewController extends Controller
             else {
                 foreach ($questions as $q){
                     $q['subject_name'] = $q->subject->name;
-                    
                     $q['options'] = $q->options;
 
                     // Se ela não é uma duplicata, ainda tem que conferir quem é o dono pois pode ser uma favoritada
@@ -192,7 +191,12 @@ class ViewController extends Controller
                 $subjects = Subject::all();
                 $question->options;
                 $identifier = $question->identifier;
-                return view('edit_quest', ['subjects' => $subjects, 'identifier' => $identifier, 'question' => $question]);
+                if (isset($_GET['fromdoc'])) {
+                    return view('edit_quest', ['subjects' => $subjects, 'identifier' => $identifier, 'question' => $question, 'origin' => 'doc']);
+                }
+                else {
+                    return view('edit_quest', ['subjects' => $subjects, 'identifier' => $identifier, 'question' => $question]);
+                }
             }
         }
         return redirect('/');

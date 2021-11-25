@@ -265,7 +265,7 @@ $(document).ready(function(){
 
         // Insere botão de editar uma cópia da questão
         $('#right-info').prepend(
-            '<a href="duplicate_quest/'+question.id+'"><img id="duplicate-question" src="/img/icons/ico_duplicate_quest.svg" title="Editar uma cópia"></a>'
+            '<a href="duplicate_quest/'+question.id+'"><img id="duplicate-question" src="/img/icons/ico_duplicate_quest.svg" title="Duplicar e editar"></a>'
         );
         
         // Insere botões de editar e apagar nas questões próprias (nos detalhes)

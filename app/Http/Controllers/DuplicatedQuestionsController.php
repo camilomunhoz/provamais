@@ -48,7 +48,12 @@ class DuplicatedQuestionsController extends Controller
                         $option->timestamps = false;
                         $option->save();
                     }
-                    return redirect("/edit_quest/{$new_question->id}");
+                    if (isset($_GET['fromdoc'])) {
+                        return redirect("/edit_quest/{$new_question->id}")->with(['duplicated' => 'Questão duplicada.', 'origin' => 'doc']);
+                    }
+                    else {
+                        return redirect("/edit_quest/{$new_question->id}")->with('duplicated', 'Questão duplicada.');
+                    }
                 }
                 else return redirect('/search_quests');
             }

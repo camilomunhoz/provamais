@@ -263,6 +263,11 @@ input:focus, textarea:focus, select:focus{
     66% { transform: rotate(-0.5deg) }
     to { transform: rotate(0); filter: brightness(1)}
 }
+@keyframes pulsate {
+    from { transform: scale(1); opacity: .4; }
+    50% { transform: scale(1.3); opacity: .6; }
+    to { transform: scale(1); opacity: .4; }
+}
 .look-at-me {
     animation-name: lookAtMe;
     animation-duration: .3s;
@@ -272,4 +277,9 @@ input:focus, textarea:focus, select:focus{
     animation-name: lookAtMeMild;
     animation-duration: .3s;
     animation-iteration-count: 2;
+}
+.pulsate {
+    animation-name: pulsate;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
 }

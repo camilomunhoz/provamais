@@ -18,21 +18,34 @@
 @endsection
 
 {{-- Define o título do header --}}
-@section('section-title', 'Edição de questão')
+@if(session('duplicated') == null)
+    @section('section-title', 'Edição de questão')
+@else
+    @section('section-title', 'Editando questão duplicada')
+@endif
 
-{{-- Adiciona um botão de cancelar no header --}}
-@section('add-header-section')
-    <div class="header-section cancel-action">
-        <span>Cancelar</span>
-        <img src="/img/icons/ico_plus.svg" alt="X">
-    </div>
-@endsection
+{{-- Adiciona um botão de cancelar no header caso não seja uma duplicação --}}
+@if(session('duplicated') == null)
+    @section('add-header-section')
+        <div class="header-section cancel-action">
+            <span>Cancelar</span>
+            <img src="/img/icons/ico_plus.svg" alt="X">
+        </div>
+    @endsection
+@endif
 
 {{-- Conteúdo da seção --}}
 @section('section_content')
 
     {{-- Define variável que será usada em /js/create_edit_quest.js para acessar os detalhes da questão --}}
     <script> var question = {!! json_encode($question) !!}; </script>
+
+    {{-- Define variável que será usada em /js/create_edit_quest.js para saber a origem da edição --}}
+    @if(session('origin') == 'doc' || isset($origin))
+        <script> var origin = 'doc'; </script>
+    @else
+        <script> var origin = 'questions'; </script>
+    @endif    
     
     <script type="text/javascript" src="/js/create_quest.js"></script>
 
