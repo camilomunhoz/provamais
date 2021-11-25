@@ -550,6 +550,7 @@ $(document).ready(function() {
                     questions = response.questions;
                     questions.sort((a,b) => (a.content > b.content) ? 1 : ((b.content > a.content) ? -1 : 0)); // Coloca as questões por ordem de disciplina
                     questions.sort((a,b) => (a.subject_id > b.subject_id) ? 1 : ((b.subject_id > a.subject_id) ? -1 : 0)); // Coloca as questões por ordem de disciplina
+                    console.log(questions);
                 } catch (e) {
                     // favorites = response;
                     questions = response;
@@ -601,7 +602,6 @@ $(document).ready(function() {
                 '<div id="left-info">'+
                     '<div id="owner">'+
                         '<img id="owner-pic" src="/img/users_profile_pics/'+question.user.profile_pic+'">'+
-                        '<span>Cadastrada por<br><a href="/profile/'+question.user.id+'" target="_blank">'+question.owner+'</a></span>'+
                     '</div>'+
                     '<div id="tags">'+
                         '<div class="question-tag tag-subject">'+question.subject_name+'</div>'+
@@ -622,6 +622,18 @@ $(document).ready(function() {
                 '<span id="question-statement"></span>'+
             '</div>'
         );
+
+        // Adiciona o dono da questão
+        if (!question.duplicated_from_user) {
+            $('#owner').append(
+                '<span>Cadastrada por<br><a href="/profile/'+question.user.id+'" target="_blank">'+question.owner+'</a></span>'
+            );
+        }
+        else {
+            $('#owner').append(
+                '<span>Adaptada de<br><a href="/profile/'+question.duplicated_from_user+'" target="_blank">'+question.owner+'</a></span>'
+            );
+        }
 
         // Adiciona a estrela de favorito caso a questão não seja do próprio user
         if (question.user_id != userId) {
