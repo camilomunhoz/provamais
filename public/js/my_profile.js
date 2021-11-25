@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
     
     $('#my-profile-alterpic').on('change', previewProfilePic);
     $('#reset-my-profile-pic').on('change', resetProfilePic);
@@ -34,4 +33,11 @@ $(document).ready(function(){
         $('#wrp-my-profile-pic label').hide();
         $('#reset-my-profile-pic').attr('value', 1);
     }
+
+    /*** Bloqueia botão de envio quando envia ***/    
+    $('#my-profile').on('submit', () => { 
+        $('.save-btn').css({pointerEvents: 'none', userSelect: 'none', opacity: '.4', cursor: 'default'}).attr('type', 'button');
+        $('body').css('cursor', 'progress');
+    });
+
 });

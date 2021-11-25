@@ -186,6 +186,12 @@ $(document).ready(function() {
 
     }
 
+    // Bloqueia botão de enviar quando aperta nele (impede que crie várias)
+    $('#save-dialog').on('submit', () => { 
+        $('.save-btn').css({pointerEvents: 'none', userSelect: 'none', opacity: '.4', cursor: 'default'}).attr('type', 'button');
+        $('body').css('cursor', 'progress');
+    });
+
     /****************************************************/
     /*********** Fecha overlay de salvamento ************/
     /****************************************************/
