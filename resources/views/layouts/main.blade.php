@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>ProvA+ @yield('title')</title>
 		<link rel="stylesheet" href= @yield('css') type="text/css">
-        <link rel="shortcut icon" href="/img/icone.ico">
 
         <script src="/js/jquery.js"></script>
         <script src="/js/jqueryUI/jquery-ui.js"></script> {{-- bem pesado, tem que dar um jeito nisso--}}
