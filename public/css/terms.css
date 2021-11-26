@@ -1,0 +1,59 @@
+@import url(main.css);
+
+#wrapper {
+    min-height: 100%;
+    width: 100%;
+    background-color: var(--bgcolor3);
+    padding: 10vw 20%;
+}
+#dialog {
+    max-width: 900px;
+    display: block;
+    margin: 0 auto;
+    padding: 50px;
+    padding-top: 30px;
+    position: relative;
+    border-radius: 10px;
+    background-color:white;
+}
+#logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-85%);
+    height: 60px;
+    width: 100px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(to top, white 9px, #e9e9e9 9px, white 17px )
+}
+#logo img {
+    width: 80%;
+    margin-top: -8px;
+}
+body::-webkit-scrollbar {
+    width: 10px;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: var(--color1);
+}
+h1, h2 {
+    margin: 0;
+    margin-bottom: 20px;
+    color: var(--bgcolor3);
+    word-break: break-word;
+    font-weight: 100;
+}
+#terms {
+    padding: 20px;
+    padding-top: 15px;
+    font-size: 14px;
+    color: #666;
+    border-radius: 5px;
+    text-align: justify;
+    height: 450px;
+    overflow-y: auto;
+    background-color: #eee;
+}

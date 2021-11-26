@@ -8,19 +8,19 @@ $(document).ready(function(){
     $('.frases-wrp').children().hide();  // esconde todas as frases
     $('#slider').find('img').hide();     // esconde todas as figuras
 
-    function changeSlide(event){
+    function changeSlide(trigger){
         
         $('.d'+atual).animate({opacity:0.2});
         $('.f'+atual).hide();
         $('.s'+atual).hide();
         
-        if(atual==0||event.target.id=='right-arrow'){ // esse 'atual==0' é para fazer o carregamento do primeiro slide
+        if(atual==0||trigger=='right-arrow'){ // esse 'atual==0' é para fazer o carregamento do primeiro slide
             atual++;
             if(atual==N_SLIDES+1){ // se não há mais à direita, vai ao primeiro
                 atual = 1;
             }
         }
-        else if(event.target.id=='left-arrow'){
+        else if(trigger=='left-arrow'){
             atual--;
             if(atual==0){ // se não há mais à esquerda, vai ao último
                 atual = N_SLIDES;
@@ -31,9 +31,14 @@ $(document).ready(function(){
         $('.f'+atual).fadeIn(400);
         $('.s'+atual).fadeIn(400);
     }
+    changeSlide();
 
-    $('#left-arrow').on('click', changeSlide);
-    $('#right-arrow').on('click', changeSlide);
+    $('#left-arrow').on('click', () => {changeSlide('left-arrow')});
+    $('#right-arrow').on('click', () => {changeSlide('right-arrow')});
+
+    setInterval(() => {
+        changeSlide('right-arrow');
+    }, 5000);
 
 
     /****** fim slider ******/
@@ -115,5 +120,27 @@ $(document).ready(function(){
     
     /****** fim responsividade Mobile ******/
 
-    $(window).load(showOverlay());
+    $(window).on('load', () => {$('#btn-go-signup').trigger('click')});
+
+    $('form').on('submit', () => {
+        $('body').css('cursor', 'progress');
+        $('#btn-login, #btn-signup').css({
+            userSelect: 'none',
+            pointerEvents: 'none',
+            opacity: '.6',
+        });
+    });
+
+    $('#terms-of-use').on('change', () => {
+        if ($('#terms-of-use')[0].checked) {
+            $('#btn-signup').css({
+                userSelect: 'all',
+                pointerEvents: 'all',
+                opacity: '1',
+            });
+        }
+        else {
+            $('#btn-signup').removeAttr('style');
+        }
+    });
 })

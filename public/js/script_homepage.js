@@ -38,7 +38,7 @@ $(document).ready(function(){
 
     setInterval(() => {
         changeSlide('right-arrow');
-    }, 4000);
+    }, 5000);
 
 
     /****** fim slider ******/
@@ -124,5 +124,36 @@ $(document).ready(function(){
             opacity: '.6',
         });
     });
+
+    $('#terms-of-use').on('change', () => {
+        if ($('#terms-of-use')[0].checked) {
+            $('#btn-signup').css({
+                userSelect: 'all',
+                pointerEvents: 'all',
+                opacity: '1',
+            });
+        }
+        else {
+            $('#btn-signup').removeAttr('style');
+        }
+    });
+
+    // function checkSignupInputs() {
+    //     for (let i of $('#form-signup input')) {
+    //         if(i.value == '') {
+    //             $('#btn-signup').css({
+    //                 userSelect: 'none',
+    //                 pointerEvents: 'none',
+    //                 opacity: '.6',
+    //             });
+    //             return true;
+    //         }
+    //         $('#btn-signup').removeAttr('style');
+    //         return false;
+    //     }
+    // }
+    // checkSignupInputs();
+    // $('#form-signup input').on('change', () => {checkSignupInputs()});
+    // $('#form-signup input').on('input', () => {checkSignupInputs()});
 
 })

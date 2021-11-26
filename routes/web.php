@@ -78,6 +78,7 @@ Route::get('/customization/remove/instruction/{id}', [CustomizeController::class
 
 // Ajuda
 Route::get('/help', [ViewController::class, 'help']);
+Route::get('/terms_of_use', [ViewController::class, 'terms_of_use']);
 
 // Autenticação
 Route::get('/logout', [AuthController::class, 'logout']);

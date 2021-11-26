@@ -333,4 +333,9 @@ class ViewController extends Controller
         return view('pswd_reset', ['token' => $token]);
     }
 
+    // Termos de uso e condições
+    public function terms_of_use() {
+        return view('terms_of_use');
+    }
+
 }

@@ -117,6 +117,16 @@
                         @error('password') <span class="error-feedback"> {{$message}} </span> @enderror
                         @error('password_confirmation') <span class="error-feedback">{{$message}}</span> @enderror
 
+                    <div id="terms">
+                        <label for="terms-of-use" class="checkbox-label">
+                            <input type="checkbox" class="simple-box" name="terms_of_use" id="terms-of-use" value="1">
+                            <div class="checkbox"><div class="checkmark"></div></div>
+                        </label>
+                        <div id="see-terms">
+                            Aceito os termos de uso e condições
+                            <a href="/terms_of_use" target="_blank"><img src="/img/icons/ico_new_tab.svg" alt="Ler termos de uso e condiçoes" title="Ler termos de uso e condiçoes"></a>
+                        </div>
+                    </div>
                     <input id="btn-signup" type="submit" value="CADASTRE-SE">
                 </form>
             </div>

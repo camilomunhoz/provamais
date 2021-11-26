@@ -72,6 +72,11 @@
 #btn-go-signup, #btn-signup{
     background-color: var(--color2);
 }
+#btn-signup {
+    user-select: none;
+    pointer-events: none;
+    opacity: .6;
+}
 #btn-go-login, #btn-go-signup, #wrp-btn-go-in{
     width: 65%;
 }
@@ -226,10 +231,10 @@
     font-size: 17px;
     height: 50px;
     padding-left: 10px;
-    margin: 20px 0;
+    margin: 12px 0;
 }
 #form-login input:last-of-type{
-    margin-top: 70px;
+    margin-top: 50px;
 }
 #form-signup input:last-of-type{
     margin-top: 30px;
@@ -250,6 +255,29 @@
 .error-pswd-feedback{
     font-size: small;
     color: #ccc;
+}
+.checkbox-label {
+    width: auto;
+    display: inline;
+}
+.checkbox {
+    float: left;
+}
+#see-terms {
+    position: relative;
+    float: left;
+    color: #666;
+    font-size: 14px;
+}
+#see-terms img {
+    height: 12px;
+    position: absolute;
+    right: -18px;
+    top: -5px;
+}
+#terms {
+    margin-top: 10px;
+    height: fit-content;
 }
 
 /* Info em mobile */
