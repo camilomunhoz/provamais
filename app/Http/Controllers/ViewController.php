@@ -325,4 +325,9 @@ class ViewController extends Controller
         return view('help');
     }
 
+    // View "Esqueci minha senha"
+    public function pswd_reset_request() {
+        return view('password_reset');
+    }
+
 }

@@ -83,3 +83,5 @@ Route::get('/help', [ViewController::class, 'help']);
 Route::get('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [AuthController::class, 'register_user']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/password/reset', [ViewController::class, 'pswd_reset_request'])->name('password.reset');
+Route::post('/password/reset/validation', [AuthController::class, 'pswd_reset_validation']);

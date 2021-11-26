@@ -88,7 +88,7 @@
                     @endif
                     <input type="text" maxlength="255" class="form-input" name="email" placeholder="E-mail" @if(session('login')) value="{{ old('email') }}" @endif required>
                     <input type="password" maxlength="255" class="form-input" name="password" placeholder="Senha" required>
-                    <a href="index.html" id="forgot-pswd">Esqueci minha senha</a>
+                    <a href="/password/reset" id="forgot-pswd">Esqueci minha senha</a>
                     <input id="btn-login" type="submit" value="ENTRAR">
                 </form>
             </div>
