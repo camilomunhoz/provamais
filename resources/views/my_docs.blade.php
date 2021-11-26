@@ -15,7 +15,7 @@
 @section('header-img', '/img/icons/ico_test.svg')
 @section('header-title', 'Meus documentos')
 @section('search-placeholder', 'Procurar em "Meus documentos"')
-@section('layout_for_doc')<a id="customize-btn" href="/customization" title="Guarde imagens para cabeçalho e mais">Personalização</a>@endsection
+@section('layout_for_doc')<a id="customize-btn" href="/customization" title="Guarde imagens para cabeçalho e mais" target="_blank">Personalização</a>@endsection
 
 {{-- Carrega banner se a conta foi recém criada --}}
 @if(session('account_created'))

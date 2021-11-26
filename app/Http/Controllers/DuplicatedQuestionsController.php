@@ -29,7 +29,6 @@ class DuplicatedQuestionsController extends Controller
                     else {
                         $new_question->duplicated_from_user = $question->duplicated_from_user;
                     }
-                    
 
                     $new_question->private = 1;
                     $new_question->user_id = Auth::id();

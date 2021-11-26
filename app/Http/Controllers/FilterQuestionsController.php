@@ -114,6 +114,7 @@ class FilterQuestionsController extends Controller
             // Inserindo dados das chaves estrangeiras. Acesso direto por causa da relação.
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
+                $q['options'] = $q->options;
                 
                 if ($q->user->name == Auth::user()->name) {
                     $q->owner = 'você mesmo';

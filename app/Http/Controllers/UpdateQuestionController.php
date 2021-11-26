@@ -67,7 +67,11 @@ class UpdateQuestionController extends Controller
                 $img->move(public_path('img/questions_images'), $img_name);  
                 $question->image = $img_name;
             }
-        } else {
+        }
+        else if ($question->image != null && $request->image_flag) {
+            $question->image = $question->image; // Mantém
+        }
+        else {
             $question->image = NULL;
         }
         

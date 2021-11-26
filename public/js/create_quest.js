@@ -525,6 +525,7 @@ console.log(origin);
             $('#img-name').append('<img src="/img/questions_images/'+question.image+'">');
             $('#quest-img-label').html('Alterar imagem');
             $('#quest-img-x').show();
+            $('#quest-img-flag').attr('value', 1);
         }
         /******** Setando disciplina ********/
         $('#subject option[value='+question.subject_id+']')[0].selected = true;

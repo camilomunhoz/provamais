@@ -218,6 +218,7 @@ input:focus, textarea:focus, select:focus{
     border-radius: 5px;
     transition: background .3s ease;
     position: relative;
+    flex-shrink: 0;
 }
 .checkmark{
     position: absolute;
