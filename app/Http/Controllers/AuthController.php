@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\EmailPswdUpdateRequest;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -70,16 +71,20 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function forgot_pswd_email(Request $request) {
-        $request->validate(['email' => 'required|email']);
+    public function forgot_pswd_email(EmailPswdUpdateRequest $request) {
+
+        // $request->validate(['email' => 'required|email']);
 
         $status = Password::sendResetLink(
             $request->only('email')
         );
         
-        return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+        // if ($status === Password::RESET_LINK_SENT) {
+            return back()->with(['status' => __($status)]);
+        // }
+        // return $status === Password::RESET_LINK_SENT
+        //             ? back()->with(['status' => __($status)])
+        //             : back()->withErrors(['status' => __($status)]);
     }
 
     public function pswd_update(UpdatePasswordRequest $request) {

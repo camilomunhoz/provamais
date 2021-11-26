@@ -13,12 +13,15 @@
 
             <h1>Insira seu e-mail cadastrado</h1>
             <input class="simple-box" type="text" name="email" placeholder="E-mail" @if(session('status')) value="{{old('email')}}" @endif>
-            @if(!session('status'))
+            @if(!session('status') && !$errors->any())
                 <span class="info">Um link para redefinição de senha será enviado ao e-mail informado.</span>
             @else
-                {{-- <span class="info"> @error('email') {{$message}} @enderror</span> --}}
                 @if(session('status'))
                     <span class="info status">{{session('status')}}</span>
+                @else
+                    @foreach($errors->all() as $error)
+                        <span class="info status">{{$error}}</span>
+                    @endforeach
                 @endif
             @endif
             <input type="submit" value="Recuperar acesso" class="save-btn confirmation-btn-hard">
