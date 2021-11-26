@@ -41,6 +41,7 @@
 }
 .bigger-label{
     font-size: 20px;
+    position: relative;
 }
 .row-content-left span, .row-content-left label{
     color: #444;
@@ -199,6 +200,15 @@
 #correct option{
     font-size: 18px;
     text-align: center;
+}
+#info-format {
+    position: absolute;
+    left: -20px;
+}
+#info-format .tip-msg img {
+    width: 250px;
+    filter: none;
+    border-radius: 5px;
 }
 
 /* Escolher imagem */

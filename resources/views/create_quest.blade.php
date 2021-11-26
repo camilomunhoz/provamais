@@ -63,7 +63,16 @@
         {{-- Alternativas / para questões objetivas --}}
         <div class="row hidden">
             <div class="row-content-left aligned-top-right" id="alters-sidebar">
-                <span class="bigger-label required">Alternativas</span>
+                <span class="bigger-label required">
+                    <div class="small-tip" id="info-format" title="Como formatar o conteúdo?">
+                        <img src="/img/icons/ico_help.svg">
+                        <div class="tip-msg">
+                            <img src="/img/gif/format_option.gif" alt="Selecione o texto para formatar">
+                            <div><div class="tip-detail"></div></div>
+                        </div>
+                    </div>
+                    Alternativas
+                </span>
                 <label for="correct" id="correct-label"> <span class="required">Correta:</span><br>
                     <select name="correct" id="correct" class="simple-box"></select>
                     <span class="error-feedback" id="error-correct"></span>

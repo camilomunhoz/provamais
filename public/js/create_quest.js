@@ -53,7 +53,7 @@ console.log(origin);
         [{'list':'ordered'},{'list':'bullet'}],
         ['formula'],
     ];
-    var barraBubble = [['bold'], ['italic'], ['underline'], ['strike'], ['formula']];
+    var barraBubble = [['bold'], ['italic'], ['underline'], ['strike'], ['formula'], [{'script':'super'}], [{'script':'sub'}]];
 
     var allowedFormats = ['bold', 'italic', 'strike', 'underline', 'formula', 'indent', 'list', 'script'];
 
@@ -412,6 +412,14 @@ console.log(origin);
         });
     
     });
+
+    /***********************************************/
+    /***************** Tip de ajuda ****************/
+    /***********************************************/
+
+    $('#info-format').on('mouseenter', () => { $('#info-format .tip-msg').show() } )
+    $('#info-format').on('mouseleave', () => { $('#info-format .tip-msg').hide() } )
+
 
 /*******************************************************************************************************************************************/
 /*******************************************************************************************************************************************/
