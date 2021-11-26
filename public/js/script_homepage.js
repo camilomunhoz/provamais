@@ -116,4 +116,13 @@ $(document).ready(function(){
     
     /****** fim responsividade Mobile ******/
 
+    $('form').on('submit', () => {
+        $('body').css('cursor', 'progress');
+        $('#btn-login, #btn-signup').css({
+            userSelect: 'none',
+            pointerEvents: 'none',
+            opacity: '.6',
+        });
+    });
+
 })

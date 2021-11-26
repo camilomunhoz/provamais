@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    /*** Fecha banners ***/
+    // Fecha banners
     
     $('.btn-close-banner').on('click', () => {
         $('.banner').slideUp(200);
@@ -9,7 +9,7 @@ $(document).ready(function(){
         $('.help-tip').css('display', 'flex');
     });
 
-    /*** Abre overlay do nav de perfil ***/
+    // Abre overlay do nav de perfil
     
     $('#profile').on('click', showOverlay);
     $('.close-nav-2').on('click', hideOverlay);
@@ -32,10 +32,18 @@ $(document).ready(function(){
         $('.arrow').show();
     }
 
-    /*** Fecha diálogo de ajuda ***/
+    // Fecha diálogo de ajuda
 
     $('.close-help-tip').on('click', () => {
         $('.help-tip').slideUp(200);
     });
     
+    // Bloqueia botão de logout quando clicado
+    $('.logout').on('click', () => {
+        $('body').css('cursor', 'progress')
+        $('.logout').css({
+            userSelect: 'none',
+            pointerEvents: 'none',
+        });
+    });
 });

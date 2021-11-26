@@ -7,9 +7,9 @@
 
     <div id="wrapper">
 
-        <form action="/password/reset/validation" method="POST">
+        <form action="/password/reset/email" method="POST">
             @csrf
-            <div id="logo"><img src="/img/logo.svg" alt="ProvA+"></div>
+            <a href="/" id="logo"><img src="/img/logo.svg" alt="ProvA+"></a>
 
             <h1>Insira seu e-mail cadastrado</h1>
             <input class="simple-box" type="text" name="email" placeholder="E-mail" @if(session('status')) value="{{old('email')}}" @endif>
@@ -17,11 +17,9 @@
                 <span class="info">Um link para redefinição de senha será enviado ao e-mail informado.</span>
             @else
                 {{-- <span class="info"> @error('email') {{$message}} @enderror</span> --}}
-                <span class="info">
-                    @if(session('status'))
-                        {{session('status')}}
-                    @endif
-                </span>
+                @if(session('status'))
+                    <span class="info status">{{session('status')}}</span>
+                @endif
             @endif
             <input type="submit" value="Recuperar acesso" class="save-btn confirmation-btn-hard">
         </form>
@@ -34,8 +32,7 @@
                         pointerEvents: 'none',
                         filter: 'grayscale(100%)',
                         opacity: '.6'
-                    })
-                    .removeAttr('type');
+                    });
                 }
                 else {
                     $('.save-btn').css({
@@ -44,8 +41,15 @@
                         filter: 'none',
                         opacity: '1'
                     })
-                    $('.save-btn').attr('type', 'submit');
                 }
+            });
+            $('form').on('submit', () => {
+                $('body').css('cursor', 'progress')
+                $('.save-btn').css({
+                    userSelect: 'none',
+                    pointerEvents: 'none',
+                    opacity: '.6',
+                });
             });
         </script>
     </div>

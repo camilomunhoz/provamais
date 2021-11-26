@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -69,15 +70,32 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function pswd_reset_validation(Request $request) {
+    public function forgot_pswd_email(Request $request) {
         $request->validate(['email' => 'required|email']);
 
         $status = Password::sendResetLink(
             $request->only('email')
         );
-        // dd(__($status));
+        
         return $status === Password::RESET_LINK_SENT
                     ? back()->with(['status' => __($status)])
                     : back()->withErrors(['email' => __($status)]);
+    }
+
+    public function pswd_update(UpdatePasswordRequest $request) {
+        
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ]);
+                $user->save();
+            }
+        );
+    
+        return $status === Password::PASSWORD_RESET
+                    ? redirect('/')->with(['status' => __($status), 'login' => 1])
+                    : back()->withErrors(['email' => [__($status)]]);
     }
 }

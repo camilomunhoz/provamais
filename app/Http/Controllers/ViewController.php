@@ -327,7 +327,10 @@ class ViewController extends Controller
 
     // View "Esqueci minha senha"
     public function pswd_reset_request() {
-        return view('password_reset');
+        return view('pswd_reset_request');
+    }
+    public function pswd_reset($token) {
+        return view('pswd_reset', ['token' => $token]);
     }
 
 }

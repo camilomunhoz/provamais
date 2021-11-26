@@ -86,6 +86,9 @@
                             <div class="error-banner">{{ $error }}</div>
                         @endforeach
                     @endif
+                    @if(session('status'))
+                        <script>alert("{{session('status')}}")</script>
+                    @endif
                     <input type="text" maxlength="255" class="form-input" name="email" placeholder="E-mail" @if(session('login')) value="{{ old('email') }}" @endif required>
                     <input type="password" maxlength="255" class="form-input" name="password" placeholder="Senha" required>
                     <a href="/password/reset" id="forgot-pswd">Esqueci minha senha</a>
