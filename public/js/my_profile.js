@@ -7,23 +7,28 @@ $(document).ready(function(){
     function previewProfilePic(e) {
 
         if (e.target.files && e.target.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#my-profile-pic').attr('src', e.target.result);
+            if (e.target.files[0].size < 1024*100) {
+                var reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    $('#my-profile-pic').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(e.target.files[0]);
+                if(!$('#reset-my-profile-pic').length){
+                    $('#wrp-my-profile-pic').append(
+                        '<input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value="0">'+
+                        '<label for="reset-my-profile-pic"><img src="/img/icons/ico_plus.svg" alt="X"></label>'
+                    );
+                }
+                else{
+                    $('#wrp-my-profile-pic label').show();
+                }
+                $('#reset-my-profile-pic').attr('value', 0);
+                $('#reset-my-profile-pic').on('change', resetProfilePic);
             }
-            reader.readAsDataURL(e.target.files[0]);
-            if(!$('#reset-my-profile-pic').length){
-                $('#wrp-my-profile-pic').append(
-                    '<input type="checkbox" id="reset-my-profile-pic" name="resetpic" title="Remover foto de perfil" value="0">'+
-                    '<label for="reset-my-profile-pic"><img src="/img/icons/ico_plus.svg" alt="X"></label>'
-                );
+            else {
+                alert('Por limitações temporárias do servidor, pedimos que a imagem não exceda 100kb.');
             }
-            else{
-                $('#wrp-my-profile-pic label').show();
-            }
-            $('#reset-my-profile-pic').attr('value', 0);
-            $('#reset-my-profile-pic').on('change', resetProfilePic);
         }
     }
 
@@ -40,4 +45,10 @@ $(document).ready(function(){
         $('body').css('cursor', 'progress');
     });
 
+    /***********************************************/
+    /***************** Tip de ajuda ****************/
+    /***********************************************/
+
+    $('#info-pix').on('mouseenter', () => { $('#info-pix .tip-msg').show() } )
+    $('#info-pix').on('mouseleave', () => { $('#info-pix .tip-msg').hide() } )
 });

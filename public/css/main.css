@@ -1,4 +1,8 @@
-@import url("http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext");
+@import url("https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext");
 
 @import url(variables.css);
 @import url(general.css);
+
+img[alt="www.000webhost.com"] {
+    display: none;
+}

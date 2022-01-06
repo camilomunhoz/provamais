@@ -120,7 +120,8 @@ $(document).ready(function(){
     
     /****** fim responsividade Mobile ******/
 
-    $(window).on('load', () => {$('#btn-go-login').trigger('click')});
+    // setTimeout(() => {$('#btn-go-login').trigger('click');}, 10);
+    alert('');
     
     $('form').on('submit', () => {
         $('body').css('cursor', 'progress');

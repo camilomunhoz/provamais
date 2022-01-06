@@ -1,28 +1,83 @@
 @import url(section.css);
 
 #content {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: minmax(300px, 1fr) 5fr;
-    gap: 20px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 5fr;
+  gap: 20px;
+  overflow: hidden;
 }
-#sidebar, #advice {
-    width: 100%;
-    height: 100%;
-    position: relative;
+#sidebar,
+#advices {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
-
-#advice {
-    
+/* Sidebar */
+#sidebar {
+  padding: 10px 20px;
 }
-.here-soon {
-    color: #888;
-    font-size: 22px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    max-width: 550px;
+#sidebar h1 {
+  font-size: 20px;
+  color: var(--bgcolor1);
+}
+.advice-link {
+  color: var(--bgcolor3);
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid #e9e9e9;
+}
+.advice-link:hover {
+  font-weight: bold;
+  color: var(--color1);
+}
+
+/* Advices */
+#advices {
+  padding: 30px;
+  padding-bottom: 0;
+  overflow: auto;
+}
+.advice {
+  display: block;
+  border-bottom: 1px solid #e9e9e9;
+  margin-bottom: 16px;
+}
+#advices:first-child {
+  margin-top: 16px;
+}
+.advice h1 {
+  font-size: 26px;
+  color: var(--bgcolor3);
+  margin: 0;
+}
+.advice h1::before {
+  content: ">";
+  color: var(--color1);
+  margin-right: 12px;
+}
+.advice ol,
+.advice ul {
+  margin: 25px 0;
+  font-size: 18px;
+  list-style: none;
+  padding: 0;
+}
+.advice ol {
+  counter-reset: li;
+}
+.advice ol li,
+.advice ul li {
+  margin: 15px 0;
+  text-align: justify;
+}
+.advice ol li {
+  counter-increment: li;
+}
+.advice ol li::before {
+  content: counter(li);
+  color: var(--color1);
+  margin-left: 28px;
+  margin-right: 12px;
 }

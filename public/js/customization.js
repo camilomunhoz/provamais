@@ -58,7 +58,7 @@ $(document).ready(function() {
     
     function setImage(e) {
         if (e.target.files && e.target.files[0]) {
-            if (e.target.files[0].size < (1024*1024)/2) {
+            if (e.target.files[0].size < 1024*100) {
                 // Colocando elementos estéticos como o nome da imagem
                 let imgName = e.target.files[0].name;
                 $('#img-name').html(imgName);
@@ -73,7 +73,7 @@ $(document).ready(function() {
                 $('#save-img').css({opacity: 1, pointerEvents: 'all', userSelect: 'all'});
             }
             else {
-                alert('Arquivo muito grande. Tamanho não deve exceder 500kb.');
+                alert('Por limitações temporárias do servidor, pedimos que a imagem não exceda 100kb.');
             }
         }
     }

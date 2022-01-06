@@ -17,6 +17,20 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-thumb {
     background-color: var(--color1);
 }
+#go-back{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: var(--bgcolor2);
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+    transition: color .2s ease;
+}
+#go-back:hover{
+    color: white;
+}
 
 /********* DIÁLOGO *********/
 
@@ -162,6 +176,17 @@ body::-webkit-scrollbar-thumb {
     margin-top: 16px;
     margin-left: 20px;
     display: inline-block;
+}
+#tip-marks {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    margin-top: 10px;
+    color: var(--bgcolor2);
+    font-style: italic;
+    font-size: 14px;
+    text-align: justify;
 }
 
 /********* MEDIA QUERIES *********/

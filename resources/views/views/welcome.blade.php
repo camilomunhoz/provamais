@@ -2,13 +2,15 @@
 
 @section('css', '/css/homepage.css')
 
-@if(session('login'))
+{{--@if(session('login'))
     @section('js', '/js/script_for_login.js')
 @elseif($errors->any())
     @section('js', '/js/script_for_signup.js')
-@else
+@else--}}
     @section('js', '/js/script_homepage.js')
-@endif
+{{--@endif--}}
+
+
 
 @section('content')
 
@@ -89,7 +91,7 @@
                     @if(session('status'))
                         <script>alert("{{session('status')}}")</script>
                     @endif
-                    <input type="text" maxlength="255" class="form-input" name="email" placeholder="E-mail" @if(session('login')) value="{{ old('email') }}" @endif required>
+                    <input type="text" maxlength="255" class="form-input" name="email" placeholder="E-mail" @if(session('login')) value="{{ old('email') }}" @endif required onkeydown="return event.key != 'Enter';">
                     <input type="password" maxlength="255" class="form-input" name="password" placeholder="Senha" required>
                     <a href="/password/reset" id="forgot-pswd">Esqueci minha senha</a>
                     <input id="btn-login" type="submit" value="ENTRAR">
@@ -101,30 +103,30 @@
                 <span id="signup-label">CADASTRE-SE</span>
                 <form id="form-signup" action="/register" method="POST">
                     @csrf
-                    <input type="text" maxlength="146" class="form-input @error('name') invalid-signup-input @enderror" name="name" placeholder="Nome completo" value="{{ old('name') }}">
+                    <input type="text" maxlength="146" class="form-input @error('name') invalid-signup-input @enderror" name="name" placeholder="Nome completo" value="{{ old('name') }}" onkeydown="return event.key != 'Enter';">
                         @error('name') <span class="error-feedback">{{$message}}</span> @enderror
 
-                    <input type="text" maxlength="14" class="form-input @error('cpf') invalid-signup-input @enderror" name="cpf" placeholder="CPF" onchange="$(this).mask('000.000.000-00');" onkeypress="$(this).mask('000.000.000-00');" value="{{ old('cpf') }}">
+                    <input type="text" maxlength="14" class="form-input @error('cpf') invalid-signup-input @enderror" name="cpf" placeholder="CPF" onchange="$(this).mask('000.000.000-00');" onkeypress="$(this).mask('000.000.000-00');" value="{{ old('cpf') }}" onkeydown="return event.key != 'Enter';">
                         @error('cpf') <span class="error-feedback">{{$message}}</span> @enderror
 
-                    <input type="text" maxlength="255" class="form-input @error('email') invalid-signup-input @enderror" name="email" placeholder="E-mail" @if(!session('login')) value="{{ old('email') }}" @endif>
+                    <input type="text" maxlength="255" class="form-input @error('email') invalid-signup-input @enderror" name="email" placeholder="E-mail" @if(!session('login')) value="{{ old('email') }}" @endif onkeydown="return event.key != 'Enter';">
                         @error('email') <span class="error-feedback">{{$message}}</span> @enderror
 
-                    <input type="password" maxlength="255" class="form-input @error('password') invalid-signup-input @enderror" name="password" placeholder="Senha">
+                    <input type="password" maxlength="255" class="form-input @error('password') invalid-signup-input @enderror" name="password" placeholder="Senha" onkeydown="return event.key != 'Enter';">
                     <span class="error-pswd-feedback @error('password') error-feedback @enderror">A senha deve ter tamanho mínimo de 8 caracteres e conter uma letra maíuscula e um número.</span>
                     
-                    <input type="password" maxlength="255" class="form-input @error('password_confirmation') invalid-signup-input @enderror @error('password') invalid-signup-input @enderror" name="password_confirmation" placeholder="Confirme sua senha">
+                    <input type="password" maxlength="255" class="form-input @error('password_confirmation') invalid-signup-input @enderror @error('password') invalid-signup-input @enderror" name="password_confirmation" placeholder="Confirme sua senha" onkeydown="return event.key != 'Enter';">
                         @error('password') <span class="error-feedback"> {{$message}} </span> @enderror
                         @error('password_confirmation') <span class="error-feedback">{{$message}}</span> @enderror
 
                     <div id="terms">
                         <label for="terms-of-use" class="checkbox-label">
-                            <input type="checkbox" class="simple-box" name="terms_of_use" id="terms-of-use" value="1">
+                            <input type="checkbox" class="simple-box" name="terms_of_use" id="terms-of-use" value="1" onkeydown="return event.key != 'Enter';">
                             <div class="checkbox"><div class="checkmark"></div></div>
                         </label>
                         <div id="see-terms">
                             Aceito os termos de uso e condições
-                            <a href="/terms_of_use" target="_blank"><img src="/img/icons/ico_new_tab.svg" alt="Ler termos de uso e condiçoes" title="Ler termos de uso e condiçoes"></a>
+                            <a href="/terms_of_use" target="_blank"><img src="/img/icons/ico_new_tab.svg" alt="Ler termos de uso e condições" title="Ler em nova guia"></a>
                         </div>
                     </div>
                     <input id="btn-signup" type="submit" value="CADASTRE-SE">
@@ -132,5 +134,9 @@
             </div>
         </div>
     </div>
+    
+    @if(session('login')) <script>setTimeout(()=>{$('#btn-go-login').trigger('click');}, 50)</script>
+    @elseif($errors->any()) <script>setTimeout(()=>{$('#btn-go-signup').trigger('click');}, 50)</script>
+    @endif
 
 @endsection

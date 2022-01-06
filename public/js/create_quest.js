@@ -174,17 +174,21 @@ console.log(origin);
     var image = '';
     
     function setImage(e) {
-        if (e.target.files && e.target.files[0]) {
-
-            // Colocando elementos estéticos como o nome da imagem
-            let imgName = e.target.files[0].name;
-            $('#img-name').html(imgName);
-            $('#quest-img-label').html('Alterar imagem');
-            $('#quest-img-x').show();
-            $('#quest-img-flag').attr('value', 1);
-
-            // Salvando imagem para enviar posteriormente
-            image = e.target.files[0];
+        if (e.target.files[0].size < 1024*100) {
+            if (e.target.files && e.target.files[0]) {
+                // Colocando elementos estéticos como o nome da imagem
+                let imgName = e.target.files[0].name;
+                $('#img-name').html(imgName);
+                $('#quest-img-label').html('Alterar imagem');
+                $('#quest-img-x').show();
+                $('#quest-img-flag').attr('value', 1);
+    
+                // Salvando imagem para enviar posteriormente
+                image = e.target.files[0];
+            }
+        }
+        else {
+            alert('Por limitações temporárias do servidor, pedimos que a imagem não exceda 100kb.');
         }
     }
     function removeImage() {

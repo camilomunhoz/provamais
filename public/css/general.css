@@ -89,6 +89,7 @@ input:focus, textarea:focus, select:focus{
     display: flex;
     align-items: center;
     justify-content: center;
+    display: inline-flex;
 }
 .small-tip {
     height: 15px;
@@ -98,6 +99,7 @@ input:focus, textarea:focus, select:focus{
     display: flex;
     align-items: center;
     justify-content: center;
+    display: inline-flex;
 }
 .tip img, .small-tip img {
     height: 70%;

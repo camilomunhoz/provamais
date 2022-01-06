@@ -1,10 +1,17 @@
 @extends('layouts.section')
 
-@section('title', '| Personalização dso documentos')
+@section('title', '| Personalização dos documentos')
 @section('css', '/css/customization.css')
 
 {{-- Define título do header --}}
 @section('section-title', 'Personalização dos documentos')
+
+{{-- Adiciona um botão de cancelar no header --}}
+@section('add-header-section')
+    <a href="/my_docs" class="header-section go-back">
+        <span><&nbsp;&nbsp;&nbsp;Voltar</span>
+    </a>
+@endsection
 
 {{-- Conteúdo da seção --}}
 @section('section_content')
@@ -16,7 +23,8 @@
 
     <div id="explanation">
         Aqui você pode definir opções para a personalização de seus documentos.<br>
-        Você pode aplicá-las ao salvar um documento.</div>
+        Você pode aplicá-las ao salvar um documento.
+    </div>
 
     {{-- Imagens --}}
     <section class="simple-box" id="section-images">

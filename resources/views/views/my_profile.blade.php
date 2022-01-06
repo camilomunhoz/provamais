@@ -44,7 +44,14 @@
                 <textarea name="desc" maxlength="1024" placeholder="Dê mais detalhes sobre você ao público" class="my-profile-desc simple-box">{{$user->description}}</textarea>
             </label>
             <label>
-                Chave Pix:<br>
+                <span>Chave Pix:</span>
+                <div id="info-pix" class="small-tip" id="info-format">
+                    <img src="/img/icons/ico_help.svg">
+                    <div class="tip-msg">
+                        <span>Ao cadastrar sua chave Pix, você se disponibiliza a receber doações por suas contribuições para a comunidade ProvA+.</span>
+                        <div><div class="tip-detail"></div></div>
+                    </div>
+                </div>
                 <input type="text" name="pix" class="my-profile-pix simple-box" value="{{$user->pix}}">
             </label>
             <button type="submit" class="confirmation-btn-hard save-btn">SALVAR</button>

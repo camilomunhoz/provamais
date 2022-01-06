@@ -137,9 +137,6 @@
     padding: 3px 10px;
     text-align: center;
     display: inline-block;
-    max-height: 22px;
-    flex-shrink: 0;
-    /* max-width: 22px; */
 }
 .tag-subject{
     background-color: var(--color1);
@@ -173,18 +170,20 @@
 .showing-quest{
     align-items: center;
     justify-content: center;
+    padding: 30px;
 }
 .showing-quest .simple-line{
     width: 100%;
 }
 #quest-details{
-    width: 800px;
-    max-width: 800px;
-    height: 800px;
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    max-height: 800px;
     padding: 30px;
     padding-top: 20px;
     display: grid;
-    grid-template-rows: 50px 2px auto;
+    grid-template-rows: minmax(50px, max-content) 2px auto;
     gap: 20px;
     position: relative;
 }
@@ -259,6 +258,7 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    /*flex-wrap: wrap;*/
 }
 #right-info{
     display: flex;
@@ -270,6 +270,7 @@
     align-items: center;
     gap: 10px;
     color: grey;
+    flex-shrink: 0;
 }
 #owner-pic{
     height: 40px;
@@ -291,6 +292,7 @@
     display: flex;
     gap: 10px;
     height: fit-content;
+    flex-wrap: wrap;
 }
 .x{
     filter: invert();

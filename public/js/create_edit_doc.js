@@ -221,7 +221,7 @@ $(document).ready(function() {
 
     // Bloqueia ou desbloqueia o embaralhamento de acordo com as inserções
     function blockOrUnlockShuffle() {
-        if (insertedQuestions.length < 3) {
+        if (insertedQuestions.length < 2) {
             $('#shuffle').css({
                 userSelect: 'none',
                 pointerEvents: 'none',
@@ -243,10 +243,11 @@ $(document).ready(function() {
     function shuffleQuestions() {
 
         let oldInsertedQuestions = insertedQuestions;
-        insertedQuestions = [];
 
         // Loop enquanto oldInsertedQuestions acabar sendo igual ao novo array
         do {
+            insertedQuestions = [];
+            
             let shuffleThis = $('.question');
             let currentIndex = shuffleThis.length, randomIndex;
             
@@ -268,6 +269,9 @@ $(document).ready(function() {
                 $('#questions').append(q);    // Recolocando as questões no DOM
                 insertedQuestions.push(q.id); // Recolocando as questões no array
             }
+            
+            // Insere no input escondido os identifiers das questões a serem enviadas
+            $('#questions-to-save').val(JSON.stringify(insertedQuestions));
 
         } while (JSON.stringify(insertedQuestions) == JSON.stringify(oldInsertedQuestions));
 
@@ -525,7 +529,8 @@ $(document).ready(function() {
 
     $('#filters').on('submit', (e) => {
         e.preventDefault();
-        $('#filter-btn').attr('type', 'button').css('cursor', 'progress');
+        $('#filter-btn').attr('type', 'button');
+        $('body').css('cursor', 'progress');
 
         // Caso todos os filtros estejam selecionados, envia somente "all: 1", senão, envia todos os marcados
         let data;     
@@ -562,7 +567,7 @@ $(document).ready(function() {
                     questions = response;
                 }
                 appendQuests();
-                setTimeout(() => { $('#filter-btn').attr('type', 'submit').removeAttr('style') }, 300); // Para não poder spammar a filtragem
+                setTimeout(() => { $('#filter-btn').attr('type', 'submit'); $('body').removeAttr('style'); }, 300); // Para não poder spammar a filtragem
             }
         });
     });
@@ -581,6 +586,8 @@ $(document).ready(function() {
     function showDetails(e) {
 
         let questCard; // Armazenará o card (elemento) clicado
+        $('.question-card').hide();
+        $('#results .checkbox').hide();
 
         // Caso clique nos elementos filhos
         (!$(e.target).hasClass('question-card')) ? 
@@ -823,7 +830,11 @@ $(document).ready(function() {
 
     function closeDetails() {
         $('#quest-details').slideUp(200);
-            setTimeout(() => {$('#search-msg').show()}, 200);
+        setTimeout(() => {
+            $('#search-msg').show()
+        }, 200);
+        $('.question-card').show();
+        $('#results .checkbox').show();
     }
 
     /*********************************************************************/
@@ -949,7 +960,7 @@ $(document).ready(function() {
     /******************* Insere as questões selecionadas *******************/
     /***********************************************************************/
 
-    function insertQuestion(q) {
+    function insertQuestion(q) { console.log(q);
         // Insere a questão
         $('#questions').append(
             '<div class="question" id="'+q.identifier+'">'+

@@ -9,6 +9,8 @@
 
     {{-- View (o que aparecerá para o user) --}}
     <div id="view">
+        <a href="/my_docs" id="go-back"><&nbsp;&nbsp;&nbsp;Voltar</a>
+        
         <div id="dialog-box">
             <div id="logo"><img src="/img/logo.svg" alt="ProvA+"></div>
 
@@ -58,6 +60,7 @@
                 </div>
             </div>
         </div>
+        <span id="tip-marks">Para remover as marcas de cabeçalho e rodapé geradas pelo seu navegador, consulte as instruções.</span>
     </div>
 
     {{-- PDF (exibido somente no print) --}}
