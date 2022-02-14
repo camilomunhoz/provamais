@@ -3,9 +3,10 @@
 É uma aplicação Web para ajudar os professores na otimização dos processos que envolvem a criação de avaliações tradicionais, beneficiando-se de aspectos colaborativos e comunitários. Nela, é possível:
 - Armazenar e organizar questões dissertativas e de múltipla escolha;
 - Procurar por questões de terceiros;
+- Disponibilizar questões de autoria própria para a comunidade de usuários;
 - Criar avaliações ou listas de exercícios rapidamente;
-- Gerar documentos em formato PDF;
-- Disponibilizar suas questões para o uso por parte de outros usuários.
+- Gerar avaliações ou listas de exercícios com layout limpo e claro em formato PDF;
+- Gerar gabaritos.
 
 ## Como surgiu o ProvA+?
 O sistema foi criado como Trabalho de Conclusão de Curso Técnico pelo IFRS Campus Canoas, e visava colaborar de alguma forma com a tão importante profissão que é a de ser professor. A aplicação foi desenvolvido inteiramente por Camilo Labella Munhoz em 2021.
