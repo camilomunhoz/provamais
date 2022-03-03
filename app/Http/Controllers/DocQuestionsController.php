@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
 use App\Models\Document;
@@ -13,10 +13,11 @@ use App\Models\FavoriteQuestion;
 
 class DocQuestionsController extends Controller
 {
-    public function filter(Request $request) {
-        
+    public function filter(Request $request)
+    {
+
         // Caso todos os filtros não estejam selecionados
-        if (!$request->all){
+        if (!$request->all) {
 
             $user_id = Auth::user()->id;
             $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
@@ -46,16 +47,13 @@ class DocQuestionsController extends Controller
             if ($request->private) {
                 if ($concatenated && $request->favorite) {
                     $sql .= " OR (user_id = $user_id AND private = 1)";
-                }
-                else if ($concatenated && !$request->favorite) {
+                } else if ($concatenated && !$request->favorite) {
                     $sql .= " OR (user_id = $user_id AND private = 1))";
-                } 
-                else if (!$concatenated && !$request->favorite) {
+                } else if (!$concatenated && !$request->favorite) {
                     $sql .= " ((user_id = $user_id AND private = 1))";
-                } 
-                else if (!$concatenated && $request->favorite) {
+                } else if (!$concatenated && $request->favorite) {
                     $sql .= " ((user_id = $user_id AND private = 1)";
-                } 
+                }
                 $concatenated = true;
             }
 
@@ -70,22 +68,23 @@ class DocQuestionsController extends Controller
                     foreach ($favorites as $key => $fav) {
                         if ($key == 0) $sql .= " (id = $fav->question_id";
                         else $sql .= " OR id = $fav->question_id";
-                        if ($key == count($favorites)-1) $sql .= ')';
+                        if ($key == count($favorites) - 1) $sql .= ')';
                     }
                 } else {
                     echo json_encode([]);
                     die;
                 }
-            }
-            else if ($request->favorite) { // Se não, apenas concatena
+            } else if ($request->favorite) { // Se não, apenas concatena
                 $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
                 foreach ($favorites as $key => $fav) {
                     if ($key == 0) $sql .= " OR (id = $fav->question_id";
                     else $sql .= " OR id = $fav->question_id";
-                    if ($key == count($favorites)-1) $sql .= '))';
+                    if ($key == count($favorites) - 1) $sql .= '))';
                 }
+            } else {
+                $favorites = [];
             }
-            
+
             // Disciplinas
             if ($request->subjects) {
                 $subjects = $request->subjects;
@@ -93,16 +92,14 @@ class DocQuestionsController extends Controller
                 foreach ($subjects as $key => $subject) {
                     if ($key == 0) {
                         $sql .= " AND (subject_id = $subject";
-                    }
-                    else {
+                    } else {
                         $sql .= " OR subject_id = $subject";
                     }
-                    if ($key == count($subjects)-1) {
+                    if ($key == count($subjects) - 1) {
                         $sql .= ")";
                     }
                 }
-            }
-            else {
+            } else {
                 echo json_encode([]);
                 die;
             }
@@ -113,12 +110,10 @@ class DocQuestionsController extends Controller
 
                 if (count($types) == 2) {
                     $sql .= " AND (type LIKE 'Dissertativa' OR type LIKE 'Objetiva')";
-                }
-                else if (count($types) == 1) {
+                } else if (count($types) == 1) {
                     $sql .= " AND type LIKE '$types[0]'";
                 }
-            }
-            else {
+            } else {
                 echo json_encode([]);
                 die;
             }
@@ -138,13 +133,12 @@ class DocQuestionsController extends Controller
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
                 $q['options'] = $q->options;
-                
+
                 // Se ela não é uma duplicata, ainda tem que conferir quem é o dono pois pode ser uma favoritada
                 if (!$q->duplicated_from_user) {
                     if ($q->user_id === Auth::id()) {
                         $q->owner = 'você mesmo';
-                    }
-                    else {
+                    } else {
                         $owner_name = explode(' ', $q->user->name);
                         $q->owner = $owner_name[0];
                     }
@@ -154,15 +148,14 @@ class DocQuestionsController extends Controller
                     $creator = User::firstWhere('id', $q->duplicated_from_user);
                     if ($creator->id === Auth::id()) {
                         $q->owner = 'você mesmo';
-                    }
-                    else {
+                    } else {
                         $creator_name = explode(' ', $creator->name);
                         $q->owner = $creator_name[0];
                     }
                     $q->user->profile_pic = $creator->profile_pic;
                 }
 
-                if(!$q->user->profile_pic){
+                if (!$q->user->profile_pic) {
                     $q->user->profile_pic = 'user_pic_placeholder.png';
                 }
 
@@ -179,7 +172,7 @@ class DocQuestionsController extends Controller
         }
 
         // Caso todos os filtros estejam selecionados
-        else if ($request->all){
+        else if ($request->all) {
 
             $user_id = Auth::user()->id;
             $favorites = FavoriteQuestion::where('user_id', $user_id)->get();
@@ -197,13 +190,12 @@ class DocQuestionsController extends Controller
             foreach ($questions as $q) {
                 $q['subject_name'] = $q->subject->name;
                 $q['options'] = $q->options;
-                
+
                 // Se ela não é uma duplicata, ainda tem que conferir quem é o dono pois pode ser uma favoritada
                 if (!$q->duplicated_from_user) {
                     if ($q->user_id === Auth::id()) {
                         $q->owner = 'você mesmo';
-                    }
-                    else {
+                    } else {
                         $owner_name = explode(' ', $q->user->name);
                         $q->owner = $owner_name[0];
                     }
@@ -213,15 +205,14 @@ class DocQuestionsController extends Controller
                     $creator = User::firstWhere('id', $q->duplicated_from_user);
                     if ($creator->id === Auth::id()) {
                         $q->owner = 'você mesmo';
-                    }
-                    else {
+                    } else {
                         $creator_name = explode(' ', $creator->name);
                         $q->owner = $creator_name[0];
                     }
                     $q->user->profile_pic = $creator->profile_pic;
                 }
 
-                if(!$q->user->profile_pic){
+                if (!$q->user->profile_pic) {
                     $q->user->profile_pic = 'user_pic_placeholder.png';
                 }
 
@@ -236,11 +227,12 @@ class DocQuestionsController extends Controller
                 unset($q->user['updated_at']);
             }
         }
-        
+
         echo json_encode(['questions' => $questions, 'favorites' => $favorites]);
     }
 
-    public function get(Request $request) {
+    public function get(Request $request)
+    {
 
         $sql = "SELECT * FROM questions WHERE";
 
@@ -248,10 +240,9 @@ class DocQuestionsController extends Controller
         array_pop($ids);
 
         foreach ($ids as $key => $id) {
-            if ($key == 0){
+            if ($key == 0) {
                 $sql .= " identifier = '$id'";
-            }
-            else {
+            } else {
                 $sql .= " OR identifier = '$id'";
             }
         }
@@ -266,8 +257,7 @@ class DocQuestionsController extends Controller
             if (!$q->duplicated_from_user) {
                 if ($q->user_id === Auth::id()) {
                     $q->owner = 'você mesmo';
-                }
-                else {
+                } else {
                     $owner_name = explode(' ', $q->user->name);
                     $q->owner = $owner_name[0];
                 }
@@ -277,15 +267,14 @@ class DocQuestionsController extends Controller
                 $creator = User::firstWhere('id', $q->duplicated_from_user);
                 if ($creator->id === Auth::id()) {
                     $q->owner = 'você mesmo';
-                }
-                else {
+                } else {
                     $creator_name = explode(' ', $creator->name);
                     $q->owner = $creator_name[0];
                 }
                 $q->user->profile_pic = $creator->profile_pic;
             }
 
-            if(!$q->user->profile_pic){
+            if (!$q->user->profile_pic) {
                 $q->user->profile_pic = 'user_pic_placeholder.png';
             }
         }
@@ -293,7 +282,8 @@ class DocQuestionsController extends Controller
         echo json_encode($questions);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $doc = new Document;
 
@@ -305,16 +295,15 @@ class DocQuestionsController extends Controller
         // Garante que não seja salvo um nome repetido. Concatena '(n)'.
         while (count(DB::select("SELECT * FROM documents WHERE user_id = $user->id AND name = '$doc->name'"))) {
             if (preg_match('/^\s\((\d+)\)$/', substr($doc->name, -4))) {
-                $doc->name = substr($doc->name, 0, -4).' ('.(substr($doc->name, -2, -1) + 1).')';
-            }
-            else {
-                $doc->name = $doc->name.' (1)';
+                $doc->name = substr($doc->name, 0, -4) . ' (' . (substr($doc->name, -2, -1) + 1) . ')';
+            } else {
+                $doc->name = $doc->name . ' (1)';
             }
         }
 
         trim($doc->name);                                     // Tira espaços no início e fim
         $doc->name = preg_replace('/\s+/', ' ', $doc->name);  // Tira espaços múltiplos
-        
+
         $doc->details = $request->details;
         trim($doc->details);                                        // Tira espaços no início e fim
         $doc->details = preg_replace('/\s+/', ' ', $doc->details);  // Tira espaços múltiplos
@@ -356,33 +345,31 @@ class DocQuestionsController extends Controller
             $relation->save();
         }
         return redirect('/my_docs');
-
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
 
         $doc = Document::firstWhere('id', $request->doc_id);
 
-        if($doc && $doc->user_id === Auth::id()) {
+        if ($doc && $doc->user_id === Auth::id()) {
 
             $user = Auth::user();
 
-            $name_was_changed = ($doc->name == $request->name) ? false : true ;
+            $name_was_changed = ($doc->name == $request->name) ? false : true;
 
             // Se o nome foi mudado, garante que não seja salvo um nome repetido. Concatena '(n)'.
             if ($name_was_changed) {
                 $was_equal = false;
                 while (count(DB::select("SELECT * FROM documents WHERE user_id = $doc->user_id AND name = '$request->name'"))) {
-                    
+
                     $was_equal = true;
 
                     if (preg_match('/^\s\((\d+)\)$/', substr($request->name, -4))) {
-                        $doc->name = substr($request->name, 0, -4).' ('. (substr($request->name, -2, -1) + 1) .')';
+                        $doc->name = substr($request->name, 0, -4) . ' (' . (substr($request->name, -2, -1) + 1) . ')';
                         $request->name = $doc->name;
-                    }
-
-                    else {
-                        $doc->name = $request->name.' (1)';
+                    } else {
+                        $doc->name = $request->name . ' (1)';
                         $request->name = $doc->name;
                     }
                 }
@@ -401,7 +388,7 @@ class DocQuestionsController extends Controller
 
             $header_images = $user->header_images;
             $instructions = $user->instructions;
-    
+
             // Verificando se os ids de header e instructions pertencem ao usuário
             $header_image_check = false;
             $instruction_check = false;
@@ -442,8 +429,6 @@ class DocQuestionsController extends Controller
                 $relation->save();
             }
             return redirect('/my_docs');
-        }
-        else return redirect('/');
+        } else return redirect('/');
     }
-
 }

@@ -21,21 +21,23 @@ class ViewController extends Controller
     /*********** FUNÇÕES PARA EXIBIÇÃO DAS VIEWS ***********/
 
     // Index (página inicial)
-    public function index(){
+    public function index()
+    {
         return view('welcome');
     }
-    
+
     // View "Meus documentos"
-    public function my_docs(){
-        if(Auth::check()){
+    public function my_docs()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
             $username = explode(' ', $user->name);
             $user->name = $username[0];
-            if(!$user->profile_pic){
+            if (!$user->profile_pic) {
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
             $docs = Document::where('user_id', $user->id)->get();
-            if(count($docs) == 0) {
+            if (count($docs) == 0) {
                 $docs[0] = 'empty';
             }
             return view('my_docs', ['user' => $user, 'docs' => $docs]);
@@ -44,8 +46,9 @@ class ViewController extends Controller
     }
 
     // View "Criar documento"
-    public function create_doc(){
-        if(Auth::check()){
+    public function create_doc()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
 
             // Selecionando as questões favoritas
@@ -66,8 +69,9 @@ class ViewController extends Controller
     }
 
     // View "Editar documento"
-    public function edit_doc($id){
-        if(Auth::check()){
+    public function edit_doc($id)
+    {
+        if (Auth::check()) {
             $document = Document::where('id', $id)->get();
             $doc_quest = DocumentQuestion::where('document_id', $id)->get();
             $questions = [];
@@ -83,7 +87,7 @@ class ViewController extends Controller
 
             // Selecionando as disciplinas
             $subjects = Subject::all();
-            
+
             // Selecionando as imagens de cabeçalho
             $user->header_images;
 
@@ -96,8 +100,9 @@ class ViewController extends Controller
     }
 
     // View "Minhas questões"
-    public function my_quests(){
-        if(Auth::check()){
+    public function my_quests()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
 
             $sql = "SELECT * FROM questions WHERE user_id = $user->id";
@@ -109,17 +114,16 @@ class ViewController extends Controller
             foreach ($favorites as $key => $fav) {
                 if ($key == 0) $sql .= " OR (id = $fav->question_id";
                 else $sql .= " OR id = $fav->question_id";
-                if ($key == count($favorites)-1) $sql .= ')';
+                if ($key == count($favorites) - 1) $sql .= ')';
             }
 
             // Selecionando as questões do usuário
             $questions = Question::hydrate(DB::select($sql));
 
-            if(count($questions) == 0) {
+            if (count($questions) == 0) {
                 $questions[0] = 'empty';
-            }
-            else {
-                foreach ($questions as $q){
+            } else {
+                foreach ($questions as $q) {
                     $q['subject_name'] = $q->subject->name;
                     $q['options'] = $q->options;
 
@@ -127,8 +131,7 @@ class ViewController extends Controller
                     if (!$q->duplicated_from_user) {
                         if ($q->user_id === Auth::id()) {
                             $q->owner = 'você mesmo';
-                        }
-                        else {
+                        } else {
                             $owner_name = explode(' ', $q->user->name);
                             $q->owner = $owner_name[0];
                         }
@@ -138,15 +141,14 @@ class ViewController extends Controller
                         $creator = User::firstWhere('id', $q->duplicated_from_user);
                         if ($creator->id === Auth::id()) {
                             $q->owner = 'você mesmo';
-                        }
-                        else {
+                        } else {
                             $creator_name = explode(' ', $creator->name);
                             $q->owner = $creator_name[0];
                         }
                         $q->user->profile_pic = $creator->profile_pic;
                     }
 
-                    if(!$q->user->profile_pic){
+                    if (!$q->user->profile_pic) {
                         $q->user->profile_pic = 'user_pic_placeholder.png';
                     }
 
@@ -163,7 +165,7 @@ class ViewController extends Controller
             }
             $username = explode(' ', $user->name);
             $user->name = $username[0];
-            if(!$user->profile_pic){
+            if (!$user->profile_pic) {
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
 
@@ -173,28 +175,29 @@ class ViewController extends Controller
     }
 
     // View "Cadastrar questão"
-    public function create_quest(){
-        if(Auth::check()){
+    public function create_quest()
+    {
+        if (Auth::check()) {
             $subjects = Subject::all();
             $identifier = Hash::make('id');
-            $identifier = substr($identifier, strlen($identifier)-8, strlen($identifier));
+            $identifier = substr($identifier, strlen($identifier) - 8, strlen($identifier));
             return view('create_quest', ['subjects' => $subjects, 'identifier' => $identifier]);
         }
         return redirect('/');
     }
 
     // View "Editar questão"
-    public function edit_quest($id){
-        if(Auth::check()){
+    public function edit_quest($id)
+    {
+        if (Auth::check()) {
             $question = Question::firstWhere('id', $id);
-            if($question->user_id === Auth::id()) {
+            if ($question->user_id === Auth::id()) {
                 $subjects = Subject::all();
                 $question->options;
                 $identifier = $question->identifier;
                 if (isset($_GET['fromdoc'])) {
                     return view('edit_quest', ['subjects' => $subjects, 'identifier' => $identifier, 'question' => $question, 'origin' => 'doc']);
-                }
-                else {
+                } else {
                     return view('edit_quest', ['subjects' => $subjects, 'identifier' => $identifier, 'question' => $question]);
                 }
             }
@@ -203,30 +206,29 @@ class ViewController extends Controller
     }
 
     // View "Procurar questões"
-    public function search_quests(){
-        if(Auth::check()){
+    public function search_quests()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
 
             $questions = Question::where('private', 0)->get();
-            if(count($questions) == 0) {
+            if (count($questions) == 0) {
                 $questions[0] = 'empty';
-            }
-            else {
-                foreach ($questions as $q){
+            } else {
+                foreach ($questions as $q) {
                     $q['subject_name'] = $q->subject->name;
                     $q['options'] = $q->options;
-                    
+
                     $q['options'] = $q->options;
 
                     if ($q->user->name == $user->name) {
                         $q->owner = 'você mesmo';
-                    }
-                    else {
+                    } else {
                         $username = explode(' ', $q->user->name);
                         $q->owner = $username[0];
                     }
 
-                    if(!$q->user->profile_pic){
+                    if (!$q->user->profile_pic) {
                         $q->user->profile_pic = 'user_pic_placeholder.png';
                     }
 
@@ -243,7 +245,7 @@ class ViewController extends Controller
             }
             $username = explode(' ', $user->name);
             $user->name = $username[0];
-            if(!$user->profile_pic){
+            if (!$user->profile_pic) {
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
 
@@ -264,10 +266,11 @@ class ViewController extends Controller
     }
 
     // View "Editar perfil"
-    public function my_profile(){
-        if(Auth::check()){
+    public function my_profile()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
-            if(!$user->profile_pic){
+            if (!$user->profile_pic) {
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
             $n_quests = User::withCount('questions')->get();
@@ -285,12 +288,13 @@ class ViewController extends Controller
     }
 
     // View "Exibir perfil"
-    public function show_profile($id){
-        if(Auth::check()){
+    public function show_profile($id)
+    {
+        if (Auth::check()) {
             $user = User::findOrFail($id);
             $username = explode(' ', $user->name);
             $user->name = $username[0];
-            if(!$user->profile_pic){
+            if (!$user->profile_pic) {
                 $user->profile_pic = 'user_pic_placeholder.png';
             }
             $n_quests = User::withCount('questions')->get();
@@ -308,12 +312,13 @@ class ViewController extends Controller
     }
 
     // View "Personalizar documentos"
-    public function customization(){
-        if(Auth::check()){
+    public function customization()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
-            
+
             $header_imgs = HeaderImage::where('user_id', Auth::user()->id)->get();
-            $instructions= Instruction::where('user_id', Auth::user()->id)->get();
+            $instructions = Instruction::where('user_id', Auth::user()->id)->get();
 
             return view('customization', ['images' => $header_imgs, 'instructions' => $instructions]);
         }
@@ -321,21 +326,24 @@ class ViewController extends Controller
     }
 
     // View "Ajuda e Tutoriais"
-    public function help(){
+    public function help()
+    {
         return view('help');
     }
 
     // View "Esqueci minha senha"
-    public function pswd_reset_request() {
+    public function pswd_reset_request()
+    {
         return view('pswd_reset_request');
     }
-    public function pswd_reset($token) {
+    public function pswd_reset($token)
+    {
         return view('pswd_reset', ['token' => $token]);
     }
 
     // Termos de uso e condições
-    public function terms_of_use() {
+    public function terms_of_use()
+    {
         return view('terms_of_use');
     }
-
 }
